@@ -32,5 +32,8 @@
 		<file src="$OutputPath35$Validation.dll" target="lib\net35-client" />
 		<file src="$OutputPath35$Validation.pdb" target="lib\net35-client" />
 		<file src="$OutputPath35$Validation.xml" target="lib\net35-client" />
+
+		<file src="..\src\Validation\**\*.cs" target="src" />
+		<file src="$IntermediatePath$Validation.Version.cs" target="src\Properties" />
 	</files>
 </package>

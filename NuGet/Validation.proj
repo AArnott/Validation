@@ -24,6 +24,7 @@
 			<NuGetProperties Include="Version=$(NuGetPackageVersion)" />
 			<NuGetProperties Include="OutputPathPortable=$(ProjectRoot)bin\v4.0\release\" />
 			<NuGetProperties Include="OutputPath35=$(ProjectRoot)bin\v3.5\release\" />
+			<NuGetProperties Include="IntermediatePath=$(IntermediatePath)" />
 		</ItemGroup>
 
 		<ItemGroup>
