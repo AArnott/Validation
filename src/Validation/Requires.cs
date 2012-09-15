@@ -10,6 +10,7 @@ namespace Validation
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Common runtime checks that throw ArgumentExceptions upon failure.
@@ -60,14 +61,13 @@ namespace Validation
         /// </summary>
         /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <returns>The value of the parameter.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c></exception>
         /// <remarks>
         /// This method allows async methods to use Requires.NotNull without having to assign the result
         /// to local variables to avoid C# warnings.
         /// </remarks>
         [DebuggerStepThrough]
-        public static void NotNull([ValidatedNotNull]System.Threading.Tasks.Task value, string parameterName)
+        public static void NotNull([ValidatedNotNull]Task value, string parameterName)
         {
             if (value == null)
             {
@@ -81,7 +81,6 @@ namespace Validation
         /// <typeparam name="T">The type of the return value of the task.</typeparam>
         /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <returns>The value of the parameter.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c></exception>
         /// <remarks>
         /// This method allows async methods to use Requires.NotNull without having to assign the result
@@ -166,7 +165,7 @@ namespace Validation
                 throw new ArgumentException(Format(Strings.Argument_EmptyString, parameterName), parameterName);
             }
 
-            if (String.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value))
             {
                 throw new ArgumentException(Format(Strings.Argument_Whitespace, parameterName));
             }
@@ -277,7 +276,7 @@ namespace Validation
         [DebuggerStepThrough]
         public static Exception FailRange(string parameterName, string message = null)
         {
-            if (String.IsNullOrEmpty(message))
+            if (string.IsNullOrEmpty(message))
             {
                 throw new ArgumentOutOfRangeException(parameterName);
             }
@@ -347,7 +346,7 @@ namespace Validation
         {
             if (!condition)
             {
-                throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, unformattedMessage, args), parameterName);
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, unformattedMessage, args), parameterName);
             }
         }
 
@@ -388,6 +387,7 @@ namespace Validation
         /// <summary>
         /// Throws an ArgumentException.
         /// </summary>
+        /// <returns>Nothing.  This method always throws.  But the signature allows calling code to "throw" this method for C# syntax reasons.</returns>
         [DebuggerStepThrough]
         public static Exception Fail(Exception innerException, string unformattedMessage, params object[] args)
         {
@@ -397,6 +397,7 @@ namespace Validation
         /// <summary>
         /// Helper method that formats string arguments.
         /// </summary>
+        /// <returns>The formatted string.</returns>
         private static string Format(string format, params object[] arguments)
         {
             return PrivateErrorHelpers.Format(format, arguments);

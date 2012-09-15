@@ -41,9 +41,12 @@ namespace Validation
         /// <summary>
         /// Helper method that formats string arguments.
         /// </summary>
+        /// <param name="format">The unformatted string.</param>
+        /// <param name="arguments">The formatting arguments.</param>
+        /// <returns>The formatted string.</returns>
         internal static string Format(string format, params object[] arguments)
         {
-            return String.Format(CultureInfo.CurrentCulture, format, arguments);
+            return string.Format(CultureInfo.CurrentCulture, format, arguments);
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Validation
         /// Throws an exception if the specified value is null.
         /// </summary>
         /// <typeparam name="T">The type of value to test.</typeparam>
+        /// <param name="value">The value.</param>
         [DebuggerStepThrough]
         public static void NotNull<T>([ValidatedNotNull]T value)
             where T : class
@@ -31,6 +32,7 @@ namespace Validation
         /// <summary>
         /// Throws an exception if the specified value is null or empty.
         /// </summary>
+        /// <param name="value">The value.</param>
         [DebuggerStepThrough]
         public static void NotNullOrEmpty([ValidatedNotNull]string value)
         {
@@ -54,6 +56,7 @@ namespace Validation
         /// Throws an exception if the specified value is null or empty.
         /// </summary>
         /// <typeparam name="T">The type of value to test.</typeparam>
+        /// <param name="values">The values.</param>
         [DebuggerStepThrough]
         public static void NotNullOrEmpty<T>([ValidatedNotNull]IEnumerable<T> values)
         {
@@ -65,6 +68,7 @@ namespace Validation
         /// Throws an exception if the specified value is not null.
         /// </summary>
         /// <typeparam name="T">The type of value to test.</typeparam>
+        /// <param name="value">The value.</param>
         [DebuggerStepThrough]
         public static void Null<T>(T value)
             where T : class
@@ -158,6 +162,7 @@ namespace Validation
         /// <summary>
         /// Throws an public exception.
         /// </summary>
+        /// <returns>Nothing.  This method always throws.  But the signature allows calling code to "throw" this method for C# syntax reasons.</returns>
         [DebuggerStepThrough]
         public static Exception NotReachable()
         {
@@ -234,6 +239,7 @@ namespace Validation
         /// <summary>
         /// Helper method that formats string arguments.
         /// </summary>
+        /// <returns>The formatted strings.</returns>
         private static string Format(string format, params object[] arguments)
         {
             return PrivateErrorHelpers.Format(format, arguments);

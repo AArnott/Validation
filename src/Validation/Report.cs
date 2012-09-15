@@ -39,6 +39,8 @@ namespace Validation
         /// <summary>
         /// Reports an error if a condition evaluates to true.
         /// </summary>
+        /// <param name="condition">if set to <c>true</c>, an error is reported.</param>
+        /// <param name="message">The formatted message.</param>
         [DebuggerStepThrough]
         public static void If(bool condition, string message = null)
         {
@@ -51,6 +53,8 @@ namespace Validation
         /// <summary>
         /// Reports an error if a condition does not evaluate to true.
         /// </summary>
+        /// <param name="condition">if set to <c>false</c>, an error is reported.</param>
+        /// <param name="message">The formatted message.</param>
         [DebuggerStepThrough]
         public static void IfNot(bool condition, string message = null)
         {
@@ -63,6 +67,9 @@ namespace Validation
         /// <summary>
         /// Reports an error if a condition does not evaluate to true.
         /// </summary>
+        /// <param name="condition">if set to <c>false</c>, an error is reported.</param>
+        /// <param name="message">The unformatted message.</param>
+        /// <param name="arg1">The only formatting argument.</param>
         [DebuggerStepThrough]
         public static void IfNot(bool condition, string message, object arg1)
         {
@@ -75,6 +82,10 @@ namespace Validation
         /// <summary>
         /// Reports an error if a condition does not evaluate to true.
         /// </summary>
+        /// <param name="condition">if set to <c>false</c>, an error is reported.</param>
+        /// <param name="message">The unformatted message.</param>
+        /// <param name="arg1">The first formatting argument.</param>
+        /// <param name="arg2">The second formatting argument.</param>
         [DebuggerStepThrough]
         public static void IfNot(bool condition, string message, object arg1, object arg2)
         {
@@ -87,6 +98,9 @@ namespace Validation
         /// <summary>
         /// Reports an error if a condition does not evaluate to true.
         /// </summary>
+        /// <param name="condition">if set to <c>false</c>, an error is reported.</param>
+        /// <param name="message">The unformatted message.</param>
+        /// <param name="args">The formatting args.</param>
         [DebuggerStepThrough]
         public static void IfNot(bool condition, string message, params object[] args)
         {
@@ -99,6 +113,7 @@ namespace Validation
         /// <summary>
         /// Reports a certain failure.
         /// </summary>
+        /// <param name="message">The message.</param>
         [DebuggerStepThrough]
         public static void Fail(string message = null)
         {
