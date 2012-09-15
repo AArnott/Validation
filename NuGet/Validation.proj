@@ -1,22 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup Label="Globals">
+		<Configuration>Release</Configuration>
+	</PropertyGroup>
+
 	<Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), EnlistmentInfo.props))\EnlistmentInfo.props" Condition=" '$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), EnlistmentInfo.props))' != '' " />
 
 	<ItemGroup>
 		<ProjectReference Include="$(ProjectRoot)src\Validation\Validation.csproj" />
 	</ItemGroup>
-		
+
 	<Target Name="Build" DependsOnTargets="GetBuildVersion">
 		<MSBuild
 			Projects="@(ProjectReference)"
 			Targets="Build"
-			Properties="Configuration=Release"
+			Properties="Configuration=$(Configuration)"
 			BuildInParallel="$(BuildInParallel)"
 			/>
 		<MSBuild
 			Projects="@(ProjectReference)"
 			Targets="Build"
-			Properties="Configuration=Release;TargetFrameworkVersion=v3.5;TargetFrameworkProfile=Client"
+			Properties="Configuration=$(Configuration);TargetFrameworkVersion=v3.5;TargetFrameworkProfile=Client"
 			BuildInParallel="$(BuildInParallel)"
 			/>
 
