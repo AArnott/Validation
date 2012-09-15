@@ -1,6 +1,9 @@
 Validation
 ==========
 
+*Method input validation and runtime checks that report errors or throw
+exceptions when failures are detected.*
+
 Basic input validation via the `Requires` class throws an ArgumentException.
 
 	Requires.NotNull(arg1, "arg1");
@@ -10,7 +13,8 @@ State validation via the `Verify` class throws an InvalidOperationException.
 
 	Verify.Operation(condition, "some error occurred.");
 
-Internal integrity checks via the `Assumes` class throws an InternalErrorException.
+Internal integrity checks via the `Assumes` class throws an
+InternalErrorException.
 
 	Assumes.True(condition, "some error");
 
