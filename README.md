@@ -4,6 +4,8 @@ Validation
 *Method input validation and runtime checks that report errors or throw
 exceptions when failures are detected.*
 
+This project is available as the [Validation][1] NuGet package.
+
 Basic input validation via the `Requires` class throws an ArgumentException.
 
 	Requires.NotNull(arg1, "arg1");
@@ -21,3 +23,5 @@ InternalErrorException.
 Warning signs that should not throw exceptions via the `Report` class.
 
 	Report.IfNot(condition, "some error");
+
+[1]: http://nuget.org/packages/Validation "Validation NuGet package"
