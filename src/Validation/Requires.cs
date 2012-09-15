@@ -10,7 +10,6 @@ namespace Validation
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Common runtime checks that throw ArgumentExceptions upon failure.
@@ -67,7 +66,7 @@ namespace Validation
         /// to local variables to avoid C# warnings.
         /// </remarks>
         [DebuggerStepThrough]
-        public static void NotNull([ValidatedNotNull]Task value, string parameterName)
+        public static void NotNull([ValidatedNotNull]System.Threading.Tasks.Task value, string parameterName)
         {
             if (value == null)
             {
