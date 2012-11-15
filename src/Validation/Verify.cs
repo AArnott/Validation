@@ -67,20 +67,6 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
-        /// </summary>
-        [DebuggerStepThrough]
-        public static void OperationWithHelp(bool condition, string message, string helpLink)
-        {
-            if (!condition)
-            {
-                var ex = new InvalidOperationException(message);
-                ex.HelpLink = helpLink;
-                throw ex;
-            }
-        }
-
-        /// <summary>
         /// Throws an <see cref="InvalidOperationException"/>.
         /// </summary>
         /// <returns>
@@ -145,30 +131,6 @@ namespace Validation
             if (!condition)
             {
                 throw new ObjectDisposedException(message);
-            }
-        }
-
-        /// <summary>
-        /// Throws an exception if the given value is negative.
-        /// </summary>
-        /// <param name="hresult">The HRESULT corresponding to the desired exception.</param>
-        /// <param name="ignorePreviousComCalls">If true, prevents <c>ThrowExceptionForHR</c> from returning an exception from a previous COM call and instead always use the HRESULT specified.</param>
-        /// <remarks>
-        /// No exception is thrown for S_FALSE.
-        /// </remarks>
-        [DebuggerStepThrough]
-        public static void HResult(int hresult, bool ignorePreviousComCalls = false)
-        {
-            if (hresult < 0)
-            {
-                if (ignorePreviousComCalls)
-                {
-                    Marshal.ThrowExceptionForHR(hresult, new IntPtr(-1));
-                }
-                else
-                {
-                    Marshal.ThrowExceptionForHR(hresult);
-                }
             }
         }
     }
