@@ -13,8 +13,8 @@
 		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 		<TargetFrameworkVersion Condition=" '$(TargetFrameworkVersion)' == '' ">v4.0</TargetFrameworkVersion>
 
-		<IntermediatePath>$(ProjectRoot)obj\$(TargetFrameworkVersion)\$(Configuration)\</IntermediatePath>
-		<OutputPath>$(ProjectRoot)bin\$(TargetFrameworkVersion)\$(Configuration)\</OutputPath>
+		<IntermediatePath>$(ProjectRoot)obj\$(Configuration)\</IntermediatePath>
+		<OutputPath>$(ProjectRoot)bin\$(Configuration)\</OutputPath>
 		<PlatformTarget>$(Platform)</PlatformTarget>
 
 		<!-- Release builds should break when StyleCop warnings exist. -->

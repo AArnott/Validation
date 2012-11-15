@@ -13,25 +13,16 @@
 		-->
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>
-			Method input validation and runtime checks that report errors or throw exceptions
-			when failures are detected.
+			Method input validation and runtime checks that report errors or throw exceptions when failures are detected.
 		</description>
 		<releaseNotes></releaseNotes>
 		<copyright>Copyright © Andrew Arnott</copyright>
 		<tags>InputValidation IntegrityCheck</tags>
 	</metadata>
 	<files>
-		<file src="$OutputPathPortable$Validation.dll" target="lib\net40-client" />
-		<file src="$OutputPathPortable$Validation.pdb" target="lib\net40-client" />
-		<file src="$OutputPathPortable$Validation.xml" target="lib\net40-client" />
-
-		<file src="$OutputPathPortable$Validation.dll" target="lib\winrt45" />
-		<file src="$OutputPathPortable$Validation.pdb" target="lib\winrt45" />
-		<file src="$OutputPathPortable$Validation.xml" target="lib\winrt45" />
-
-		<file src="$OutputPath35$Validation.dll" target="lib\net35-client" />
-		<file src="$OutputPath35$Validation.pdb" target="lib\net35-client" />
-		<file src="$OutputPath35$Validation.xml" target="lib\net35-client" />
+		<file src="$OutputPathPortable$Validation.dll" target="lib\portable-windows8+net40+sl5+windowsphone8" />
+		<file src="$OutputPathPortable$Validation.pdb" target="lib\portable-windows8+net40+sl5+windowsphone8" />
+		<file src="$OutputPathPortable$Validation.xml" target="lib\portable-windows8+net40+sl5+windowsphone8" />
 
 		<file src="..\src\Validation\**\*.cs" target="src" />
 		<file src="$IntermediatePath$Validation.Version.cs" target="src\Properties" />

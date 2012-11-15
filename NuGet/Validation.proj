@@ -17,17 +17,10 @@
 			Properties="Configuration=$(Configuration)"
 			BuildInParallel="$(BuildInParallel)"
 			/>
-		<MSBuild
-			Projects="@(ProjectReference)"
-			Targets="Build"
-			Properties="Configuration=$(Configuration);TargetFrameworkVersion=v3.5;TargetFrameworkProfile=Client"
-			BuildInParallel="$(BuildInParallel)"
-			/>
 
 		<ItemGroup>
 			<NuGetProperties Include="Version=$(NuGetPackageVersion)" />
-			<NuGetProperties Include="OutputPathPortable=$(ProjectRoot)bin\v4.0\release\" />
-			<NuGetProperties Include="OutputPath35=$(ProjectRoot)bin\v3.5\release\" />
+			<NuGetProperties Include="OutputPathPortable=$(ProjectRoot)bin\$(Configuration)\" />
 			<NuGetProperties Include="IntermediatePath=$(IntermediatePath)" />
 		</ItemGroup>
 
@@ -36,7 +29,7 @@
 				<Symbols>true</Symbols>
 				<Properties>@(NuGetProperties)</Properties>
 				<Version>$(NuGetPackageVersion)</Version>
-				<OutputPackageDirectory>$(ProjectRoot)bin\</OutputPackageDirectory>
+				<OutputPackageDirectory>$(ProjectRoot)bin\$(Configuration)</OutputPackageDirectory>
 			</NuGetSpecifications>
 		</ItemGroup>
 
