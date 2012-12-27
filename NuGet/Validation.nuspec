@@ -15,7 +15,7 @@
 		<description>
 			Method input validation and runtime checks that report errors or throw exceptions when failures are detected.
 		</description>
-		<releaseNotes></releaseNotes>
+		<releaseNotes>v2.0.1 allows partially trusted callers.</releaseNotes>
 		<copyright>Copyright © Andrew Arnott</copyright>
 		<tags>InputValidation IntegrityCheck</tags>
 	</metadata>
