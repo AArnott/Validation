@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.0.0" xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <Header>
+    <Title>Verifies that a string argument is not null or empty.</Title>
+    <Author>Andrew Arnott</Author>
+    <Shortcut>ArgLengthCheck</Shortcut>
+    <Description>Checks an argument for a null value and throws a ArgumentNullException if it is.</Description>
+    <SnippetTypes>
+      <SnippetType>Expansion</SnippetType>
+    </SnippetTypes>
+  </Header>
+  <Snippet>
+    <Declarations>
+      <Object>
+        <ID>paramName</ID>
+        <Type>System.String</Type>
+        <Default>paramName</Default>
+      </Object>
+    </Declarations>
+    <Code Language="CSharp">
+      <![CDATA[if (String.IsNullOrEmpty($paramName$)) {
+				throw new ArgumentNullException("$paramName$");
+			}
+			$end$]]>
+    </Code>
+  </Snippet>
+</CodeSnippet>
