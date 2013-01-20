@@ -56,3 +56,4 @@ The two snippets are `vArgNullCheck` and `vArgLengthCheck`, which expand to chec
 for null inputs or null-or-empty inputs, respectively.
 
 [1]: http://nuget.org/packages/Validation "Validation NuGet package"
+[2]: https://github.com/AArnott/Validation/tree/master/My%20Code%20Snippets "Code Snippets for Visual Studio"
