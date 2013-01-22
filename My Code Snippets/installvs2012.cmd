@@ -1,0 +1,2 @@
+@ECHO OFF 
+IF EXIST "%USERPROFILE%\My Documents" (COPY Requires*.snippet "%USERPROFILE%\My Documents\Visual Studio 2012\Code Snippets\Visual C#\My Code Snippets") ELSE (IF EXIST "%USERPROFILE%\Documents" (COPY Requires*.snippet "%USERPROFILE%\Documents\Visual Studio 2012\Code Snippets\Visual C#\My Code Snippets"))
