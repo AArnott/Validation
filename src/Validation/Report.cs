@@ -119,7 +119,7 @@ namespace Validation
         {
             if (message == null)
             {
-                message = "An public error occurred.";
+                message = "A recoverable error has been detected.";
             }
 
             Debug.WriteLine(message);
