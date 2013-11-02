@@ -28,12 +28,12 @@ Code Snippets
 -------------
 
 Make writing input validation especially convenient with [code snippets][2].
-Copy them into your `Documents\Visual Studio 2012\Code Snippets\Visual C#\My Code Snippets`
+Copy them into your `Documents\Visual Studio 201x\Code Snippets\Visual C#\My Code Snippets`
 folder (or prior version of Visual Studio works too) and just type the first few letters
 of the code snippet name to get auto-completion assisted input validation.
-If you don't want to manually copy the snippets, you can also use the `installvs2012.cmd`
-and `installvs2010.cmd` commands that are located in the same directory as the
-[code snippets][2].
+If you don't want to manually copy the snippets, you can also use the `install.cmd`
+script that is located in the same directory as the [code snippets][2], which will
+copy the code snippet files into VS 2010, 2012, and 2013 (whichever ones you have installed).
 
 Note that if you have Resharper installed, code snippets don't appear in
 auto-completion lists so you may have to press `Ctrl+J` after the first few letters
