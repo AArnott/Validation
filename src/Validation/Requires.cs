@@ -7,6 +7,7 @@
 namespace Validation
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
@@ -189,17 +190,29 @@ namespace Validation
                 throw new ArgumentNullException(parameterName);
             }
 
-            bool hasElements = false;
-            foreach (object value in values)
-            {
-                hasElements = true;
-                break;
-            }
+            ICollection collection = values as ICollection;
 
-            if (!hasElements)
+            if (collection != null)
             {
+                if (collection.Count > 0)
+                {
+                    return;    
+                }
+
                 throw new ArgumentException(Format(Strings.Argument_EmptyArray, parameterName), parameterName);
             }
+
+            IEnumerator enumerator = values.GetEnumerator();
+
+            using (enumerator as IDisposable)
+            {
+                if (enumerator.MoveNext())
+                {
+                    return;
+                }
+            }
+
+            throw new ArgumentException(Format(Strings.Argument_EmptyArray, parameterName), parameterName);
         }
 
         /// <summary>
