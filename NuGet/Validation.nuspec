@@ -26,9 +26,9 @@ v2.0.1 allows partially trusted callers.
 		<tags>InputValidation IntegrityCheck</tags>
 	</metadata>
 	<files>
-		<file src="$OutputPathPortable$Validation.dll" target="lib\portable-windows8+net40+sl5+windowsphone8+MonoAndroid+MonoTouch" />
-		<file src="$OutputPathPortable$Validation.pdb" target="lib\portable-windows8+net40+sl5+windowsphone8+MonoAndroid+MonoTouch" />
-		<file src="$OutputPathPortable$Validation.xml" target="lib\portable-windows8+net40+sl5+windowsphone8+MonoAndroid+MonoTouch" />
+		<file src="$OutputPathPortable$Validation.dll" target="lib\portable-windows8+net40+sl5+wp8+wpa81+wp81+MonoAndroid+MonoTouch" />
+		<file src="$OutputPathPortable$Validation.pdb" target="lib\portable-windows8+net40+sl5+wp8+wpa81+wp81+MonoAndroid+MonoTouch" />
+		<file src="$OutputPathPortable$Validation.xml" target="lib\portable-windows8+net40+sl5+wp8+wpa81+wp81+MonoAndroid+MonoTouch" />
 
 		<file src="..\src\Validation\**\*.cs" target="src" />
 		<file src="$IntermediatePath$Validation.Version.cs" target="src\Properties" />
