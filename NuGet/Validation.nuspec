@@ -18,7 +18,7 @@
 			Check out the code snippets available at https://github.com/AArnott/Validation/tree/master/My%20Code%20Snippets and make your input validation even easier with auto-completion for quoted parameter names.
 		</description>
 		<releaseNotes>
-v2.0.4 adds wpa81 target.
+v2.0.5 adds wpa81 target.
 v2.0.3 adds targetability of Xamarin MonoTouch and MonoAndroid.
 v2.0.2 corrects an error message and adds code snippets.
 v2.0.1 allows partially trusted callers.
