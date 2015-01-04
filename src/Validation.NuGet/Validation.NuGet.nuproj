@@ -36,6 +36,8 @@
     <LicenseUrl>http://opensource.org/licenses/MS-PL</LicenseUrl>
     <Copyright>Copyright © Andrew Arnott</Copyright>
     <Tags>InputValidation IntegrityCheck</Tags>
+    <EmbedSourceFiles>true</EmbedSourceFiles>
+    <MinClientVersion>2.8.3</MinClientVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Validation\Validation.csproj" />
