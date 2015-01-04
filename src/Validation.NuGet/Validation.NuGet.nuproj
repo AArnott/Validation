@@ -16,7 +16,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <OutDir>$(OutputPath)</OutDir>
-
     <NuProjPackagePath>packages\NuProj.0.9.2-beta\tools</NuProjPackagePath>
     <NuProjPath Condition=" '$(SolutionDir)' != '' ">$(SolutionDir)$(NuProjPackagePath)</NuProjPath>
     <NuProjPath Condition=" '$(NuProjPath)' == '' ">..\$(NuProjPackagePath)</NuProjPath>
@@ -32,8 +31,7 @@
     <Owners>Andrew Arnott</Owners>
     <Summary>Provides convenient methods and code snippets for validating input and running state.</Summary>
     <Description>Method input validation and runtime checks that report errors or throw exceptions when failures are detected. Check out the code snippets available at https://github.com/AArnott/Validation/tree/master/My%20Code%20Snippets and make your input validation even easier with auto-completion for quoted parameter names.</Description>
-    <ReleaseNotes>
-    </ReleaseNotes>
+    <ReleaseNotes>Add support for Xamarin.iOS (Unified)</ReleaseNotes>
     <ProjectUrl>http://github.com/aarnott/Validation</ProjectUrl>
     <LicenseUrl>http://opensource.org/licenses/MS-PL</LicenseUrl>
     <Copyright>Copyright © Andrew Arnott</Copyright>
@@ -47,17 +45,14 @@
       <Link>README.md</Link>
     </None>
   </ItemGroup>
-
   <Target Name="SetVersionFromTxtFile" DependsOnTargets="GetBuildVersion">
     <PropertyGroup>
       <Version>$(NuGetPackageVersion)</Version>
-
       <!-- Redefine some properties set in the .targets files that depend on Version. -->
       <NuGetOutputPath>$([System.IO.Path]::GetFullPath('$(OutDir)$(Id).$(Version).nupkg'))</NuGetOutputPath>
       <NuGetSymbolsOutputPath>$(OutDir)$(Id).$(Version).symbols.nupkg</NuGetSymbolsOutputPath>
     </PropertyGroup>
   </Target>
-  
   <Import Project="$(NuProjPath)\NuProj.targets" />
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), EnlistmentInfo.targets))\EnlistmentInfo.targets" Condition=" '$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), EnlistmentInfo.targets))' != '' " />
 </Project>
