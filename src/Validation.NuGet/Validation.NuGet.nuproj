@@ -45,6 +45,13 @@
       <Link>README.md</Link>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="tools\CodeSnippets\2013\RequiresNotNull.snippet" />
+    <Content Include="tools\CodeSnippets\2013\RequiresNotNullOrEmpty.snippet" />
+    <Content Include="tools\CodeSnippets\2015\RequiresNotNull.snippet" />
+    <Content Include="tools\CodeSnippets\2015\RequiresNotNullOrEmpty.snippet" />
+    <Content Include="tools\CodeSnippets\install.cmd" />
+  </ItemGroup>
   <Target Name="SetVersionFromTxtFile" DependsOnTargets="GetBuildVersion">
     <PropertyGroup>
       <Version>$(NuGetPackageVersion)</Version>

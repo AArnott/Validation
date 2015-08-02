@@ -7,28 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validation", "Validation\Va
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{223AEE15-59AF-40A6-BCBA-78D2A3CA598D}"
 	ProjectSection(SolutionItems) = preProject
+		..\nuget.config = ..\nuget.config
 		..\README.md = ..\README.md
 		version.txt = version.txt
 	EndProjectSection
 EndProject
 Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "Validation.NuGet", "Validation.NuGet\Validation.NuGet.nuproj", "{0F350EC9-D80D-4479-B602-C3D2DEB45367}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code Snippets", "Code Snippets", "{3A97B2CB-B66E-4818-B7A0-57066311F006}"
-	ProjectSection(SolutionItems) = preProject
-		..\My Code Snippets\install.cmd = ..\My Code Snippets\install.cmd
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2013", "2013", "{F0E08B8C-F8F0-4763-B4F3-53C16C77EA48}"
-	ProjectSection(SolutionItems) = preProject
-		..\My Code Snippets\2013\RequiresNotNull.snippet = ..\My Code Snippets\2013\RequiresNotNull.snippet
-		..\My Code Snippets\2013\RequiresNotNullOrEmpty.snippet = ..\My Code Snippets\2013\RequiresNotNullOrEmpty.snippet
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2015", "2015", "{0D1EA359-9E48-46DD-886F-03E491A5BCF6}"
-	ProjectSection(SolutionItems) = preProject
-		..\My Code Snippets\2015\RequiresNotNull.snippet = ..\My Code Snippets\2015\RequiresNotNull.snippet
-		..\My Code Snippets\2015\RequiresNotNullOrEmpty.snippet = ..\My Code Snippets\2015\RequiresNotNullOrEmpty.snippet
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,9 +31,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{F0E08B8C-F8F0-4763-B4F3-53C16C77EA48} = {3A97B2CB-B66E-4818-B7A0-57066311F006}
-		{0D1EA359-9E48-46DD-886F-03E491A5BCF6} = {3A97B2CB-B66E-4818-B7A0-57066311F006}
 	EndGlobalSection
 EndGlobal
