@@ -53,7 +53,7 @@ And the first `paramName` is selected. Simply type the actual parameter name
 (Intellisense will auto-complete for you) and then the quoted paramName name
 will automatically be changed to match.
 
-The two snippets are `rnn` (`Requires.NotNull`) and `rnne` (`Requires.NotNullOrEmpty`),
+The two snippets are `rnn` and `rnne`
 which expand to check for null inputs or null-or-empty inputs, respectively.
 
 [1]: http://nuget.org/packages/Validation "Validation NuGet package"
