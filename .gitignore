@@ -6,6 +6,10 @@
 *.user
 *.sln.docstates
 *.sln.ide/
+.vs/
+project.lock.json
+*.nuget.targets
+*.nuget.props
 
 # Build results
 
