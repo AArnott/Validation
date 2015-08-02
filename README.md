@@ -56,4 +56,4 @@ will automatically be changed to match.
 The two snippets are `rnn` (`Requires.NotNull`) and `rnne` (`Requires.NotNullOrEmpty`),
 which expand to check for null inputs or null-or-empty inputs, respectively.
 
- [1]: http://nuget.org/packages/Validation "Validation NuGet package"
+[1]: http://nuget.org/packages/Validation "Validation NuGet package"
