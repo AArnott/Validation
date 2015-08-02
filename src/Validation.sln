@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validation", "Validation\Validation.csproj", "{E016A630-A79B-4B5D-8997-E66581D62B81}"
 EndProject
@@ -16,6 +16,23 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{AE402C7D-9156-48B2-B792-07BE8E0E4D50}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code Snippets", "Code Snippets", "{3A97B2CB-B66E-4818-B7A0-57066311F006}"
+	ProjectSection(SolutionItems) = preProject
+		..\My Code Snippets\install.cmd = ..\My Code Snippets\install.cmd
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2013", "2013", "{F0E08B8C-F8F0-4763-B4F3-53C16C77EA48}"
+	ProjectSection(SolutionItems) = preProject
+		..\My Code Snippets\2013\RequiresNotNull.snippet = ..\My Code Snippets\2013\RequiresNotNull.snippet
+		..\My Code Snippets\2013\RequiresNotNullOrEmpty.snippet = ..\My Code Snippets\2013\RequiresNotNullOrEmpty.snippet
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2015", "2015", "{0D1EA359-9E48-46DD-886F-03E491A5BCF6}"
+	ProjectSection(SolutionItems) = preProject
+		..\My Code Snippets\2015\RequiresNotNull.snippet = ..\My Code Snippets\2015\RequiresNotNull.snippet
+		..\My Code Snippets\2015\RequiresNotNullOrEmpty.snippet = ..\My Code Snippets\2015\RequiresNotNullOrEmpty.snippet
 	EndProjectSection
 EndProject
 Global
@@ -35,5 +52,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F0E08B8C-F8F0-4763-B4F3-53C16C77EA48} = {3A97B2CB-B66E-4818-B7A0-57066311F006}
+		{0D1EA359-9E48-46DD-886F-03E491A5BCF6} = {3A97B2CB-B66E-4818-B7A0-57066311F006}
 	EndGlobalSection
 EndGlobal
