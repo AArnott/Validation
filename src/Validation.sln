@@ -13,11 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "Validation.NuGet", "Validation.NuGet\Validation.NuGet.nuproj", "{0F350EC9-D80D-4479-B602-C3D2DEB45367}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{AE402C7D-9156-48B2-B792-07BE8E0E4D50}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code Snippets", "Code Snippets", "{3A97B2CB-B66E-4818-B7A0-57066311F006}"
 	ProjectSection(SolutionItems) = preProject
 		..\My Code Snippets\install.cmd = ..\My Code Snippets\install.cmd
