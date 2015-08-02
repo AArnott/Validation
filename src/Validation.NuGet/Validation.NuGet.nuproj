@@ -44,13 +44,13 @@
     <Content Include="..\..\README.md">
       <Link>README.md</Link>
     </Content>
+    <Content Include="tools\install_snippets.cmd" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="tools\CodeSnippets\2013\RequiresNotNull.snippet" />
-    <Content Include="tools\CodeSnippets\2013\RequiresNotNullOrEmpty.snippet" />
-    <Content Include="tools\CodeSnippets\2015\RequiresNotNull.snippet" />
-    <Content Include="tools\CodeSnippets\2015\RequiresNotNullOrEmpty.snippet" />
-    <Content Include="tools\CodeSnippets\install.cmd" />
+    <Content Include="tools\2013\RequiresNotNull.snippet" />
+    <Content Include="tools\2013\RequiresNotNullOrEmpty.snippet" />
+    <Content Include="tools\2015\RequiresNotNull.snippet" />
+    <Content Include="tools\2015\RequiresNotNullOrEmpty.snippet" />
   </ItemGroup>
   <Target Name="SetVersionFromTxtFile" DependsOnTargets="GetBuildVersion">
     <PropertyGroup>

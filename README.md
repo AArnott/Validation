@@ -28,7 +28,7 @@ Code Snippets
 -------------
 
 Make writing input validation especially convenient with [code snippets][2].
-Run the tools\install.cmd script within this package to copy the code snippets
+Run the tools\install_snippets.cmd script within this package to copy the code snippets
 into your `Documents\Visual Studio 201x\Code Snippets\Visual C#\My Code Snippets`
 folder(s) and just type the first few letters of the code snippet name to get
 auto-completion assisted input validation.
