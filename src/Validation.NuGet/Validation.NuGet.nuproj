@@ -41,9 +41,9 @@
     <ProjectReference Include="..\Validation\Validation.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\README.md">
+    <Content Include="..\..\README.md">
       <Link>README.md</Link>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="tools\CodeSnippets\2013\RequiresNotNull.snippet" />
