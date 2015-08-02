@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validation", "Validation\Va
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{223AEE15-59AF-40A6-BCBA-78D2A3CA598D}"
 	ProjectSection(SolutionItems) = preProject
+		..\EnlistmentInfo.props = ..\EnlistmentInfo.props
+		..\EnlistmentInfo.targets = ..\EnlistmentInfo.targets
 		..\nuget.config = ..\nuget.config
 		..\README.md = ..\README.md
 		version.txt = version.txt

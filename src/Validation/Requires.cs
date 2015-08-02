@@ -128,9 +128,9 @@ namespace Validation
         [DebuggerStepThrough]
         public static void NotNullOrEmpty([ValidatedNotNull]string value, string parameterName)
         {
-            // To the guy that is doing random code cleaning: 
+            // To the guy that is doing random code cleaning:
             // Consider the perfomance when changing the code to delegate to NotNull.
-            // In general do not chain call to another function, check first and return as earlier as possible. 
+            // In general do not chain call to another function, check first and return as earlier as possible.
             if (value == null)
             {
                 throw new ArgumentNullException(parameterName);
@@ -152,9 +152,9 @@ namespace Validation
         [DebuggerStepThrough]
         public static void NotNullOrWhiteSpace([ValidatedNotNull]string value, string parameterName)
         {
-            // To the guy that is doing random code cleaning: 
+            // To the guy that is doing random code cleaning:
             // Consider the perfomance when changing the code to delegate to NotNull.
-            // In general do not chain call to another function, check first and return as earlier as possible. 
+            // In general do not chain call to another function, check first and return as earlier as possible.
             if (value == null)
             {
                 throw new ArgumentNullException(parameterName);
@@ -182,9 +182,9 @@ namespace Validation
         [DebuggerStepThrough]
         public static void NotNullOrEmpty([ValidatedNotNull]System.Collections.IEnumerable values, string parameterName)
         {
-            // To the guy that is doing random code cleaning: 
+            // To the guy that is doing random code cleaning:
             // Consider the perfomance when changing the code to delegate to NotNull.
-            // In general do not chain call to another function, check first and return as earlier as possible. 
+            // In general do not chain call to another function, check first and return as earlier as possible.
             if (values == null)
             {
                 throw new ArgumentNullException(parameterName);
@@ -196,7 +196,7 @@ namespace Validation
             {
                 if (collection.Count > 0)
                 {
-                    return;    
+                    return;
                 }
 
                 throw new ArgumentException(Format(Strings.Argument_EmptyArray, parameterName), parameterName);
