@@ -44,6 +44,7 @@
     <Content Include="..\..\README.md">
       <Link>README.md</Link>
     </Content>
+    <Content Include="tools\uninstall_snippets.cmd" />
     <Content Include="tools\install_snippets.cmd" />
   </ItemGroup>
   <ItemGroup>
