@@ -4,6 +4,8 @@ Validation
 *Method input validation and runtime checks that report errors or throw
 exceptions when failures are detected.*
 
+[![Build status](https://ci.appveyor.com/api/projects/status/nhrah957le2jri3q?svg=true)](https://ci.appveyor.com/project/AArnott/validation)
+
 This project is available as the [Validation][1] NuGet package.
 
 Basic input validation via the `Requires` class throws an ArgumentException.
