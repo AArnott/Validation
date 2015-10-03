@@ -13,8 +13,9 @@
 		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 		<TargetFrameworkVersion Condition=" '$(TargetFrameworkVersion)' == '' ">v4.0</TargetFrameworkVersion>
 
-		<IntermediatePath>$(ProjectRoot)obj\$(Configuration)\</IntermediatePath>
-		<OutputPath>$(ProjectRoot)bin\$(Configuration)\</OutputPath>
+    <BaseIntermediateOutputPath>$(ProjectRoot)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)$(Configuration)\</IntermediateOutputPath>
+    <OutputPath>$(ProjectRoot)bin\$(MSBuildProjectName)\$(Configuration)\</OutputPath>
 		<PlatformTarget>$(Platform)</PlatformTarget>
 
 		<ErrorReport>prompt</ErrorReport>
