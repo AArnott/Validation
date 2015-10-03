@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23311.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Validation", "Validation\Validation.csproj", "{E016A630-A79B-4B5D-8997-E66581D62B81}"
 EndProject
@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\EnlistmentInfo.targets = ..\EnlistmentInfo.targets
 		..\nuget.config = ..\nuget.config
 		..\README.md = ..\README.md
-		..\version.txt = ..\version.txt
+		..\version.json = ..\version.json
 	EndProjectSection
 EndProject
 Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "Validation.NuGet", "Validation.NuGet\Validation.NuGet.nuproj", "{0F350EC9-D80D-4479-B602-C3D2DEB45367}"
