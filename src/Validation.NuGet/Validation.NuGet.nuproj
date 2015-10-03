@@ -38,6 +38,7 @@
     <MinClientVersion>2.8.3</MinClientVersion>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Validation.NewPortable\Validation.NewPortable.csproj" />
     <ProjectReference Include="..\Validation\Validation.csproj" />
   </ItemGroup>
   <ItemGroup>
