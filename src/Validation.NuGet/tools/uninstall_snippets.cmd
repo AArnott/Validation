@@ -18,14 +18,14 @@ if defined ValueName (
 
 FOR %%V IN (2010 2012 2013) DO (
     IF EXIST "%DOCS%\Visual Studio %%V" (
-        ECHO Installing snippets for Visual Studio %%V...
-        ROBOCOPY /NJH /NJS /NDL /NFL "%~dp02013" "%DOCS%\Visual Studio %%V\Code Snippets\Visual C#\My Code Snippets" *.snippet
+        ECHO Removing snippets from Visual Studio %%V...
+        FOR /F %%F IN ('DIR /B ^"%~dp02013^"') DO DEL "%DOCS%\Visual Studio %%V\Code Snippets\Visual C#\My Code Snippets\%%F"
     )
 )
 
 FOR %%V IN (2015) DO (
     IF EXIST "%DOCS%\Visual Studio %%V" (
-        ECHO Installing snippets for Visual Studio %%V...
-        ROBOCOPY /NJH /NJS /NDL /NFL "%~dp02015" "%DOCS%\Visual Studio %%V\Code Snippets\Visual C#\My Code Snippets" *.snippet
+        ECHO Removing snippets from Visual Studio %%V...
+        FOR /F %%F IN ('DIR /B ^"%~dp02015^"') DO DEL "%DOCS%\Visual Studio %%V\Code Snippets\Visual C#\My Code Snippets\%%F"
     )
 )
