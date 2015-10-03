@@ -18,6 +18,7 @@
     <OutDir>$(OutputPath)</OutDir>
     <NuProjPath>$(NuProjPackagePath)tools\</NuProjPath>
     <VersionDependsOn>$(VersionDependsOn);GetNuPkgVersion</VersionDependsOn>
+    <NuSpecTemplate>Validation.nuspec</NuSpecTemplate>
   </PropertyGroup>
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
@@ -51,6 +52,9 @@
     <Content Include="tools\2013\RequiresNotNullOrEmpty.snippet" />
     <Content Include="tools\2015\RequiresNotNull.snippet" />
     <Content Include="tools\2015\RequiresNotNullOrEmpty.snippet" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Validation.nuspec" />
   </ItemGroup>
   <Import Project="$(NuProjPath)\NuProj.targets" />
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), EnlistmentInfo.targets))\EnlistmentInfo.targets" Condition=" '$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), EnlistmentInfo.targets))' != '' " />
