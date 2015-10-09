@@ -13,7 +13,7 @@
     <dependencies>
       <group targetFramework="net451">
         <dependency id="System.Diagnostics.Debug" version="4.0.0" />
-        <dependency id="System.Diagnostics.Tools" version="4.0.0" />
+        <dependency id="System.Diagnostics.Tools" version="4.0.0-beta-22816" />
         <dependency id="System.Globalization" version="4.0.0" />
         <dependency id="System.Linq" version="4.0.0" />
         <dependency id="System.Reflection" version="4.0.0" />
@@ -23,7 +23,7 @@
       </group>
       <group targetFramework="win81">
         <dependency id="System.Diagnostics.Debug" version="4.0.0" />
-        <dependency id="System.Diagnostics.Tools" version="4.0.0" />
+        <dependency id="System.Diagnostics.Tools" version="4.0.0-beta-22816" />
         <dependency id="System.Globalization" version="4.0.0" />
         <dependency id="System.Linq" version="4.0.0" />
         <dependency id="System.Reflection" version="4.0.0" />
@@ -33,7 +33,7 @@
       </group>
       <group targetFramework="wpa81">
         <dependency id="System.Diagnostics.Debug" version="4.0.0" />
-        <dependency id="System.Diagnostics.Tools" version="4.0.0" />
+        <dependency id="System.Diagnostics.Tools" version="4.0.0-beta-22816" />
         <dependency id="System.Globalization" version="4.0.0" />
         <dependency id="System.Linq" version="4.0.0" />
         <dependency id="System.Reflection" version="4.0.0" />
@@ -43,7 +43,7 @@
       </group>
       <group targetFramework="dotnet">
         <dependency id="System.Diagnostics.Debug" version="4.0.0" />
-        <dependency id="System.Diagnostics.Tools" version="4.0.0" />
+        <dependency id="System.Diagnostics.Tools" version="4.0.0-beta-22816" />
         <dependency id="System.Globalization" version="4.0.0" />
         <dependency id="System.Linq" version="4.0.0" />
         <dependency id="System.Reflection" version="4.0.0" />
