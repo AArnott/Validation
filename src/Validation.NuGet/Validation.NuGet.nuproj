@@ -70,13 +70,4 @@
       <Version>$(NuGetPackageVersion)</Version>
     </PropertyGroup>
   </Target>
-  <Target Name="CopyAssemblyToLibDotNetFolder" DependsOnTargets="ConvertItems" AfterTargets="ConvertItems">
-    <ItemGroup>
-      <File Include="@(File)"
-            Condition=" '%(File.TargetFramework)' == 'portable-net451+win81+wpa81' ">
-        <!--<TargetFramework>dotnet</TargetFramework>-->
-        <TargetPath>lib\dotnet\%(FileName)%(Extension)</TargetPath>
-      </File>
-    </ItemGroup>
-  </Target>
 </Project>
