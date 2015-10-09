@@ -18,36 +18,20 @@
         <dependency id="System.Linq" version="4.0.0" />
         <dependency id="System.Reflection" version="4.0.0" />
         <dependency id="System.Resources.ResourceManager" version="4.0.0" />
-        <dependency id="System.Runtime" version="4.0.10" />
+        <dependency id="System.Runtime" version="4.0.0" />
         <dependency id="System.Threading.Tasks" version="4.0.0" />
       </group>
-      <group targetFramework="net">
-        <!-- this section intentionally left blank. -->
-      </group>
-      <group targetFramework="sl">
-        <!-- this section intentionally left blank. -->
-      </group>
-      <group targetFramework="win">
-        <!-- this section intentionally left blank. -->
-      </group>
-      <group targetFramework="wpa">
-        <!-- this section intentionally left blank. -->
-      </group>
-      <group targetFramework="wp">
-        <!-- this section intentionally left blank. -->
-      </group>
-      <group targetFramework="MonoAndroid">
-        <!-- this section intentionally left blank. -->
-      </group>
-      <group targetFramework="MonoTouch">
-        <!-- this section intentionally left blank. -->
-      </group>
-      <group targetFramework="XamarinIOS">
-        <!-- this section intentionally left blank. -->
-      </group>
-      <group>
-        <!-- this section intentionally left blank. -->
-      </group>
+      <!-- These empty groups all represent platforms that inherently support the
+           reference assemblies our projects compile against (whether mscorlib or contracts). -->
+      <group targetFramework="MonoAndroid" />
+      <group targetFramework="MonoTouch" />
+      <group targetFramework="XamarinIOS" />
+      <group targetFramework="wp" />
+      <group targetFramework="win" />
+      <group targetFramework="sl50" />
+      <group targetFramework="net" />
+      <group targetFramework="wpa" />
+      <group />
     </dependencies>
   </metadata>
 </package>
