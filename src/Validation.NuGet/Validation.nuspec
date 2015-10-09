@@ -23,15 +23,7 @@
       <group targetFramework="net40"/>
       <!-- These non-empty groups are designed to match the lib\portable-net451+win81+wpa81
            folder assembly, which compiles against System.Runtime.dll -->
-      <group targetFramework="net451">
-        <dependency id="System.Diagnostics.Debug" version="4.0.0" />
-        <dependency id="System.Diagnostics.Tools" version="4.0.0-beta-22816" />
-        <dependency id="System.Globalization" version="4.0.0" />
-        <dependency id="System.Linq" version="4.0.0" />
-        <dependency id="System.Reflection" version="4.0.0" />
-        <dependency id="System.Resources.ResourceManager" version="4.0.0" />
-        <dependency id="System.Threading.Tasks" version="4.0.0" />
-      </group>
+      <group targetFramework="net451" />
       <group targetFramework="win81">
         <dependency id="System.Diagnostics.Debug" version="4.0.0" />
         <dependency id="System.Diagnostics.Tools" version="4.0.0-beta-22816" />
