@@ -11,8 +11,18 @@
     <copyright></copyright>
     <tags></tags>
     <dependencies>
+      <!-- These empty groups are designed to match the lib\portable-net40+* folder assembly,
+           which compiles against mscorlib. -->
       <group />
-      <group targetFramework="MonoAndroid"/>
+      <group targetFramework="MonoAndroid10"/>
+      <group targetFramework="MonoTouch10"/>
+      <group targetFramework="XamarinIOS10"/>
+      <group targetFramework="wp80"/>
+      <group targetFramework="win80"/>
+      <group targetFramework="sl50"/>
+      <group targetFramework="net40"/>
+      <!-- These non-empty groups are designed to match the lib\portable-net451+win81+wpa81
+           folder assembly, which compiles against System.Runtime.dll -->
       <group targetFramework="net451">
         <dependency id="System.Diagnostics.Debug" version="4.0.0" />
         <dependency id="System.Diagnostics.Tools" version="4.0.0-beta-22816" />
