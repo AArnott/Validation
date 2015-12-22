@@ -5,6 +5,7 @@ Validation
 exceptions when failures are detected.*
 
 [![Build status](https://ci.appveyor.com/api/projects/status/nhrah957le2jri3q?svg=true)](https://ci.appveyor.com/project/AArnott/validation)
+[![NuGet package](https://img.shields.io/nuget/v/Validation.svg)](https://nuget.org/packages/Validation)
 
 This project is available as the [Validation][1] NuGet package.
 
