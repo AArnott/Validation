@@ -1,8 +1,5 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="Andrew Arnott">
-//     Copyright (c) Andrew Arnott. All rights reserved.
-// </copyright>
-//-----------------------------------------------------------------------
+﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Licensed under the MS-PL license. See LICENSE.txt file in the project root for full license information.
 
 using System.Reflection;
 using System.Resources;
@@ -17,7 +14,7 @@ using System.Security;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyProduct("Validation")]
-[assembly: AssemblyCopyright("Copyright © Andrew Arnott 2012")]
+[assembly: AssemblyCopyright("Copyright © Andrew Arnott")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en-US")]
