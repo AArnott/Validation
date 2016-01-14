@@ -30,7 +30,7 @@
     <Description>Method input validation and runtime checks that report errors or throw exceptions when failures are detected. Check out the code snippets available at https://github.com/AArnott/Validation/tree/master/My%20Code%20Snippets and make your input validation even easier with auto-completion for quoted parameter names.</Description>
     <ReleaseNotes>Add support for Xamarin.iOS (Unified)</ReleaseNotes>
     <ProjectUrl>http://github.com/aarnott/Validation</ProjectUrl>
-    <LicenseUrl>http://opensource.org/licenses/MS-PL</LicenseUrl>
+    <LicenseUrl>https://raw.githubusercontent.com/AArnott/Validation/$CommitId$/LICENSE.txt</LicenseUrl>
     <Copyright>Copyright © Andrew Arnott</Copyright>
     <Tags>InputValidation IntegrityCheck</Tags>
     <EmbedSourceFiles>true</EmbedSourceFiles>
@@ -62,11 +62,12 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\Nerdbank.GitVersioning.1.1.52-rc\build\NerdBank.GitVersioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Nerdbank.GitVersioning.1.1.52-rc\build\NerdBank.GitVersioning.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Nerdbank.GitVersioning.1.2.8\build\NerdBank.GitVersioning.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Nerdbank.GitVersioning.1.2.8\build\NerdBank.GitVersioning.targets'))" />
   </Target>
-  <Import Project="..\..\packages\Nerdbank.GitVersioning.1.1.52-rc\build\NerdBank.GitVersioning.targets" Condition="Exists('..\..\packages\Nerdbank.GitVersioning.1.1.52-rc\build\NerdBank.GitVersioning.targets')" />
+  <Import Project="..\..\packages\Nerdbank.GitVersioning.1.2.8\build\NerdBank.GitVersioning.targets" Condition="Exists('..\..\packages\Nerdbank.GitVersioning.1.2.8\build\NerdBank.GitVersioning.targets')" />
   <Target Name="GetNuPkgVersion" DependsOnTargets="GetBuildVersion">
     <PropertyGroup>
+      <NuSpecProperties>$(NuGetProperties);CommitId=$(GitCommitIdShort)</NuSpecProperties>
       <Version>$(NuGetPackageVersion)</Version>
     </PropertyGroup>
   </Target>
