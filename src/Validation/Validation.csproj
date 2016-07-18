@@ -21,10 +21,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <Prefer32Bit>false</Prefer32Bit>
     <CodeAnalysisRuleSet>Validation.ruleset</CodeAnalysisRuleSet>
+    <DefineConstants>TRACE;DEBUG;NET40</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Prefer32Bit>false</Prefer32Bit>
     <CodeAnalysisRuleSet>Validation.ruleset</CodeAnalysisRuleSet>
+    <DefineConstants>TRACE;NET40</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>

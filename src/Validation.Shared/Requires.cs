@@ -299,6 +299,27 @@ namespace Validation
         }
 
         /// <summary>
+        /// Throws an <see cref="ArgumentException"/> if the specified value
+        /// is not defined by the enum type.
+        /// </summary>
+        /// <typeparam name="T">The type of enum the <paramref name="value"/> is constrained to be defined within.</typeparam>
+        /// <param name="value">The value that must be defined in <typeparamref name="T"/>.</param>
+        /// <param name="parameterName">The name of the parameter that supplied the <paramref name="value"/>.</param>
+        [DebuggerStepThrough]
+        public static void Defined<T>(T value, string parameterName)
+#if NET45
+            where T : struct, IComparable, IFormattable // i.e. Enum
+#else
+            where T : struct, IConvertible, IComparable, IFormattable // i.e. Enum
+#endif
+        {
+            if (!Enum.IsDefined(typeof(T), value))
+            {
+                throw new ArgumentException(Format(Strings.Argument_EnumNotDefined, parameterName, typeof(T).FullName), parameterName);
+            }
+        }
+
+        /// <summary>
         /// Throws an ArgumentException if a condition does not evaluate to true.
         /// </summary>
         [DebuggerStepThrough]
