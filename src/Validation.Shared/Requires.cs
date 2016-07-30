@@ -1,8 +1,5 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="Requires.cs" company="Andrew Arnott">
-//     Copyright (c) Andrew Arnott.  All rights reserved.
-// </copyright>
-//-----------------------------------------------------------------------
+﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
 namespace Validation
 {
@@ -111,7 +108,7 @@ namespace Validation
         [DebuggerStepThrough]
         public static T NotNullAllowStructs<T>([ValidatedNotNull]T value, string parameterName)
         {
-            if (null == value)
+            if (value == null)
             {
                 throw new ArgumentNullException(parameterName);
             }
