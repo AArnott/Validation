@@ -16,7 +16,7 @@ try {
 
     # Restore VS solution dependencies
     gci "$PSScriptRoot\src" -rec |? { $_.FullName.EndsWith('.sln') } |% {
-        & "$toolsPath\Restore-NuGetPackages.ps1" -Path $_.FullName
+        & "$toolsPath\Restore-NuGetPackages.ps1" -Path $_.FullName -Verbosity Quiet
     }
 
     Write-Host "Successfully restored all dependencies" -ForegroundColor Yellow
