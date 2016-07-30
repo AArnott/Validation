@@ -1,5 +1,6 @@
 version: 1.0.{build}
-os: Visual Studio 2015
+skip_tags: true
+image: Visual Studio 2015
 configuration: Release
 environment:
   VisualStudioVersion: 14.0
