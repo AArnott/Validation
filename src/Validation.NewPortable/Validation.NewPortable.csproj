@@ -15,25 +15,27 @@
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-		<SignAssembly>true</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ProjectBuildInternal.snk</AssemblyOriginatorKeyFile>
-		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <OutputPath Condition=" '$(OutputPath)' == '' ">bin</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-		<DebugSymbols>true</DebugSymbols>
-		<DebugType>full</DebugType>
-		<Optimize>false</Optimize>
-		<DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <CodeAnalysisRuleSet>Validation.NewPortable.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-		<DebugType>pdbonly</DebugType>
-		<Optimize>true</Optimize>
-		<DefineConstants>TRACE</DefineConstants>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <CodeAnalysisRuleSet>Validation.NewPortable.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
@@ -54,6 +56,7 @@
   <ItemGroup>
     <None Include="project.json" />
     <None Include="ProjectBuildInternal.snk" />
+    <None Include="Validation.NewPortable.ruleset" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\Validation\stylecop.json" />
