@@ -1,0 +1,16 @@
+version: 1.0.{build}
+os: Visual Studio 2015
+configuration: Release
+environment:
+  VisualStudioVersion: 14.0
+cache:
+- '%USERPROFILE%\.nuget\packages -> **\project.json'
+before_build:
+- ps: .\init.ps1
+build:
+  project: src\Validation.sln
+  parallel: true
+  verbosity: minimal
+artifacts:
+- path: bin\**\*.nupkg
+  name: NuGet Package
