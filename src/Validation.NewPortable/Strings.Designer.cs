@@ -80,6 +80,15 @@ namespace Validation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; must be set to a value defined by the enum &apos;{1}&apos;..
+        /// </summary>
+        internal static string Argument_EnumNotDefined {
+            get {
+                return ResourceManager.GetString("Argument_EnumNotDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; cannot contain a null (Nothing in Visual Basic) element..
         /// </summary>
         internal static string Argument_NullElement {

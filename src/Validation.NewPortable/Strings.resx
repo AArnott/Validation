@@ -123,6 +123,9 @@
   <data name="Argument_EmptyString" xml:space="preserve">
     <value>'{0}' cannot be an empty string ("") or start with the null character.</value>
   </data>
+  <data name="Argument_EnumNotDefined" xml:space="preserve">
+    <value>'{0}' must be set to a value defined by the enum '{1}'.</value>
+  </data>
   <data name="Argument_NullElement" xml:space="preserve">
     <value>'{0}' cannot contain a null (Nothing in Visual Basic) element.</value>
   </data>
