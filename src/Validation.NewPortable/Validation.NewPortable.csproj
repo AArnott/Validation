@@ -55,6 +55,9 @@
     <None Include="project.json" />
     <None Include="ProjectBuildInternal.snk" />
   </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\Validation\stylecop.json" />
+  </ItemGroup>
   <Import Project="..\Validation.Shared\Validation.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
 </Project>
