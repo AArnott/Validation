@@ -41,6 +41,8 @@
       <group targetFramework="sl50" />
       <group targetFramework="net" />
       <group targetFramework="wpa" />
+      <group targetFramework="portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10" />
+      <group targetFramework="portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10" />
       <group />
     </dependencies>
   </metadata>
