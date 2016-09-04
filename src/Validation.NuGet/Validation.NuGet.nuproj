@@ -43,6 +43,7 @@
     <Content Include="..\..\README.md">
       <Link>README.md</Link>
     </Content>
+    <Content Include="project.json" />
     <Content Include="tools\uninstall_snippets.cmd" />
     <Content Include="tools\install_snippets.cmd" />
   </ItemGroup>
@@ -59,12 +60,10 @@
   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), EnlistmentInfo.targets))\EnlistmentInfo.targets" Condition=" '$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), EnlistmentInfo.targets))' != '' " />
   <Target Name="CopyAssemblyToLibDotNetFolder" DependsOnTargets="ConvertItems" AfterTargets="ConvertItems">
     <ItemGroup>
-      <File Include="@(File)"
-            Condition=" '%(File.TargetFrameworkMoniker)' == '.NETPortable,Version=v5.0' ">
+      <File Include="@(File)" Condition=" '%(File.TargetFrameworkMoniker)' == '.NETPortable,Version=v5.0' ">
         <TargetPath>lib\dotnet\%(FileName)%(Extension)</TargetPath>
       </File>
-      <File Include="@(File)"
-            Condition=" '%(File.TargetFrameworkMoniker)' == '.NETPortable,Version=v5.0' ">
+      <File Include="@(File)" Condition=" '%(File.TargetFrameworkMoniker)' == '.NETPortable,Version=v5.0' ">
         <TargetPath>lib\netstandard1.0\%(FileName)%(Extension)</TargetPath>
       </File>
     </ItemGroup>

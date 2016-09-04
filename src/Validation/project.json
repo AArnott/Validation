@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "EnlistmentInfo": "1.0.4",
-    "Nerdbank.GitVersioning": "1.4.41",
+    "Nerdbank.GitVersioning": "1.5.46",
     "NuProj.Common": "0.11.14-beta",
     "ReadOnlySourceTree": "0.1.37-beta",
     "StyleCop.Analyzers": {
