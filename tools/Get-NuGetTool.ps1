@@ -16,19 +16,7 @@ $binaryToolsPath = "$PSScriptRoot\..\obj\tools"
 if (!(Test-Path $binaryToolsPath)) { $null = mkdir $binaryToolsPath }
 $nugetPath = "$binaryToolsPath\nuget.exe"
 if (!(Test-Path $nugetPath)) {
-    Write-Host "Downloading NuGet credential helper..." -ForegroundColor Yellow
-    $bundleZipPath = "$binaryToolsPath\CredentialProviderBundle.zip"
-    if (!(Test-Path $bundleZipPath)) {
-        Invoke-WebRequest -Uri "https://devdiv.pkgs.visualstudio.com/_apis/public/nuget/client/CredentialProviderBundle.zip" -OutFile $bundleZipPath 
-    }
-
-    $bundleDir = "$binaryToolsPath\CredentialProviderBundle"
-    Expand-ZIPFile $bundleZipPath $bundleDir
-    Copy-Item $bundleDir\nuget.exe $binaryToolsPath
-    Copy-Item $bundleDir\CredentialProvider.VSS.exe $binaryToolsPath
-
-    # Replace the nuget.exe that came in the bundle with the version we want to use. 
-    $NuGetVersion = "3.4.4"
+    $NuGetVersion = "3.5.0-rc1"
     Write-Host "Downloading nuget.exe $NuGetVersion..." -ForegroundColor Yellow
     Invoke-WebRequest -Uri "https://dist.nuget.org/win-x86-commandline/v$NuGetVersion/NuGet.exe" -OutFile $nugetPath
 }
