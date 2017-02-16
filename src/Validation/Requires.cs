@@ -306,7 +306,7 @@ namespace Validation
         public static void Defined<T>(T value, string parameterName)
 #if NETSTANDARD1_0
             where T : struct, IComparable, IFormattable // i.e. Enum
-#else
+#else // IConvertible is missing from netstandard1.2
             where T : struct, IConvertible, IComparable, IFormattable // i.e. Enum
 #endif
         {
