@@ -2,8 +2,6 @@ version: 1.0.{build}
 skip_tags: true
 image: Visual Studio 2017 RC
 configuration: Release
-cache:
-- '%USERPROFILE%\.nuget\packages -> **\project.json'
 before_build:
 - ps: dotnet restore src
 build_script:
