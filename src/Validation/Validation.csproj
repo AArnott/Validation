@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning" Version="1.6.1-beta-g4dc3644c72" PrivateAssets="all" />
+    <PackageReference Include="PdbGit" Version="3.0.41" PrivateAssets="all" />
   </ItemGroup>
 
   <Target Name="SetNuSpecProperties" BeforeTargets="GenerateNuspec" DependsOnTargets="GetBuildVersion">

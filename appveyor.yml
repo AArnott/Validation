@@ -2,15 +2,8 @@ version: 1.0.{build}
 skip_tags: true
 image: Visual Studio 2017 RC
 configuration: Release
-before_build:
-- ps: dotnet restore src
 build_script:
-- ps: >-
-    cd src
-
-    dotnet build
-
-    dotnet pack
+- ps: msbuild src\Validation.sln /t:restore,build,pack /nologo /m
 artifacts:
 - path: 'bin\**\*.nupkg'
   name: NuGet Package
