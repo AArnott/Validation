@@ -33,7 +33,7 @@
 
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning" Version="1.6.1-beta-g4dc3644c72" PrivateAssets="all" />
-    <PackageReference Include="PdbGit" Version="3.0.41" PrivateAssets="all" />
+    <!--<PackageReference Include="PdbGit" Version="3.0.41" PrivateAssets="all" />-->
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.0" PrivateAssets="all" />
   </ItemGroup>
 
