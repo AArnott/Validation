@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.0;netstandard1.3;net45;net40</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Input and runtime validation</Title>
     <Summary>Provides convenient methods and code snippets for validating input and running state.</Summary>
     <Description>Method input validation and runtime checks that report errors or throw exceptions when failures are detected.</Description>
     <PackageProjectUrl>http://github.com/aarnott/Validation</PackageProjectUrl>
