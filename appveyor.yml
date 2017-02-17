@@ -10,9 +10,9 @@ build_script:
 - ps: >-
     cd src
 
-    dotnet pack
-
     dotnet build -c Release
+
+    dotnet pack -c Release
 artifacts:
 - path: '**\bin\**\*.nupkg'
   name: NuGet Package

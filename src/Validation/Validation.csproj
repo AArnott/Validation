@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="1.5.96" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="1.6.1-beta-g4dc3644c72" />
   </ItemGroup>
 
 </Project>
