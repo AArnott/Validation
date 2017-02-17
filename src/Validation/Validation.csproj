@@ -3,10 +3,27 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.0;netstandard1.3;net45;net40</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Summary>Provides convenient methods and code snippets for validating input and running state.</Summary>
+    <Description>Method input validation and runtime checks that report errors or throw exceptions when failures are detected.</Description>
+    <PackageProjectUrl>http://github.com/aarnott/Validation</PackageProjectUrl>
+    <Company>Andrew Arnott</Company>
+    <Authors>Andrew Arnott</Authors>
+    <Product>Validation</Product>
+    <RepositoryUrl>http://github.com/aarnott/Validation</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>InputValidation IntegrityCheck</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning" Version="1.6.1-beta-g4dc3644c72" />
   </ItemGroup>
 
+  <Target Name="SetNuSpecProperties" BeforeTargets="GenerateNuspec" DependsOnTargets="GetBuildVersion">
+    <PropertyGroup>
+      <!-- https://github.com/NuGet/Home/issues/4649 -->
+      <!--<NuSpecProperties>$(NuSpecProperties);GitCommitIdShort=$(GitCommitIdShort)</NuSpecProperties>-->
+      <PackageLicenseUrl>https://raw.githubusercontent.com/AArnott/Validation/$(GitCommitIdShort)/LICENSE.txt</PackageLicenseUrl>
+    </PropertyGroup>
+  </Target>
+  
 </Project>
