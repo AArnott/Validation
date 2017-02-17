@@ -20,6 +20,10 @@
       <Pack>true</Pack>
       <PackagePath>tools\%(RecursiveDir)%(FileName)%(Extension)</PackagePath>
     </None>
+    <None Include="..\..\README.md">
+      <Pack>true</Pack>
+      <PackagePath>README.md</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
