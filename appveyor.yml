@@ -12,5 +12,5 @@ build_script:
 
     dotnet pack
 artifacts:
-- path: '**\bin\**\*.nupkg'
+- path: 'bin\**\*.nupkg'
   name: NuGet Package
