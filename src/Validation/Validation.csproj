@@ -1,64 +1,48 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E016A630-A79B-4B5D-8997-E66581D62B81}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Validation</RootNamespace>
-    <AssemblyName>Validation</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile328</TargetFrameworkProfile>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>ProjectBuildInternal.snk</AssemblyOriginatorKeyFile>
-    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
-    <OutputPath Condition=" '$(OutputPath)' == '' ">bin</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <Prefer32Bit>false</Prefer32Bit>
+    <TargetFrameworks>netstandard1.0;netstandard1.3;net45;net40</TargetFrameworks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CodeAnalysisRuleSet>Validation.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>TRACE;DEBUG;NET40</DefineConstants>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Input and runtime validation</Title>
+    <Summary>Provides convenient methods and code snippets for validating input and running state.</Summary>
+    <Description>Method input validation and runtime checks that report errors or throw exceptions when failures are detected.</Description>
+    <PackageProjectUrl>http://github.com/aarnott/Validation</PackageProjectUrl>
+    <Company>Andrew Arnott</Company>
+    <Authors>Andrew Arnott</Authors>
+    <Product>Validation</Product>
+    <RepositoryUrl>http://github.com/aarnott/Validation</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>InputValidation IntegrityCheck</PackageTags>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DefineConstants>TRACE;NET40</DefineConstants>
-    <Prefer32Bit>false</Prefer32Bit>
-    <CodeAnalysisRuleSet>Validation.ruleset</CodeAnalysisRuleSet>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Strings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
-    <Compile Include="TypeExtensions.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="project.json" />
-    <None Include="ProjectBuildInternal.snk" />
-    <None Include="Validation.ruleset" />
+    <None Include="tools\**">
+      <Pack>true</Pack>
+      <PackagePath>tools\%(RecursiveDir)%(FileName)%(Extension)</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>true</Pack>
+      <PackagePath>README.md</PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
-  <Import Project="..\Validation.Shared\Validation.Shared.projitems" Label="Shared" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="1.6.1-beta-g4dc3644c72" PrivateAssets="all" />
+    <!--<PackageReference Include="PdbGit" Version="3.0.41" PrivateAssets="all" />-->
+    <PackageReference Include="StyleCop.Analyzers" Version="1.0.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <Target Name="SetNuSpecProperties" BeforeTargets="GenerateNuspec" DependsOnTargets="GetBuildVersion">
+    <PropertyGroup>
+      <!-- https://github.com/NuGet/Home/issues/4649 -->
+      <!--<NuSpecProperties>$(NuSpecProperties);GitCommitIdShort=$(GitCommitIdShort)</NuSpecProperties>-->
+      <PackageLicenseUrl>https://raw.githubusercontent.com/AArnott/Validation/$(GitCommitIdShort)/LICENSE.txt</PackageLicenseUrl>
+    </PropertyGroup>
+  </Target>
+  
 </Project>

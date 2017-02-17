@@ -304,9 +304,9 @@ namespace Validation
         /// <param name="parameterName">The name of the parameter that supplied the <paramref name="value"/>.</param>
         [DebuggerStepThrough]
         public static void Defined<T>(T value, string parameterName)
-#if NET45
+#if NETSTANDARD1_0
             where T : struct, IComparable, IFormattable // i.e. Enum
-#else
+#else // IConvertible is missing from netstandard1.2
             where T : struct, IConvertible, IComparable, IFormattable // i.e. Enum
 #endif
         {

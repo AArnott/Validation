@@ -1,18 +1,9 @@
 version: 1.0.{build}
 skip_tags: true
-image: Visual Studio 2015
+image: Visual Studio 2017 RC
 configuration: Release
-environment:
-  VisualStudioVersion: 14.0
-cache:
-- '%USERPROFILE%\.nuget\packages -> **\project.json'
-- 'obj\tools -> tools\**'
-before_build:
-- ps: .\init.ps1
-build:
-  project: src\Validation.sln
-  parallel: true
-  verbosity: minimal
+build_script:
+- ps: msbuild src\Validation.sln /t:restore,build,pack /nologo /m
 artifacts:
-- path: bin\**\*.nupkg
+- path: 'bin\**\*.nupkg'
   name: NuGet Package
