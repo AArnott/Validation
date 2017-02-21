@@ -15,6 +15,8 @@
     <RepositoryUrl>http://github.com/aarnott/Validation</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>InputValidation IntegrityCheck</PackageTags>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>opensource.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
