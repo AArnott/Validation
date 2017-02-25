@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.0;netstandard1.3;net45;net40</TargetFrameworks>
+    <TargetFrameworks>netstandard1.0;netstandard1.3;net45;net40;portable-net45+win8+wpa81+wp8;portable-net4+sl50+win8+wpa81+wp8</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CodeAnalysisRuleSet>Validation.ruleset</CodeAnalysisRuleSet>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -33,10 +33,21 @@
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
 
+  <ItemDefinitionGroup>
+    <!-- Not only are all our own package references just for building,
+         we also want to suppress NETStandard.Library from being considered a dependency
+         because for older PCL packages.config project types, it would flood their file
+         with meaningless corefx packages. -->
+    <PackageReference>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemDefinitionGroup>
+
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="1.6.5-beta-gaaaf1e5f48" PrivateAssets="all" />
-    <!--<PackageReference Include="PdbGit" Version="3.0.41" PrivateAssets="all" />-->
-    <PackageReference Include="StyleCop.Analyzers" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="1.6.5-beta-gaaaf1e5f48" />
+    <!--<PackageReference Include="PdbGit" Version="3.0.41" />-->
+    <PackageReference Include="StyleCop.Analyzers" Version="1.0.0" />
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.0-rc4-19" />
   </ItemGroup>
 
   <Target Name="SetNuSpecProperties" BeforeTargets="GenerateNuspec" DependsOnTargets="GetBuildVersion">
@@ -47,4 +58,8 @@
     </PropertyGroup>
   </Target>
   
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+  <PropertyGroup Condition="'$(_ExtrasShortFrameworkIdentifier)' == 'portable'">
+    <DefineConstants>$(DefineConstants);$(TargetFrameworkProfile)</DefineConstants>
+  </PropertyGroup>
 </Project>
