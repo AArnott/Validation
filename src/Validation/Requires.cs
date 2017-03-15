@@ -52,7 +52,7 @@ namespace Validation
             return value;
         }
 
-#if !NET35
+#if !NET20
         /// <summary>
         /// Throws an exception if the specified parameter's value is null.
         /// </summary>
@@ -139,7 +139,7 @@ namespace Validation
             }
         }
 
-#if !NET35
+#if !NET20
         /// <summary>
         /// Throws an exception if the specified parameter's value is null, empty, or whitespace.
         /// </summary>

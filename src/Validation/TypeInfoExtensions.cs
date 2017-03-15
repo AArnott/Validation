@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
-#if NETSTANDARD1_0 || NETSTANDARD1_3 || Profile259
+#if NETSTANDARD1_0 || NETSTANDARD1_3 || Profile259 || NET20
 
 namespace Validation
 {
@@ -13,6 +13,13 @@ namespace Validation
     /// </summary>
     internal static class TypeInfoExtensions
     {
+#if NET20
+        /// <summary>
+        /// Returns the given type.
+        /// </summary>
+        /// <returns>The given type</returns>
+        internal static Type GetTypeInfo(this Type type) => type;
+#else
         /// <summary>
         /// Returns the generic type arguments of specified type.
         /// </summary>
@@ -23,6 +30,7 @@ namespace Validation
         /// as well as older Reflection APIs.
         /// </remarks>
         internal static Type[] GetGenericArguments(this TypeInfo type) => type.GenericTypeArguments;
+#endif
     }
 }
 

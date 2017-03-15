@@ -7,7 +7,6 @@ namespace Validation
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
-    using System.Linq;
 
     /// <summary>
     /// Common runtime checks that trace messages and invoke an assertion failure,
@@ -24,7 +23,7 @@ namespace Validation
         {
             if (part == null)
             {
-#if NET35
+#if NET20
                 Type coreType = typeof(T);
 #else
                 Type coreType = PrivateErrorHelpers.TrimGenericWrapper(typeof(T), typeof(Lazy<>));

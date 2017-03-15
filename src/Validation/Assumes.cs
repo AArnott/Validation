@@ -7,7 +7,6 @@ namespace Validation
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Globalization;
-    using System.Linq;
 
     /// <summary>
     /// Common runtime checks that throw public error exceptions upon failure.
@@ -58,7 +57,14 @@ namespace Validation
         public static void NotNullOrEmpty<T>([ValidatedNotNull]IEnumerable<T> values)
         {
             Assumes.NotNull(values);
-            Assumes.True(values.Any());
+#if NET20
+            using (var enumerator = values.GetEnumerator())
+            {
+                Assumes.True(enumerator.MoveNext());
+            }
+#else
+            Assumes.True(System.Linq.Enumerable.Any(values));
+#endif
         }
 
         /// <summary>
@@ -187,7 +193,7 @@ namespace Validation
         {
             if (component == null)
             {
-#if NET35
+#if NET20
                 Type coreType = typeof(T);
 #else
                 Type coreType = PrivateErrorHelpers.TrimGenericWrapper(typeof(T), typeof(Lazy<>));

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.0;netstandard1.3;net45;net40;portable-net45+win8+wpa81+wp8;portable-net4+sl50+win8+wpa81+wp8</TargetFrameworks>
+    <TargetFrameworks>netstandard1.0;netstandard1.3;net45;net40;net20;portable-net45+win8+wpa81+wp8;portable-net4+sl50+win8+wpa81+wp8</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CodeAnalysisRuleSet>Validation.ruleset</CodeAnalysisRuleSet>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -57,7 +57,7 @@
       <PackageLicenseUrl>https://raw.githubusercontent.com/AArnott/Validation/$(GitCommitIdShort)/LICENSE.txt</PackageLicenseUrl>
     </PropertyGroup>
   </Target>
-  
+
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
   <PropertyGroup Condition="'$(_ExtrasShortFrameworkIdentifier)' == 'portable'">
     <DefineConstants>$(DefineConstants);$(TargetFrameworkProfile)</DefineConstants>
