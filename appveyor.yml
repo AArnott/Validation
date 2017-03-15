@@ -1,6 +1,6 @@
-version: 1.0.{build}
+version: '{build}'
 skip_tags: true
-image: Visual Studio 2017 RC
+image: Visual Studio 2017
 configuration: Release
 before_build:
 - ps: >-
