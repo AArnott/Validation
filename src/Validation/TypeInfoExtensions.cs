@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
-#if NETSTANDARD1_0 || NETSTANDARD1_3 || Profile259 || NET20
+#if NETSTANDARD1_0 || NETSTANDARD1_3 || PROFILE259 || NET20 || PROFILE328
 
 namespace Validation
 {
@@ -9,11 +9,11 @@ namespace Validation
     using System.Reflection;
 
     /// <summary>
-    /// Extension methods for the <see cref="Type"/> class to emulate older reflection APIs.
+    /// Extension methods for the <see cref="System.Type"/> class to emulate older reflection APIs.
     /// </summary>
     internal static class TypeInfoExtensions
     {
-#if NET20
+#if NET20 || PROFILE328
         /// <summary>
         /// Returns the given type.
         /// </summary>

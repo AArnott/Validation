@@ -33,33 +33,18 @@
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
 
-  <ItemDefinitionGroup>
-    <!-- Not only are all our own package references just for building,
-         we also want to suppress NETStandard.Library from being considered a dependency
-         because for older PCL packages.config project types, it would flood their file
-         with meaningless corefx packages. -->
-    <PackageReference>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemDefinitionGroup>
-
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="1.6.5-beta-gaaaf1e5f48" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.0.41" />
     <!--<PackageReference Include="PdbGit" Version="3.0.41" />-->
-    <PackageReference Include="StyleCop.Analyzers" Version="1.0.0" />
-    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.0.0-rc4-19" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta004" />
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0" />
   </ItemGroup>
 
   <Target Name="SetNuSpecProperties" BeforeTargets="GenerateNuspec" DependsOnTargets="GetBuildVersion">
     <PropertyGroup>
-      <!-- https://github.com/NuGet/Home/issues/4649 -->
-      <!--<NuSpecProperties>$(NuSpecProperties);GitCommitIdShort=$(GitCommitIdShort)</NuSpecProperties>-->
       <PackageLicenseUrl>https://raw.githubusercontent.com/AArnott/Validation/$(GitCommitIdShort)/LICENSE.txt</PackageLicenseUrl>
     </PropertyGroup>
   </Target>
 
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
-  <PropertyGroup Condition="'$(_ExtrasShortFrameworkIdentifier)' == 'portable'">
-    <DefineConstants>$(DefineConstants);$(TargetFrameworkProfile)</DefineConstants>
-  </PropertyGroup>
 </Project>
