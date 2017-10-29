@@ -164,7 +164,7 @@ namespace Validation
 
             if (string.IsNullOrWhiteSpace(value))
             {
-                throw new ArgumentException(Format(Strings.Argument_Whitespace, parameterName));
+                throw new ArgumentException(Format(Strings.Argument_Whitespace, parameterName), parameterName);
             }
         }
 #endif
