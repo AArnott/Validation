@@ -33,6 +33,16 @@
     <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
 
+  <ItemDefinitionGroup>
+    <!-- Not only are all our own package references just for building,
+         we also want to suppress NETStandard.Library from being considered a dependency
+         because for older PCL packages.config project types, it would flood their file
+         with meaningless corefx packages. -->
+    <PackageReference>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemDefinitionGroup>
+
   <ItemGroup>
     <PackageReference Include="Nerdbank.GitVersioning" Version="2.0.41" />
     <!--<PackageReference Include="PdbGit" Version="3.0.41" />-->
