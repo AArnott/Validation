@@ -44,7 +44,7 @@
   </ItemDefinitionGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="2.0.41" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.2.3" />
     <!--<PackageReference Include="PdbGit" Version="3.0.41" />-->
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta004" />
     <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0" />
