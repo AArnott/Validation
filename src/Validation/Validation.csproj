@@ -20,6 +20,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="tools\**">
       <Pack>true</Pack>
       <PackagePath>tools\%(RecursiveDir)%(FileName)%(Extension)</PackagePath>
