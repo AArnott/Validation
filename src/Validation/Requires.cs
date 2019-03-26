@@ -126,7 +126,7 @@ namespace Validation
         public static void NotNullOrEmpty([ValidatedNotNull]string value, string parameterName)
         {
             // To the guy that is doing random code cleaning:
-            // Consider the perfomance when changing the code to delegate to NotNull.
+            // Consider the performance when changing the code to delegate to NotNull.
             // In general do not chain call to another function, check first and return as earlier as possible.
             if (value == null)
             {
@@ -150,7 +150,7 @@ namespace Validation
         public static void NotNullOrWhiteSpace([ValidatedNotNull]string value, string parameterName)
         {
             // To the guy that is doing random code cleaning:
-            // Consider the perfomance when changing the code to delegate to NotNull.
+            // Consider the performance when changing the code to delegate to NotNull.
             // In general do not chain call to another function, check first and return as earlier as possible.
             if (value == null)
             {
@@ -180,7 +180,7 @@ namespace Validation
         public static void NotNullOrEmpty([ValidatedNotNull]System.Collections.IEnumerable values, string parameterName)
         {
             // To the guy that is doing random code cleaning:
-            // Consider the perfomance when changing the code to delegate to NotNull.
+            // Consider the performance when changing the code to delegate to NotNull.
             // In general do not chain call to another function, check first and return as earlier as possible.
             if (values == null)
             {
@@ -313,6 +313,25 @@ namespace Validation
             if (!Enum.IsDefined(typeof(T), value))
             {
                 throw new ArgumentException(Format(Strings.Argument_EnumNotDefined, parameterName, typeof(T).FullName), parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Throws an <see cref="ArgumentException"/> if the specified parameter's value is equal to the 
+        /// default value of the <see cref="Type"/> <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the parameter.</typeparam>
+        /// <param name="value">The value of the argument.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
+        [DebuggerStepThrough]
+        public static void NotDefault<T>(T value, string parameterName)
+            where T : struct
+        {
+            var defaultValue = default(T);
+            if (defaultValue.Equals(value))
+            {
+                throw new ArgumentException(Format(Strings.Argument_StructIsDefault, parameterName, typeof(T).FullName), parameterName);
             }
         }
 
