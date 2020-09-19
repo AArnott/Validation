@@ -6,7 +6,6 @@ namespace Validation
     using System;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
 
     /// <content>
     /// Contains the inner exception thrown by Assumes.
@@ -17,13 +16,14 @@ namespace Validation
         /// The exception that is thrown when an internal assumption failed.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic", Justification = "Internal exceptions should not be caught.")]
-        private class InternalErrorException : Exception
+        [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors", Justification = "This is an internal exception type and we don't use the recommended ctors.")]
+        private sealed class InternalErrorException : Exception
         {
             /// <summary>
             /// Initializes a new instance of the <see cref="InternalErrorException"/> class.
             /// </summary>
             [DebuggerStepThrough]
-            public InternalErrorException(string message = null, bool showAssert = true)
+            public InternalErrorException(string? message = null, bool showAssert = true)
                 : base(message ?? Strings.InternalExceptionMessage)
             {
                 this.ShowAssertDialog(showAssert);
@@ -33,7 +33,7 @@ namespace Validation
             /// Initializes a new instance of the <see cref="InternalErrorException"/> class.
             /// </summary>
             [DebuggerStepThrough]
-            public InternalErrorException(string message, Exception innerException, bool showAssert = true)
+            public InternalErrorException(string? message, Exception? innerException, bool showAssert = true)
                 : base(message ?? Strings.InternalExceptionMessage, innerException)
             {
                 this.ShowAssertDialog(showAssert);

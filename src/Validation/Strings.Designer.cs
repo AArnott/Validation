@@ -20,7 +20,7 @@ namespace Validation {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Strings {
@@ -71,6 +71,15 @@ namespace Validation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; cannot be an empty guid..
+        /// </summary>
+        internal static string Argument_EmptyGuid {
+            get {
+                return ResourceManager.GetString("Argument_EmptyGuid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; cannot be an empty string (&quot;&quot;) or start with the null character..
         /// </summary>
         internal static string Argument_EmptyString {
@@ -80,11 +89,11 @@ namespace Validation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; must be set to a value defined by the enum &apos;{1}&apos;..
+        ///   Looks up a localized string similar to The value of argument &apos;{0}&apos; ({1}) is invalid for Enum type &apos;{2}&apos;..
         /// </summary>
-        internal static string Argument_EnumNotDefined {
+        internal static string Argument_NotEnum {
             get {
-                return ResourceManager.GetString("Argument_EnumNotDefined", resourceCulture);
+                return ResourceManager.GetString("Argument_NotEnum", resourceCulture);
             }
         }
         
@@ -98,16 +107,7 @@ namespace Validation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; cannot be the default value defined by &apos;{1}&apos;..
-        /// </summary>
-        internal static string Argument_StructIsDefault {
-            get {
-                return ResourceManager.GetString("Argument_StructIsDefault", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The parameter &quot;{0}&quot; cannot consist entirely of white space characters..
+        ///   Looks up a localized string similar to The argument cannot consist entirely of white space characters..
         /// </summary>
         internal static string Argument_Whitespace {
             get {
@@ -116,11 +116,20 @@ namespace Validation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An internal error occurred. Please contact customer support..
+        ///   Looks up a localized string similar to An internal error occurred. Please contact Microsoft Support..
         /// </summary>
         internal static string InternalExceptionMessage {
             get {
                 return ResourceManager.GetString("InternalExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value of argument &apos;{0}&apos; ({1}) is invalid for Enum type &apos;{2}&apos;..
+        /// </summary>
+        internal static string InvalidEnumArgument {
+            get {
+                return ResourceManager.GetString("InvalidEnumArgument", resourceCulture);
             }
         }
         

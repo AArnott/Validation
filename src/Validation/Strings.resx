@@ -120,23 +120,26 @@
   <data name="Argument_EmptyArray" xml:space="preserve">
     <value>'{0}' must contain at least one element.</value>
   </data>
+  <data name="Argument_EmptyGuid" xml:space="preserve">
+    <value>'{0}' cannot be an empty guid.</value>
+  </data>
   <data name="Argument_EmptyString" xml:space="preserve">
     <value>'{0}' cannot be an empty string ("") or start with the null character.</value>
   </data>
-  <data name="Argument_EnumNotDefined" xml:space="preserve">
-    <value>'{0}' must be set to a value defined by the enum '{1}'.</value>
+  <data name="Argument_NotEnum" xml:space="preserve">
+    <value>The value of argument '{0}' ({1}) is invalid for Enum type '{2}'.</value>
   </data>
   <data name="Argument_NullElement" xml:space="preserve">
     <value>'{0}' cannot contain a null (Nothing in Visual Basic) element.</value>
   </data>
-  <data name="Argument_StructIsDefault" xml:space="preserve">
-    <value>'{0}' cannot be the default value defined by '{1}'.</value>
-  </data>
   <data name="Argument_Whitespace" xml:space="preserve">
-    <value>The parameter "{0}" cannot consist entirely of white space characters.</value>
+    <value>The argument cannot consist entirely of white space characters.</value>
   </data>
   <data name="InternalExceptionMessage" xml:space="preserve">
-    <value>An internal error occurred. Please contact customer support.</value>
+    <value>An internal error occurred. Please contact Microsoft Support.</value>
+  </data>
+  <data name="InvalidEnumArgument" xml:space="preserve">
+    <value>The value of argument '{0}' ({1}) is invalid for Enum type '{2}'.</value>
   </data>
   <data name="ServiceMissing" xml:space="preserve">
     <value>Cannot find an instance of the {0} service.</value>

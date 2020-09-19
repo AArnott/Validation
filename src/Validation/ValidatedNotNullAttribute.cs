@@ -4,7 +4,6 @@
 namespace Validation
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
 
     /// <summary>
     /// Indicates to Code Analysis that a method validates a particular parameter.
