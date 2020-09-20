@@ -8,6 +8,7 @@ namespace Validation
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime;
+    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// Common runtime checks that throw ArgumentExceptions upon failure.
@@ -18,6 +19,8 @@ namespace Validation
         /// Throws an ArgumentException if a condition does not evaluate to true.
         /// </summary>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string? message)
         {
             if (!condition)
@@ -30,6 +33,8 @@ namespace Validation
         /// Throws an ArgumentException if a condition does not evaluate to true.
         /// </summary>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, object? arg1)
         {
             if (!condition)
@@ -42,6 +47,8 @@ namespace Validation
         /// Throws an ArgumentException if a condition does not evaluate to true.
         /// </summary>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, object? arg1, object? arg2)
         {
             if (!condition)
@@ -54,6 +61,8 @@ namespace Validation
         /// Throws an ArgumentException if a condition does not evaluate to true.
         /// </summary>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, params object?[] args)
         {
             if (!condition)
@@ -69,6 +78,8 @@ namespace Validation
         /// <param name="value">The value that may be named by <typeparamref name="TEnum"/>.</param>
         /// <param name="parameterName">The name of the parameter to include in the exception, if thrown.</param>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Defined<TEnum>(TEnum value, string parameterName)
             where TEnum : struct, Enum
         {
@@ -90,6 +101,8 @@ namespace Validation
         /// </summary>
         /// <returns>Nothing, as this method always throws. The signature allows for "throwing" Fail so C# knows execution will stop.</returns>        [DebuggerStepThrough]
         [DoesNotReturn]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Exception Fail(Exception? innerException, string unformattedMessage, params object?[] args)
         {
             throw new ArgumentException(PrivateErrorHelpers.Format(unformattedMessage, args), innerException);
@@ -101,6 +114,8 @@ namespace Validation
         /// <returns>Nothing, as this method always throws. The signature allows for "throwing" Fail so C# knows execution will stop.</returns>        [DebuggerStepThrough]
         [DebuggerStepThrough]
         [DoesNotReturn]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Exception Fail(string unformattedMessage, params object?[] args)
         {
             throw Fail(PrivateErrorHelpers.Format(unformattedMessage, args));
@@ -112,6 +127,8 @@ namespace Validation
         /// <returns>Nothing, as this method always throws. The signature allows for "throwing" Fail so C# knows execution will stop.</returns>        [DebuggerStepThrough]
         [DebuggerStepThrough]
         [DoesNotReturn]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Exception Fail(string? message)
         {
             throw new ArgumentException(message);
@@ -123,6 +140,8 @@ namespace Validation
         /// <returns>Nothing, as this method always throws. The signature allows for "throwing" Fail so C# knows execution will stop.</returns>        [DebuggerStepThrough]
         [DebuggerStepThrough]
         [DoesNotReturn]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Exception FailRange(string? parameterName, string? message = null)
         {
             if (string.IsNullOrEmpty(message))
@@ -144,6 +163,8 @@ namespace Validation
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotDefault<T>(T value, string parameterName)
             where T : struct
         {
@@ -161,6 +182,8 @@ namespace Validation
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is an empty guid (<see cref="Guid.Empty"/>.)</exception>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotEmpty(Guid value, string? parameterName)
         {
             if (value == Guid.Empty)
@@ -178,6 +201,7 @@ namespace Validation
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <see cref="IntPtr.Zero"/>.</exception>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IntPtr NotNull(IntPtr value, string? parameterName)
         {
             if (value == IntPtr.Zero)
@@ -188,7 +212,6 @@ namespace Validation
             return value;
         }
 
-#if !NET20
         /// <summary>
         /// Throws an exception if the specified parameter's value is null.
         /// </summary>
@@ -201,6 +224,7 @@ namespace Validation
         /// </remarks>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotNull([ValidatedNotNull, NotNull] System.Threading.Tasks.Task value, string? parameterName)
         {
             if (value is null)
@@ -222,6 +246,7 @@ namespace Validation
         /// </remarks>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotNull<T>([ValidatedNotNull, NotNull] System.Threading.Tasks.Task<T> value, string? parameterName)
         {
             if (value is null)
@@ -229,7 +254,6 @@ namespace Validation
                 throw new ArgumentNullException(parameterName);
             }
         }
-#endif
 
         /// <summary>
         /// Throws an exception if the specified parameter's value is null.
@@ -241,6 +265,7 @@ namespace Validation
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T NotNull<T>([ValidatedNotNull, NotNull] T value, string? parameterName)
             where T : class // ensures value-types aren't passed to a null checking method
         {
@@ -265,6 +290,8 @@ namespace Validation
         /// may or may not be a class, but certainly cannot be null.
         /// </remarks>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T NotNullAllowStructs<T>([ValidatedNotNull, NotNull] T value, string? parameterName)
         {
             if (value is null)
@@ -284,6 +311,8 @@ namespace Validation
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotNullEmptyOrNullElements<T>([ValidatedNotNull, NotNull] IEnumerable<T> values, string? parameterName)
             where T : class // ensures value-types aren't passed to a null checking method
         {
@@ -313,6 +342,8 @@ namespace Validation
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotNullOrEmpty([ValidatedNotNull, NotNull] string value, string? parameterName)
         {
             // To whoever is doing random code cleaning:
@@ -337,6 +368,8 @@ namespace Validation
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotNullOrEmpty([ValidatedNotNull, NotNull] System.Collections.IEnumerable values, string? parameterName)
         {
             // To whoever is doing random code cleaning:
@@ -362,6 +395,8 @@ namespace Validation
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotNullOrEmpty<T>([ValidatedNotNull, NotNull] IEnumerable<T> values, string? parameterName)
         {
             // To whoever is doing random code cleaning:
@@ -386,6 +421,8 @@ namespace Validation
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotNullOrWhiteSpace([ValidatedNotNull, NotNull] string value, string? parameterName)
         {
             // To whoever is doing random code cleaning:
@@ -401,20 +438,10 @@ namespace Validation
                 throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_EmptyString, parameterName), parameterName);
             }
 
-#if NET20
-            for (int i = 0; i < value.Length; i++)
-            {
-                if (char.IsWhiteSpace(value[i]))
-                {
-                    throw new ArgumentException(Strings.Argument_Whitespace, parameterName);
-                }
-            }
-#else
             if (string.IsNullOrWhiteSpace(value))
             {
                 throw new ArgumentException(Strings.Argument_Whitespace, parameterName);
             }
-#endif
         }
 
         /// <summary>
@@ -426,6 +453,8 @@ namespace Validation
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NullOrNotNullElements<T>(IEnumerable<T> values, string? parameterName)
         {
             if (values is object)
@@ -444,6 +473,8 @@ namespace Validation
         /// Throws an <see cref="ArgumentOutOfRangeException"/> if a condition does not evaluate to true.
         /// </summary>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Range([DoesNotReturnIf(false)] bool condition, string? parameterName, string? message = null)
         {
             if (!condition)
@@ -460,6 +491,8 @@ namespace Validation
         /// <param name="unformattedMessage">The unformatted message.</param>
         /// <param name="args">Formatting arguments.</param>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void That(bool condition, string? parameterName, string unformattedMessage, params object?[] args)
         {
             if (!condition)
@@ -474,6 +507,8 @@ namespace Validation
         /// <param name="condition">The expression that must evaluate to true to avoid an <see cref="InvalidOperationException"/>.</param>
         /// <param name="message">The message to include with the exception.</param>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ValidState(bool condition, string message)
         {
             if (!condition)

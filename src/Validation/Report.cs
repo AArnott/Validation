@@ -6,6 +6,8 @@ namespace Validation
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
+    using System.Runtime;
+    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// Common runtime checks that trace messages and invoke an assertion failure,
@@ -17,6 +19,8 @@ namespace Validation
         /// Reports a certain failure.
         /// </summary>
         [Conditional("DEBUG")]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Fail([Localizable(false)] string? message = null)
         {
             if (message is null)
@@ -32,6 +36,8 @@ namespace Validation
         /// Reports a certain failure.
         /// </summary>
         [Conditional("DEBUG")]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Fail([Localizable(false)] string message, params object?[] args)
         {
             Fail(PrivateErrorHelpers.Format(message, args));
@@ -41,6 +47,8 @@ namespace Validation
         /// Reports an error if a condition evaluates to true.
         /// </summary>
         [Conditional("DEBUG")]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void If(bool condition, [Localizable(false)] string? message = null)
         {
             if (condition)
@@ -53,6 +61,8 @@ namespace Validation
         /// Reports an error if a condition does not evaluate to true.
         /// </summary>
         [Conditional("DEBUG")]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void IfNot(bool condition, [Localizable(false)] string? message = null)
         {
             if (!condition)
@@ -65,6 +75,8 @@ namespace Validation
         /// Reports an error if a condition does not evaluate to true.
         /// </summary>
         [Conditional("DEBUG")]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void IfNot(bool condition, [Localizable(false)] string message, object? arg1)
         {
             if (!condition)
@@ -77,6 +89,8 @@ namespace Validation
         /// Reports an error if a condition does not evaluate to true.
         /// </summary>
         [Conditional("DEBUG")]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void IfNot(bool condition, [Localizable(false)] string message, object? arg1, object? arg2)
         {
             if (!condition)
@@ -89,6 +103,8 @@ namespace Validation
         /// Reports an error if a condition does not evaluate to true.
         /// </summary>
         [Conditional("DEBUG")]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void IfNot(bool condition, [Localizable(false)] string message, params object?[] args)
         {
             if (!condition)
@@ -102,15 +118,13 @@ namespace Validation
         /// </summary>
         /// <typeparam name="T">The interface of the imported part.</typeparam>
         [Conditional("DEBUG")]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void IfNotPresent<T>(T part)
         {
             if (part is null)
             {
-#if NET20
-                Type coreType = typeof(T);
-#else
                 Type coreType = PrivateErrorHelpers.TrimGenericWrapper(typeof(T), typeof(Lazy<>));
-#endif
                 Fail(Strings.ServiceMissing, coreType.FullName);
             }
         }

@@ -6,6 +6,8 @@ namespace Validation
     using System;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.Runtime;
+    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// Common runtime checks that throw exceptions upon failure.
@@ -22,12 +24,13 @@ namespace Validation
         /// </returns>
         [DebuggerStepThrough]
         [DoesNotReturn]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Exception FailOperation(string message, params object?[] args)
         {
             throw new InvalidOperationException(PrivateErrorHelpers.Format(message, args));
         }
 
-#if !NETSTANDARD1_0
         /// <summary>
         /// Throws an exception if the given value is negative.
         /// </summary>
@@ -38,6 +41,8 @@ namespace Validation
         /// </remarks>
         [DebuggerStepThrough]
         [System.Security.SecurityCritical]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void HResult(int hresult, bool ignorePreviousComCalls = false)
         {
             if (hresult < 0)
@@ -52,12 +57,13 @@ namespace Validation
                 }
             }
         }
-#endif
 
         /// <summary>
         /// Throws an <see cref="ObjectDisposedException"/> if an object is disposed.
         /// </summary>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotDisposed(IDisposableObservable disposedValue, string? message = null)
         {
             Requires.NotNull(disposedValue, nameof(disposedValue));
@@ -80,6 +86,8 @@ namespace Validation
         /// Throws an <see cref="ObjectDisposedException"/> if a condition is false.
         /// </summary>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotDisposed([DoesNotReturnIf(false)] bool condition, object? disposedValue, string? message = null)
         {
             if (!condition)
@@ -100,6 +108,8 @@ namespace Validation
         /// Throws an <see cref="ObjectDisposedException"/> if a condition is false.
         /// </summary>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotDisposed([DoesNotReturnIf(false)] bool condition, string? message)
         {
             if (!condition)
@@ -112,6 +122,8 @@ namespace Validation
         /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
         /// </summary>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Operation([DoesNotReturnIf(false)] bool condition, string? message)
         {
             if (!condition)
@@ -124,6 +136,8 @@ namespace Validation
         /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
         /// </summary>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Operation([DoesNotReturnIf(false)] bool condition, string unformattedMessage, object? arg1)
         {
             if (!condition)
@@ -136,6 +150,8 @@ namespace Validation
         /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
         /// </summary>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Operation([DoesNotReturnIf(false)] bool condition, string unformattedMessage, object? arg1, object? arg2)
         {
             if (!condition)
@@ -148,6 +164,8 @@ namespace Validation
         /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
         /// </summary>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Operation([DoesNotReturnIf(false)] bool condition, string unformattedMessage, params object?[] args)
         {
             if (!condition)
@@ -160,15 +178,16 @@ namespace Validation
         /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
         /// </summary>
         [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void OperationWithHelp([DoesNotReturnIf(false)] bool condition, string? message, string? helpLink)
         {
             if (!condition)
             {
-                var ex = new InvalidOperationException(message)
+                throw new InvalidOperationException(message)
                 {
                     HelpLink = helpLink,
                 };
-                throw ex;
             }
         }
     }

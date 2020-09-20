@@ -5,9 +5,7 @@ namespace Validation
 {
     using System;
     using System.Globalization;
-#if !(NET20 || NET40)
     using System.Reflection;
-#endif
 
     /// <summary>
     /// Common utility methods used by the various error detection and reporting classes.
@@ -26,7 +24,7 @@ namespace Validation
         {
             Type[] typeArgs;
             var typeInfo = type.GetTypeInfo();
-            if (typeInfo.IsGenericType && type.GetGenericTypeDefinition() == wrapper && (typeArgs = typeInfo.GetGenericArguments()).Length == 1)
+            if (typeInfo.IsGenericType && type.GetGenericTypeDefinition() == wrapper && (typeArgs = typeInfo.GenericTypeArguments).Length == 1)
             {
                 return typeArgs[0];
             }
