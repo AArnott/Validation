@@ -16,6 +16,25 @@ namespace Validation
     public static class Requires
     {
         /// <summary>
+        /// Throws an <see cref="ArgumentException"/> if the specified parameter's value is equal to the 
+        /// default value of the <see cref="Type"/> <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the parameter.</typeparam>
+        /// <param name="value">The value of the argument.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
+        [DebuggerStepThrough]
+        public static void NotDefault<T>(T value, string parameterName)
+            where T : struct
+        {
+            var defaultValue = default(T);
+            if (defaultValue.Equals(value))
+            {
+                throw new ArgumentException(Format(Strings.Argument_StructIsDefault, parameterName, typeof(T).FullName), parameterName);
+            }
+        }
+
+        /// <summary>
         /// Throws an exception if the specified parameter's value is null.
         /// </summary>
         /// <typeparam name="T">The type of the parameter.</typeparam>

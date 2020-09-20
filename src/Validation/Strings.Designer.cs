@@ -89,6 +89,15 @@ namespace Validation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; must be set to a value defined by the enum &apos;{1}&apos;..
+        /// </summary>
+        internal static string Argument_EnumNotDefined {
+            get {
+                return ResourceManager.GetString("Argument_EnumNotDefined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The value of argument &apos;{0}&apos; ({1}) is invalid for Enum type &apos;{2}&apos;..
         /// </summary>
         internal static string Argument_NotEnum {
@@ -107,6 +116,15 @@ namespace Validation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; cannot be the default value defined by &apos;{1}&apos;..
+        /// </summary>
+        internal static string Argument_StructIsDefault {
+            get {
+                return ResourceManager.GetString("Argument_StructIsDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The argument cannot consist entirely of white space characters..
         /// </summary>
         internal static string Argument_Whitespace {
@@ -116,7 +134,7 @@ namespace Validation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An internal error occurred. Please contact Microsoft Support..
+        ///   Looks up a localized string similar to An internal error occurred. Please contact customer support..
         /// </summary>
         internal static string InternalExceptionMessage {
             get {

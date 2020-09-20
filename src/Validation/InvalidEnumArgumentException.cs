@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
-#if NETSTANDARD || NETSTANDARD1_3
+#if NETSTANDARD1_0 || NETSTANDARD1_3
 namespace System.ComponentModel
 {
     using System.Runtime.CompilerServices;
@@ -11,12 +11,10 @@ namespace System.ComponentModel
     /// <summary>
     /// The exception that is thrown when using invalid arguments that are enumerators.
     /// </summary>
-#if !NETSTANDARD
+#if NETSTANDARD1_3
     [Serializable]
 #endif
-#if !NET20
     [TypeForwardedFrom("System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
-#endif
     public class InvalidEnumArgumentException : ArgumentException
     {
         /// <summary>
@@ -59,16 +57,6 @@ namespace System.ComponentModel
                 throw new ArgumentNullException(nameof(enumClass));
             }
         }
-
-#if !NETSTANDARD
-        /// <summary>
-        /// Need this constructor since Exception implements ISerializable.
-        /// We don't have any fields, so just forward this to base.
-        /// </summary>
-        protected InvalidEnumArgumentException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context)
-        {
-        }
-#endif
     }
 }
 #endif
