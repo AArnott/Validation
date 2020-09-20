@@ -9,11 +9,15 @@ namespace Validation
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
+
 #if NET20
     using System.Collections;
 #else
+
     using System.Linq;
+
 #endif
+
     using System.Runtime;
 
     /// <summary>
@@ -21,6 +25,119 @@ namespace Validation
     /// </summary>
     public static partial class Assumes
     {
+        /// <summary>
+        /// Throws an public exception.
+        /// </summary>
+        /// <returns>Nothing, as this method always throws.  The signature allows for "throwing" Fail so C# knows execution will stop.</returns>
+        [DebuggerStepThrough]
+        [DoesNotReturn]
+        public static Exception Fail([Localizable(false)] string? message = null)
+        {
+            var exception = new InternalErrorException(message);
+            bool proceed = true; // allows debuggers to skip the throw statement
+            if (proceed)
+            {
+                throw exception;
+            }
+            else
+            {
+#pragma warning disable CS8763
+                return new Exception();
+#pragma warning restore CS8763
+            }
+        }
+
+        /// <summary>
+        /// Throws an public exception.
+        /// </summary>
+        /// <returns>Nothing, as this method always throws.  The signature allows for "throwing" Fail so C# knows execution will stop.</returns>
+        [DebuggerStepThrough]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("Use Fail(string) instead.")]
+        [DoesNotReturn]
+        public static Exception Fail([Localizable(false)] string? message = null, bool showAssert = true) => Fail(message);
+
+        /// <summary>
+        /// Throws an public exception.
+        /// </summary>
+        /// <returns>Nothing, as this method always throws.  The signature allows for "throwing" Fail so C# knows execution will stop.</returns>
+        [DoesNotReturn]
+        public static Exception Fail([Localizable(false)] string? message, Exception? innerException)
+        {
+            var exception = new InternalErrorException(message, innerException);
+            bool proceed = true; // allows debuggers to skip the throw statement
+            if (proceed)
+            {
+                throw exception;
+            }
+            else
+            {
+#pragma warning disable CS8763
+                return new Exception();
+#pragma warning restore CS8763
+            }
+        }
+
+        /// <summary>
+        /// Throws an public exception.
+        /// </summary>
+        /// <returns>Nothing, as this method always throws.  The signature allows for "throwing" Fail so C# knows execution will stop.</returns>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("Use Fail(string, Exception) instead.")]
+        [DoesNotReturn]
+        public static Exception Fail([Localizable(false)] string? message, Exception? innerException, bool showAssert = true) => Fail(message, innerException);
+
+        /// <summary>
+        /// Throws an public exception if a condition evaluates to true.
+        /// </summary>
+        [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        public static void False([DoesNotReturnIf(true)] bool condition, [Localizable(false)] string? message = null)
+        {
+            if (condition)
+            {
+                Fail(message);
+            }
+        }
+
+        /// <summary>
+        /// Throws an public exception if a condition evaluates to true.
+        /// </summary>
+        [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        public static void False([DoesNotReturnIf(true)] bool condition, [Localizable(false)] string unformattedMessage, object? arg1)
+        {
+            if (condition)
+            {
+                Fail(Format(unformattedMessage, arg1));
+            }
+        }
+
+        /// <summary>
+        /// Throws an public exception if a condition evaluates to true.
+        /// </summary>
+        [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        public static void False([DoesNotReturnIf(true)] bool condition, [Localizable(false)] string unformattedMessage, params object?[] args)
+        {
+            if (condition)
+            {
+                Fail(Format(unformattedMessage, args));
+            }
+        }
+
+        /// <summary>
+        /// Throws an exception if the specified object is not of a given type.
+        /// </summary>
+        /// <typeparam name="T">The type the value is expected to be.</typeparam>
+        /// <param name="value">The value to test.</param>
+        [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        public static void Is<T>([NotNull] object? value)
+        {
+            True(value is T);
+        }
+
         /// <summary>
         /// Throws an exception if the specified value is null.
         /// </summary>
@@ -97,120 +214,6 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified value is not null.
-        /// </summary>
-        /// <typeparam name="T">The type of value to test.</typeparam>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void Null<T>(T? value)
-            where T : class
-        {
-            True(value is null);
-        }
-
-        /// <summary>
-        /// Throws an exception if the specified value is not null.
-        /// </summary>
-        /// <typeparam name="T">The type of value to test.</typeparam>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void Null<T>(T? value)
-            where T : struct
-        {
-            False(value.HasValue);
-        }
-
-        /// <summary>
-        /// Throws an exception if the specified object is not of a given type.
-        /// </summary>
-        /// <typeparam name="T">The type the value is expected to be.</typeparam>
-        /// <param name="value">The value to test.</param>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void Is<T>([NotNull] object? value)
-        {
-            True(value is T);
-        }
-
-        /// <summary>
-        /// Throws an public exception if a condition evaluates to true.
-        /// </summary>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void False([DoesNotReturnIf(true)] bool condition, [Localizable(false)] string? message = null)
-        {
-            if (condition)
-            {
-                Fail(message);
-            }
-        }
-
-        /// <summary>
-        /// Throws an public exception if a condition evaluates to true.
-        /// </summary>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void False([DoesNotReturnIf(true)] bool condition, [Localizable(false)] string unformattedMessage, object? arg1)
-        {
-            if (condition)
-            {
-                Fail(Format(unformattedMessage, arg1));
-            }
-        }
-
-        /// <summary>
-        /// Throws an public exception if a condition evaluates to true.
-        /// </summary>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void False([DoesNotReturnIf(true)] bool condition, [Localizable(false)] string unformattedMessage, params object?[] args)
-        {
-            if (condition)
-            {
-                Fail(Format(unformattedMessage, args));
-            }
-        }
-
-        /// <summary>
-        /// Throws an public exception if a condition evaluates to false.
-        /// </summary>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void True([DoesNotReturnIf(false)] bool condition, [Localizable(false)] string? message = null)
-        {
-            if (!condition)
-            {
-                Fail(message);
-            }
-        }
-
-        /// <summary>
-        /// Throws an public exception if a condition evaluates to false.
-        /// </summary>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void True([DoesNotReturnIf(false)] bool condition, [Localizable(false)] string unformattedMessage, object? arg1)
-        {
-            if (!condition)
-            {
-                Fail(Format(unformattedMessage, arg1));
-            }
-        }
-
-        /// <summary>
-        /// Throws an public exception if a condition evaluates to false.
-        /// </summary>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void True([DoesNotReturnIf(false)] bool condition, [Localizable(false)] string unformattedMessage, params object?[] args)
-        {
-            if (!condition)
-            {
-                Fail(Format(unformattedMessage, args));
-            }
-        }
-
-        /// <summary>
         /// Unconditionally throws an <see cref="InternalErrorException"/>.
         /// </summary>
         [DebuggerStepThrough]
@@ -262,6 +265,30 @@ namespace Validation
         }
 
         /// <summary>
+        /// Throws an exception if the specified value is not null.
+        /// </summary>
+        /// <typeparam name="T">The type of value to test.</typeparam>
+        [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        public static void Null<T>(T? value)
+            where T : class
+        {
+            True(value is null);
+        }
+
+        /// <summary>
+        /// Throws an exception if the specified value is not null.
+        /// </summary>
+        /// <typeparam name="T">The type of value to test.</typeparam>
+        [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        public static void Null<T>(T? value)
+            where T : struct
+        {
+            False(value.HasValue);
+        }
+
+        /// <summary>
         /// Verifies that a value is not null, and throws an exception about a missing service otherwise.
         /// </summary>
         /// <typeparam name="T">The interface of the imported part.</typeparam>
@@ -280,64 +307,41 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an public exception.
+        /// Throws an public exception if a condition evaluates to false.
         /// </summary>
-        /// <returns>Nothing, as this method always throws.  The signature allows for "throwing" Fail so C# knows execution will stop.</returns>
         [DebuggerStepThrough]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use Fail(string) instead.")]
-        [DoesNotReturn]
-        public static Exception Fail([Localizable(false)] string? message = null, bool showAssert = true) => Fail(message);
-
-        /// <summary>
-        /// Throws an public exception.
-        /// </summary>
-        /// <returns>Nothing, as this method always throws.  The signature allows for "throwing" Fail so C# knows execution will stop.</returns>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use Fail(string, Exception) instead.")]
-        [DoesNotReturn]
-        public static Exception Fail([Localizable(false)] string? message, Exception? innerException, bool showAssert = true) => Fail(message, innerException);
-
-        /// <summary>
-        /// Throws an public exception.
-        /// </summary>
-        /// <returns>Nothing, as this method always throws.  The signature allows for "throwing" Fail so C# knows execution will stop.</returns>
-        [DebuggerStepThrough]
-        [DoesNotReturn]
-        public static Exception Fail([Localizable(false)] string? message = null)
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        public static void True([DoesNotReturnIf(false)] bool condition, [Localizable(false)] string? message = null)
         {
-            var exception = new InternalErrorException(message);
-            bool proceed = true; // allows debuggers to skip the throw statement
-            if (proceed)
+            if (!condition)
             {
-                throw exception;
-            }
-            else
-            {
-#pragma warning disable CS8763
-                return new Exception();
-#pragma warning restore CS8763
+                Fail(message);
             }
         }
 
         /// <summary>
-        /// Throws an public exception.
+        /// Throws an public exception if a condition evaluates to false.
         /// </summary>
-        /// <returns>Nothing, as this method always throws.  The signature allows for "throwing" Fail so C# knows execution will stop.</returns>
-        [DoesNotReturn]
-        public static Exception Fail([Localizable(false)] string? message, Exception? innerException)
+        [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        public static void True([DoesNotReturnIf(false)] bool condition, [Localizable(false)] string unformattedMessage, object? arg1)
         {
-            var exception = new InternalErrorException(message, innerException);
-            bool proceed = true; // allows debuggers to skip the throw statement
-            if (proceed)
+            if (!condition)
             {
-                throw exception;
+                Fail(Format(unformattedMessage, arg1));
             }
-            else
+        }
+
+        /// <summary>
+        /// Throws an public exception if a condition evaluates to false.
+        /// </summary>
+        [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        public static void True([DoesNotReturnIf(false)] bool condition, [Localizable(false)] string unformattedMessage, params object?[] args)
+        {
+            if (!condition)
             {
-#pragma warning disable CS8763
-                return new Exception();
-#pragma warning restore CS8763
+                Fail(Format(unformattedMessage, args));
             }
         }
 

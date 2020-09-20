@@ -14,21 +14,27 @@ namespace Validation
     public static class Report
     {
         /// <summary>
-        /// Verifies that a value is not null, and reports an error about a missing MEF component otherwise.
+        /// Reports a certain failure.
         /// </summary>
-        /// <typeparam name="T">The interface of the imported part.</typeparam>
         [Conditional("DEBUG")]
-        public static void IfNotPresent<T>(T part)
+        public static void Fail([Localizable(false)] string? message = null)
         {
-            if (part is null)
+            if (message is null)
             {
-#if NET20
-                Type coreType = typeof(T);
-#else
-                Type coreType = PrivateErrorHelpers.TrimGenericWrapper(typeof(T), typeof(Lazy<>));
-#endif
-                Fail(Strings.ServiceMissing, coreType.FullName);
+                message = "A recoverable error has been detected.";
             }
+
+            Debug.WriteLine(message);
+            Debug.Assert(false, message);
+        }
+
+        /// <summary>
+        /// Reports a certain failure.
+        /// </summary>
+        [Conditional("DEBUG")]
+        public static void Fail([Localizable(false)] string message, params object?[] args)
+        {
+            Fail(PrivateErrorHelpers.Format(message, args));
         }
 
         /// <summary>
@@ -92,27 +98,21 @@ namespace Validation
         }
 
         /// <summary>
-        /// Reports a certain failure.
+        /// Verifies that a value is not null, and reports an error about a missing MEF component otherwise.
         /// </summary>
+        /// <typeparam name="T">The interface of the imported part.</typeparam>
         [Conditional("DEBUG")]
-        public static void Fail([Localizable(false)] string? message = null)
+        public static void IfNotPresent<T>(T part)
         {
-            if (message is null)
+            if (part is null)
             {
-                message = "A recoverable error has been detected.";
+#if NET20
+                Type coreType = typeof(T);
+#else
+                Type coreType = PrivateErrorHelpers.TrimGenericWrapper(typeof(T), typeof(Lazy<>));
+#endif
+                Fail(Strings.ServiceMissing, coreType.FullName);
             }
-
-            Debug.WriteLine(message);
-            Debug.Assert(false, message);
-        }
-
-        /// <summary>
-        /// Reports a certain failure.
-        /// </summary>
-        [Conditional("DEBUG")]
-        public static void Fail([Localizable(false)] string message, params object?[] args)
-        {
-            Fail(PrivateErrorHelpers.Format(message, args));
         }
     }
 }

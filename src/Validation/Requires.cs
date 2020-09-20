@@ -7,7 +7,6 @@ namespace Validation
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
     using System.Runtime;
 
     /// <summary>
@@ -16,7 +15,128 @@ namespace Validation
     public static class Requires
     {
         /// <summary>
-        /// Throws an <see cref="ArgumentException"/> if the specified parameter's value is equal to the 
+        /// Throws an ArgumentException if a condition does not evaluate to true.
+        /// </summary>
+        [DebuggerStepThrough]
+        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string? message)
+        {
+            if (!condition)
+            {
+                throw new ArgumentException(message, parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Throws an ArgumentException if a condition does not evaluate to true.
+        /// </summary>
+        [DebuggerStepThrough]
+        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, object? arg1)
+        {
+            if (!condition)
+            {
+                throw new ArgumentException(Format(message, arg1), parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Throws an ArgumentException if a condition does not evaluate to true.
+        /// </summary>
+        [DebuggerStepThrough]
+        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, object? arg1, object? arg2)
+        {
+            if (!condition)
+            {
+                throw new ArgumentException(Format(message, arg1, arg2), parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Throws an ArgumentException if a condition does not evaluate to true.
+        /// </summary>
+        [DebuggerStepThrough]
+        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, params object?[] args)
+        {
+            if (!condition)
+            {
+                throw new ArgumentException(Format(message, args), parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Throws an <see cref="System.ComponentModel.InvalidEnumArgumentException"/> if a given value is not a named value of the enum type.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of enum that may define the <paramref name="value"/>.</typeparam>
+        /// <param name="value">The value that may be named by <typeparamref name="TEnum"/>.</param>
+        /// <param name="parameterName">The name of the parameter to include in the exception, if thrown.</param>
+        [DebuggerStepThrough]
+        public static void Defined<TEnum>(TEnum value, string parameterName)
+            where TEnum : struct, Enum
+        {
+            if (!Enum.IsDefined(typeof(TEnum), value))
+            {
+                if (typeof(int) == Enum.GetUnderlyingType(typeof(TEnum)))
+                {
+                    throw new System.ComponentModel.InvalidEnumArgumentException(parameterName, (int)(object)value, typeof(TEnum));
+                }
+                else
+                {
+                    throw new System.ComponentModel.InvalidEnumArgumentException(Format(Strings.Argument_NotEnum, parameterName, value, typeof(TEnum).FullName));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Throws an ArgumentException.
+        /// </summary>
+        [DebuggerStepThrough]
+        [DoesNotReturn]
+        public static Exception Fail(Exception? innerException, string unformattedMessage, params object?[] args)
+        {
+            throw new ArgumentException(Format(unformattedMessage, args), innerException);
+        }
+        
+        /// <summary>
+        /// Throws an ArgumentException.
+        /// </summary>
+        /// <returns>Nothing.  It always throws.</returns>
+        [DebuggerStepThrough]
+        [DoesNotReturn]
+        public static Exception Fail(string unformattedMessage, params object?[] args)
+        {
+            throw Fail(Format(unformattedMessage, args));
+        }
+
+        /// <summary>
+        /// Throws an ArgumentException.
+        /// </summary>
+        /// <returns>Nothing.  It always throws.</returns>
+        [DebuggerStepThrough]
+        [DoesNotReturn]
+        public static Exception Fail(string? message)
+        {
+            throw new ArgumentException(message);
+        }
+
+        /// <summary>
+        /// Throws an <see cref="ArgumentOutOfRangeException"/> if a condition does not evaluate to true.
+        /// </summary>
+        /// <returns>Nothing.  This method always throws.</returns>
+        [DebuggerStepThrough]
+        [DoesNotReturn]
+        public static Exception FailRange(string? parameterName, string? message = null)
+        {
+            if (string.IsNullOrEmpty(message))
+            {
+                throw new ArgumentOutOfRangeException(parameterName);
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(parameterName, message);
+            }
+        }
+
+        /// <summary>
+        /// Throws an <see cref="ArgumentException"/> if the specified parameter's value is equal to the
         /// default value of the <see cref="Type"/> <typeparamref name="T"/>.
         /// </summary>
         /// <typeparam name="T">The type of the parameter.</typeparam>
@@ -35,24 +155,18 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is null.
+        /// Throws an exception if the specified parameter's value is <see cref="Guid.Empty"/>.
         /// </summary>
-        /// <typeparam name="T">The type of the parameter.</typeparam>
         /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <returns>The value of the parameter.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is an empty guid (<see cref="Guid.Empty"/>.)</exception>
         [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static T NotNull<T>([ValidatedNotNull, NotNull] T value, string? parameterName)
-            where T : class // ensures value-types aren't passed to a null checking method
+        public static void NotEmpty(Guid value, string? parameterName)
         {
-            if (value is null)
+            if (value == Guid.Empty)
             {
-                throw new ArgumentNullException(parameterName);
+                throw new ArgumentException(Format(Strings.Argument_EmptyGuid, parameterName), parameterName);
             }
-
-            return value;
         }
 
         /// <summary>
@@ -127,6 +241,27 @@ namespace Validation
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <returns>The value of the parameter.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
+        [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        public static T NotNull<T>([ValidatedNotNull, NotNull] T value, string? parameterName)
+            where T : class // ensures value-types aren't passed to a null checking method
+        {
+            if (value is null)
+            {
+                throw new ArgumentNullException(parameterName);
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Throws an exception if the specified parameter's value is null.
+        /// </summary>
+        /// <typeparam name="T">The type of the parameter.</typeparam>
+        /// <param name="value">The value of the argument.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <returns>The value of the parameter.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
         /// <remarks>
         /// This method exists for callers who themselves only know the type as a generic parameter which
         /// may or may not be a class, but certainly cannot be null.
@@ -143,41 +278,34 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is null, empty, or whitespace.
+        /// Throws an exception if the specified parameter's value is null,
+        /// has no elements or has an element with a null value.
         /// </summary>
-        /// <param name="value">The value of the argument.</param>
+        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+        /// <param name="values">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
+        /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
-        public static void NotNullOrWhiteSpace([ValidatedNotNull, NotNull] string value, string? parameterName)
+        public static void NotNullEmptyOrNullElements<T>([ValidatedNotNull, NotNull] IEnumerable<T> values, string? parameterName)
+            where T : class // ensures value-types aren't passed to a null checking method
         {
-            // To whoever is doing random code cleaning:
-            // Consider the performance when changing the code to delegate to NotNull.
-            // In general do not chain call to another function, check first and return as earlier as possible.
-            if (value is null)
-            {
-                throw new ArgumentNullException(parameterName);
-            }
+            NotNull(values, parameterName);
 
-            if (value.Length == 0 || value[0] == '\0')
+            bool hasElements = false;
+            foreach (T? value in values)
             {
-                throw new ArgumentException(Format(Strings.Argument_EmptyString, parameterName), parameterName);
-            }
+                hasElements = true;
 
-#if NET20
-            for (int i = 0; i < value.Length; i++)
-            {
-                if (char.IsWhiteSpace(value[i]))
+                if (value is null)
                 {
-                    throw new ArgumentException(Strings.Argument_Whitespace, parameterName);
+                    throw new ArgumentException(Format(Strings.Argument_NullElement, parameterName), parameterName);
                 }
             }
-#else
-            if (string.IsNullOrWhiteSpace(value))
+
+            if (!hasElements)
             {
-                throw new ArgumentException(Strings.Argument_Whitespace, parameterName);
+                throw new ArgumentException(Format(Strings.Argument_EmptyArray, parameterName), parameterName);
             }
-#endif
         }
 
         /// <summary>
@@ -252,35 +380,43 @@ namespace Validation
             }
         }
 
+
         /// <summary>
-        /// Throws an exception if the specified parameter's value is null,
-        /// has no elements or has an element with a null value.
+        /// Throws an exception if the specified parameter's value is null, empty, or whitespace.
         /// </summary>
-        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
-        /// <param name="values">The value of the argument.</param>
+        /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
         [DebuggerStepThrough]
-        public static void NotNullEmptyOrNullElements<T>([ValidatedNotNull, NotNull] IEnumerable<T> values, string? parameterName)
-            where T : class // ensures value-types aren't passed to a null checking method
+        public static void NotNullOrWhiteSpace([ValidatedNotNull, NotNull] string value, string? parameterName)
         {
-            NotNull(values, parameterName);
-
-            bool hasElements = false;
-            foreach (T? value in values)
+            // To whoever is doing random code cleaning:
+            // Consider the performance when changing the code to delegate to NotNull.
+            // In general do not chain call to another function, check first and return as earlier as possible.
+            if (value is null)
             {
-                hasElements = true;
+                throw new ArgumentNullException(parameterName);
+            }
 
-                if (value is null)
+            if (value.Length == 0 || value[0] == '\0')
+            {
+                throw new ArgumentException(Format(Strings.Argument_EmptyString, parameterName), parameterName);
+            }
+
+#if NET20
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (char.IsWhiteSpace(value[i]))
                 {
-                    throw new ArgumentException(Format(Strings.Argument_NullElement, parameterName), parameterName);
+                    throw new ArgumentException(Strings.Argument_Whitespace, parameterName);
                 }
             }
-
-            if (!hasElements)
+#else
+            if (string.IsNullOrWhiteSpace(value))
             {
-                throw new ArgumentException(Format(Strings.Argument_EmptyArray, parameterName), parameterName);
+                throw new ArgumentException(Strings.Argument_Whitespace, parameterName);
             }
+#endif
         }
 
         /// <summary>
@@ -307,21 +443,6 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is <see cref="Guid.Empty"/>.
-        /// </summary>
-        /// <param name="value">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is an empty guid (<see cref="Guid.Empty"/>.)</exception>
-        [DebuggerStepThrough]
-        public static void NotEmpty(Guid value, string? parameterName)
-        {
-            if (value == Guid.Empty)
-            {
-                throw new ArgumentException(Format(Strings.Argument_EmptyGuid, parameterName), parameterName);
-            }
-        }
-
-        /// <summary>
         /// Throws an <see cref="ArgumentOutOfRangeException"/> if a condition does not evaluate to true.
         /// </summary>
         [DebuggerStepThrough]
@@ -334,104 +455,6 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an <see cref="ArgumentOutOfRangeException"/> if a condition does not evaluate to true.
-        /// </summary>
-        /// <returns>Nothing.  This method always throws.</returns>
-        [DebuggerStepThrough]
-        [DoesNotReturn]
-        public static Exception FailRange(string? parameterName, string? message = null)
-        {
-            if (string.IsNullOrEmpty(message))
-            {
-                throw new ArgumentOutOfRangeException(parameterName);
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException(parameterName, message);
-            }
-        }
-
-        /// <summary>
-        /// Throws an ArgumentException if a condition does not evaluate to true.
-        /// </summary>
-        [DebuggerStepThrough]
-        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string? message)
-        {
-            if (!condition)
-            {
-                throw new ArgumentException(message, parameterName);
-            }
-        }
-
-        /// <summary>
-        /// Throws an ArgumentException if a condition does not evaluate to true.
-        /// </summary>
-        [DebuggerStepThrough]
-        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, object? arg1)
-        {
-            if (!condition)
-            {
-                throw new ArgumentException(Format(message, arg1), parameterName);
-            }
-        }
-
-        /// <summary>
-        /// Throws an ArgumentException if a condition does not evaluate to true.
-        /// </summary>
-        [DebuggerStepThrough]
-        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, object? arg1, object? arg2)
-        {
-            if (!condition)
-            {
-                throw new ArgumentException(Format(message, arg1, arg2), parameterName);
-            }
-        }
-
-        /// <summary>
-        /// Throws an ArgumentException if a condition does not evaluate to true.
-        /// </summary>
-        [DebuggerStepThrough]
-        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, params object?[] args)
-        {
-            if (!condition)
-            {
-                throw new ArgumentException(Format(message, args), parameterName);
-            }
-        }
-
-        /// <summary>
-        /// Throws an ArgumentException.
-        /// </summary>
-        /// <returns>Nothing.  It always throws.</returns>
-        [DebuggerStepThrough]
-        [DoesNotReturn]
-        public static Exception Fail(string? message)
-        {
-            throw new ArgumentException(message);
-        }
-
-        /// <summary>
-        /// Throws an ArgumentException.
-        /// </summary>
-        /// <returns>Nothing.  It always throws.</returns>
-        [DebuggerStepThrough]
-        [DoesNotReturn]
-        public static Exception Fail(string unformattedMessage, params object?[] args)
-        {
-            throw Fail(Format(unformattedMessage, args));
-        }
-
-        /// <summary>
-        /// Throws an ArgumentException.
-        /// </summary>
-        [DebuggerStepThrough]
-        [DoesNotReturn]
-        public static Exception Fail(Exception? innerException, string unformattedMessage, params object?[] args)
-        {
-            throw new ArgumentException(Format(unformattedMessage, args), innerException);
-        }
-
-        /// <summary>
         /// Validates some expression describing the acceptable condition for an argument evaluates to true.
         /// </summary>
         /// <param name="condition">The expression that must evaluate to true to avoid an <see cref="ArgumentException"/>.</param>
@@ -439,11 +462,11 @@ namespace Validation
         /// <param name="unformattedMessage">The unformatted message.</param>
         /// <param name="args">Formatting arguments.</param>
         [DebuggerStepThrough]
-        public static void That(bool condition, string parameterName, string unformattedMessage, params object[] args)
+        public static void That(bool condition, string? parameterName, string unformattedMessage, params object?[] args)
         {
             if (!condition)
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, unformattedMessage, args), parameterName);
+                throw new ArgumentException(Format(unformattedMessage, args), parameterName);
             }
         }
 
@@ -458,29 +481,6 @@ namespace Validation
             if (!condition)
             {
                 throw new InvalidOperationException(message);
-            }
-        }
-
-        /// <summary>
-        /// Throws an <see cref="System.ComponentModel.InvalidEnumArgumentException"/> if a given value is not a named value of the enum type.
-        /// </summary>
-        /// <typeparam name="TEnum">The type of enum that may define the <paramref name="value"/>.</typeparam>
-        /// <param name="value">The value that may be named by <typeparamref name="TEnum"/>.</param>
-        /// <param name="parameterName">The name of the parameter to include in the exception, if thrown.</param>
-        [DebuggerStepThrough]
-        public static void Defined<TEnum>(TEnum value, string parameterName)
-            where TEnum : struct, Enum
-        {
-            if (!Enum.IsDefined(typeof(TEnum), value))
-            {
-                if (typeof(int) == Enum.GetUnderlyingType(typeof(TEnum)))
-                {
-                    throw new System.ComponentModel.InvalidEnumArgumentException(parameterName, (int)(object)value, typeof(TEnum));
-                }
-                else
-                {
-                    throw new System.ComponentModel.InvalidEnumArgumentException(Format(Strings.Argument_NotEnum, parameterName, value, typeof(TEnum).FullName));
-                }
             }
         }
 
