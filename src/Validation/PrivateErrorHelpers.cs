@@ -5,7 +5,9 @@ namespace Validation
 {
     using System;
     using System.Globalization;
+#if !(NET20 || NET40)
     using System.Reflection;
+#endif
 
     /// <summary>
     /// Common utility methods used by the various error detection and reporting classes.

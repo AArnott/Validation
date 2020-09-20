@@ -8,7 +8,6 @@ namespace Validation
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
 
 #if NET20
     using System.Collections;
@@ -109,7 +108,7 @@ namespace Validation
         {
             if (condition)
             {
-                Fail(Format(unformattedMessage, arg1));
+                Fail(PrivateErrorHelpers.Format(unformattedMessage, arg1));
             }
         }
 
@@ -122,7 +121,7 @@ namespace Validation
         {
             if (condition)
             {
-                Fail(Format(unformattedMessage, args));
+                Fail(PrivateErrorHelpers.Format(unformattedMessage, args));
             }
         }
 
@@ -180,8 +179,8 @@ namespace Validation
         [DebuggerStepThrough]
         public static void NotNullOrEmpty<T>([ValidatedNotNull, NotNull] ICollection<T>? values)
         {
-            Assumes.NotNull(values);
-            Assumes.True(values.Count > 0);
+            NotNull(values);
+            True(values.Count > 0);
         }
 
         /// <summary>
@@ -191,31 +190,30 @@ namespace Validation
         [DebuggerStepThrough]
         public static void NotNullOrEmpty<T>([ValidatedNotNull, NotNull] IEnumerable<T>? values)
         {
-            Assumes.NotNull(values);
+            NotNull(values);
 #if NET20
             if (values is ICollection<T> collectionoft)
             {
-                Assumes.True(collectionoft.Count != 0);
+                True(collectionoft.Count != 0);
             }
             else if (values is ICollection collection)
             {
-                Assumes.True(collection.Count != 0);
+                True(collection.Count != 0);
             }
             else
             {
-                using (IEnumerator<T> e = values.GetEnumerator())
-                {
-                    Assumes.True(e.MoveNext());
-                }
+                using IEnumerator<T> e = values.GetEnumerator();
+                True(e.MoveNext());
             }
 #else
-            Assumes.True(values.Any());
+            True(values.Any());
 #endif
         }
 
         /// <summary>
         /// Unconditionally throws an <see cref="InternalErrorException"/>.
         /// </summary>
+        /// <returns>Nothing. This method always throws. But the signature allows calling code to "throw" this method for C# syntax reasons.</returns>
         [DebuggerStepThrough]
         [DoesNotReturn]
         public static Exception NotReachable()
@@ -302,7 +300,7 @@ namespace Validation
 #else
                 Type coreType = PrivateErrorHelpers.TrimGenericWrapper(typeof(T), typeof(Lazy<>));
 #endif
-                Fail(string.Format(CultureInfo.CurrentCulture, Strings.ServiceMissing, coreType.FullName));
+                Fail(PrivateErrorHelpers.Format(Strings.ServiceMissing, coreType.FullName));
             }
         }
 
@@ -328,7 +326,7 @@ namespace Validation
         {
             if (!condition)
             {
-                Fail(Format(unformattedMessage, arg1));
+                Fail(PrivateErrorHelpers.Format(unformattedMessage, arg1));
             }
         }
 
@@ -341,16 +339,8 @@ namespace Validation
         {
             if (!condition)
             {
-                Fail(Format(unformattedMessage, args));
+                Fail(PrivateErrorHelpers.Format(unformattedMessage, args));
             }
-        }
-
-        /// <summary>
-        /// Helper method that formats string arguments.
-        /// </summary>
-        private static string Format(string format, params object?[] arguments)
-        {
-            return PrivateErrorHelpers.Format(format, arguments);
         }
     }
 }

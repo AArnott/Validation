@@ -8,8 +8,8 @@ namespace System.Runtime.CompilerServices
     /// <summary>
     /// Allows the C# compiler to target .NET 2.0 while still using extension method syntax.
     /// </summary>
-    [AttributeUsageAttribute(AttributeTargets.Method)]
-    internal class ExtensionAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Method)]
+    internal sealed class ExtensionAttribute : Attribute
     {
     }
 }

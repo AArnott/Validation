@@ -34,7 +34,7 @@ namespace Validation
         {
             if (!condition)
             {
-                throw new ArgumentException(Format(message, arg1), parameterName);
+                throw new ArgumentException(PrivateErrorHelpers.Format(message, arg1), parameterName);
             }
         }
 
@@ -46,7 +46,7 @@ namespace Validation
         {
             if (!condition)
             {
-                throw new ArgumentException(Format(message, arg1, arg2), parameterName);
+                throw new ArgumentException(PrivateErrorHelpers.Format(message, arg1, arg2), parameterName);
             }
         }
 
@@ -58,7 +58,7 @@ namespace Validation
         {
             if (!condition)
             {
-                throw new ArgumentException(Format(message, args), parameterName);
+                throw new ArgumentException(PrivateErrorHelpers.Format(message, args), parameterName);
             }
         }
 
@@ -80,7 +80,7 @@ namespace Validation
                 }
                 else
                 {
-                    throw new System.ComponentModel.InvalidEnumArgumentException(Format(Strings.Argument_NotEnum, parameterName, value, typeof(TEnum).FullName));
+                    throw new System.ComponentModel.InvalidEnumArgumentException(PrivateErrorHelpers.Format(Strings.Argument_NotEnum, parameterName, value, typeof(TEnum).FullName));
                 }
             }
         }
@@ -88,28 +88,28 @@ namespace Validation
         /// <summary>
         /// Throws an ArgumentException.
         /// </summary>
-        [DebuggerStepThrough]
+        /// <returns>Nothing, as this method always throws. The signature allows for "throwing" Fail so C# knows execution will stop.</returns>        [DebuggerStepThrough]
         [DoesNotReturn]
         public static Exception Fail(Exception? innerException, string unformattedMessage, params object?[] args)
         {
-            throw new ArgumentException(Format(unformattedMessage, args), innerException);
-        }
-        
-        /// <summary>
-        /// Throws an ArgumentException.
-        /// </summary>
-        /// <returns>Nothing.  It always throws.</returns>
-        [DebuggerStepThrough]
-        [DoesNotReturn]
-        public static Exception Fail(string unformattedMessage, params object?[] args)
-        {
-            throw Fail(Format(unformattedMessage, args));
+            throw new ArgumentException(PrivateErrorHelpers.Format(unformattedMessage, args), innerException);
         }
 
         /// <summary>
         /// Throws an ArgumentException.
         /// </summary>
-        /// <returns>Nothing.  It always throws.</returns>
+        /// <returns>Nothing, as this method always throws. The signature allows for "throwing" Fail so C# knows execution will stop.</returns>        [DebuggerStepThrough]
+        [DebuggerStepThrough]
+        [DoesNotReturn]
+        public static Exception Fail(string unformattedMessage, params object?[] args)
+        {
+            throw Fail(PrivateErrorHelpers.Format(unformattedMessage, args));
+        }
+
+        /// <summary>
+        /// Throws an ArgumentException.
+        /// </summary>
+        /// <returns>Nothing, as this method always throws. The signature allows for "throwing" Fail so C# knows execution will stop.</returns>        [DebuggerStepThrough]
         [DebuggerStepThrough]
         [DoesNotReturn]
         public static Exception Fail(string? message)
@@ -120,7 +120,7 @@ namespace Validation
         /// <summary>
         /// Throws an <see cref="ArgumentOutOfRangeException"/> if a condition does not evaluate to true.
         /// </summary>
-        /// <returns>Nothing.  This method always throws.</returns>
+        /// <returns>Nothing, as this method always throws. The signature allows for "throwing" Fail so C# knows execution will stop.</returns>        [DebuggerStepThrough]
         [DebuggerStepThrough]
         [DoesNotReturn]
         public static Exception FailRange(string? parameterName, string? message = null)
@@ -150,7 +150,7 @@ namespace Validation
             var defaultValue = default(T);
             if (defaultValue.Equals(value))
             {
-                throw new ArgumentException(Format(Strings.Argument_StructIsDefault, parameterName, typeof(T).FullName), parameterName);
+                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_StructIsDefault, parameterName, typeof(T).FullName), parameterName);
             }
         }
 
@@ -165,7 +165,7 @@ namespace Validation
         {
             if (value == Guid.Empty)
             {
-                throw new ArgumentException(Format(Strings.Argument_EmptyGuid, parameterName), parameterName);
+                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_EmptyGuid, parameterName), parameterName);
             }
         }
 
@@ -189,7 +189,6 @@ namespace Validation
         }
 
 #if !NET20
-
         /// <summary>
         /// Throws an exception if the specified parameter's value is null.
         /// </summary>
@@ -230,7 +229,6 @@ namespace Validation
                 throw new ArgumentNullException(parameterName);
             }
         }
-
 #endif
 
         /// <summary>
@@ -298,13 +296,13 @@ namespace Validation
 
                 if (value is null)
                 {
-                    throw new ArgumentException(Format(Strings.Argument_NullElement, parameterName), parameterName);
+                    throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_NullElement, parameterName), parameterName);
                 }
             }
 
             if (!hasElements)
             {
-                throw new ArgumentException(Format(Strings.Argument_EmptyArray, parameterName), parameterName);
+                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_EmptyArray, parameterName), parameterName);
             }
         }
 
@@ -327,7 +325,7 @@ namespace Validation
 
             if (value.Length == 0 || value[0] == '\0')
             {
-                throw new ArgumentException(Format(Strings.Argument_EmptyString, parameterName), parameterName);
+                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_EmptyString, parameterName), parameterName);
             }
         }
 
@@ -351,7 +349,7 @@ namespace Validation
 
             if (!values.GetEnumerator().MoveNext())
             {
-                throw new ArgumentException(Format(Strings.Argument_EmptyArray, parameterName), parameterName);
+                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_EmptyArray, parameterName), parameterName);
             }
         }
 
@@ -374,12 +372,12 @@ namespace Validation
                 throw new ArgumentNullException(parameterName);
             }
 
-            if (!values.GetEnumerator().MoveNext())
+            using IEnumerator<T> e = values.GetEnumerator();
+            if (!e.MoveNext())
             {
-                throw new ArgumentException(Format(Strings.Argument_EmptyArray, parameterName), parameterName);
+                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_EmptyArray, parameterName), parameterName);
             }
         }
-
 
         /// <summary>
         /// Throws an exception if the specified parameter's value is null, empty, or whitespace.
@@ -400,7 +398,7 @@ namespace Validation
 
             if (value.Length == 0 || value[0] == '\0')
             {
-                throw new ArgumentException(Format(Strings.Argument_EmptyString, parameterName), parameterName);
+                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_EmptyString, parameterName), parameterName);
             }
 
 #if NET20
@@ -436,7 +434,7 @@ namespace Validation
                 {
                     if (value is null)
                     {
-                        throw new ArgumentException(Format(Strings.Argument_NullElement, parameterName), parameterName);
+                        throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_NullElement, parameterName), parameterName);
                     }
                 }
             }
@@ -466,7 +464,7 @@ namespace Validation
         {
             if (!condition)
             {
-                throw new ArgumentException(Format(unformattedMessage, args), parameterName);
+                throw new ArgumentException(PrivateErrorHelpers.Format(unformattedMessage, args), parameterName);
             }
         }
 
@@ -482,14 +480,6 @@ namespace Validation
             {
                 throw new InvalidOperationException(message);
             }
-        }
-
-        /// <summary>
-        /// Helper method that formats string arguments.
-        /// </summary>
-        private static string Format(string format, params object?[] arguments)
-        {
-            return PrivateErrorHelpers.Format(format, arguments);
         }
     }
 }
