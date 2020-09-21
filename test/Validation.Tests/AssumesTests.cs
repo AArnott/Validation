@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -11,14 +12,14 @@ using Validation;
 
 using Xunit;
 
-public partial class AssumesTests : IDisposable
+public partial class AssumesTests
 {
     private const string TestMessage = "Some test message.";
-    private AssertDialogSuppression suppressAssertUi = new AssertDialogSuppression();
 
-    public void Dispose()
+    public AssumesTests()
     {
-        this.suppressAssertUi.Dispose();
+        Trace.Listeners.Clear();
+        Trace.Listeners.Add(new TestingTraceListener());
     }
 
     [Fact]

@@ -4,15 +4,9 @@
 // Ensure the tests defined in this file always emulate a client compiled for Debug
 #define DEBUG
 
-#if !NETCOREAPP3_1 // The tests fail in this environment too! :(
-
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-
-using Moq;
 
 using Validation;
 
@@ -23,126 +17,86 @@ using Xunit;
 /// the test project compiles with DEBUG (and the supplied condition is as appropriate).
 /// </summary>
 [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1649:File name must match first type name", Justification = "By design")]
-public class ReportDebugTests : IDisposable
+public class ReportDebugTests
 {
     private const string FailureMessage = "failure";
     private const string DefaultFailureMessage = "A recoverable error has been detected.";
 
-    private AssertDialogSuppression suppressAssertUi = new AssertDialogSuppression();
-
-    public void Dispose()
+    public ReportDebugTests()
     {
-        this.suppressAssertUi.Dispose();
+        Trace.Listeners.Clear();
+        Trace.Listeners.Add(new TestingTraceListener());
+    }
+
+    private void AssertDoesNotThrow(Action action)
+    {
+        try
+        {
+            action();
+        }
+        catch (Exception e)
+        {
+            Assert.False(false, e.Message);
+        }
+
+        Assert.True(true);
     }
 
     [Fact]
     public void If()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
-        {
-            Report.If(false, FailureMessage);
-            listener.Value.Setup(l => l.WriteLine(FailureMessage)).Verifiable();
-            listener.Value.Setup(l => l.Fail(FailureMessage)).Verifiable();
-            Report.If(true, FailureMessage);
-        }
+        AssertDoesNotThrow(() => Report.If(false, FailureMessage));
+        Assert.Equal(FailureMessage, Assert.ThrowsAny<Exception>(() => Report.If(true, FailureMessage)).Message);
     }
 
     [Fact]
     public void IfNot()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
-        {
-            Report.IfNot(true, FailureMessage);
-            listener.Value.Setup(l => l.WriteLine(FailureMessage)).Verifiable();
-            listener.Value.Setup(l => l.Fail(FailureMessage)).Verifiable();
-            Report.IfNot(false, FailureMessage);
-        }
+        AssertDoesNotThrow(() => Report.IfNot(true, FailureMessage));
+        Assert.Equal(FailureMessage, Assert.ThrowsAny<Exception>(() => Report.IfNot(false, FailureMessage)).Message);
     }
 
     [Fact]
     public void IfNot_Format1Arg()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
-        {
-            Report.IfNot(true, "a{0}c", "b");
-            listener.Value.Setup(l => l.WriteLine("abc")).Verifiable();
-            listener.Value.Setup(l => l.Fail("abc")).Verifiable();
-            Report.IfNot(false, "a{0}c", "b");
-        }
+        AssertDoesNotThrow(() => Report.IfNot(true, "a{0}c", "b"));
+        Assert.Equal("abc", Assert.ThrowsAny<Exception>(() => Report.IfNot(false, "a{0}c", "b")).Message);
     }
 
     [Fact]
     public void IfNot_Format2Arg()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
-        {
-            Report.IfNot(true, "a{0}{1}d", "b", "c");
-            listener.Value.Setup(l => l.WriteLine("abcd")).Verifiable();
-            listener.Value.Setup(l => l.Fail("abcd")).Verifiable();
-            Report.IfNot(false, "a{0}{1}d", "b", "c");
-        }
+        AssertDoesNotThrow(() => Report.IfNot(true, "a{0}{1}d", "b", "c"));
+        Assert.Equal("abcd", Assert.ThrowsAny<Exception>(() => Report.IfNot(false, "a{0}{1}d", "b", "c")).Message);
     }
 
     [Fact]
     public void IfNot_FormatNArg()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
-        {
-            Report.IfNot(true, "a{0}{1}{2}e", "b", "c", "d");
-            listener.Value.Setup(l => l.WriteLine("abcde")).Verifiable();
-            listener.Value.Setup(l => l.Fail("abcde")).Verifiable();
-            Report.IfNot(false, "a{0}{1}{2}e", "b", "c", "d");
-        }
+        AssertDoesNotThrow(() => Report.IfNot(true, "a{0}{1}{2}e", "b", "c", "d"));
+        Assert.Equal("abcde", Assert.ThrowsAny<Exception>(() => Report.IfNot(false, "a{0}{1}{2}e", "b", "c", "d")).Message);
     }
 
     [Fact]
     public void IfNotPresent()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
-        {
-            string? possiblyPresent = "not missing";
-            string missingTypeName = possiblyPresent.GetType().FullName!;
-            Report.IfNotPresent(possiblyPresent);
-            listener.Value.Setup(l => l.WriteLine(It.Is<string>(v => v.Contains(missingTypeName)))).Verifiable();
-            listener.Value.Setup(l => l.Fail(It.Is<string>(v => v.Contains(missingTypeName)))).Verifiable();
-            possiblyPresent = null;
-            Report.IfNotPresent(possiblyPresent);
-        }
+        string? possiblyPresent = "not missing";
+        string missingTypeName = possiblyPresent.GetType().FullName!;
+        AssertDoesNotThrow(() => Report.IfNotPresent(possiblyPresent));
+
+        possiblyPresent = null;
+        Assert.Contains(missingTypeName, Assert.ThrowsAny<Exception>(() => Report.IfNotPresent(possiblyPresent)).Message);
     }
 
     [Fact]
     public void Fail()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
-        {
-            listener.Value.Setup(l => l.WriteLine(FailureMessage)).Verifiable();
-            listener.Value.Setup(l => l.Fail(FailureMessage)).Verifiable();
-            Report.Fail(FailureMessage);
-        }
+        Assert.Equal(FailureMessage, Assert.ThrowsAny<Exception>(() => Report.Fail(FailureMessage)).Message);
     }
 
     [Fact]
     public void Fail_DefaultMessage()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
-        {
-            listener.Value.Setup(l => l.WriteLine(DefaultFailureMessage)).Verifiable();
-            listener.Value.Setup(l => l.Fail(DefaultFailureMessage)).Verifiable();
-            Report.Fail();
-        }
-    }
-
-    private static DisposableValue<Mock<TraceListener>> Listen()
-    {
-        var mockListener = new Mock<TraceListener>(MockBehavior.Strict);
-        Trace.Listeners.Add(mockListener.Object);
-        return new DisposableValue<Mock<TraceListener>>(
-            mockListener,
-            () =>
-            {
-                Trace.Listeners.Remove(mockListener.Object);
-                mockListener.Verify();
-            });
+        Assert.Equal(DefaultFailureMessage, Assert.ThrowsAny<Exception>(() => Report.Fail()).Message);
     }
 }
-#endif
