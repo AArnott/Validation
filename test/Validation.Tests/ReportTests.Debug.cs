@@ -4,7 +4,6 @@
 // Ensure the tests defined in this file always emulate a client compiled for Debug
 #define DEBUG
 
-#if !NETCOREAPP2_1 // .NET Core < 3.0 doesn't let us use TraceListeners to verify behavior https://github.com/dotnet/corefx/issues/16596
 #if !NETCOREAPP3_1 // The tests fail in this environment too! :(
 
 using System;
@@ -146,5 +145,4 @@ public class ReportDebugTests : IDisposable
             });
     }
 }
-#endif
 #endif
