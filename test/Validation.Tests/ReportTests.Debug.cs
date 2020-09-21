@@ -34,10 +34,12 @@ public class ReportDebugTests
         {
             action();
         }
+#pragma warning disable CA1031 // Do not catch general exception types
         catch (Exception e)
         {
             Assert.False(false, e.Message);
         }
+#pragma warning restore CA1031 // Do not catch general exception types
 
         Assert.True(true);
     }

@@ -20,7 +20,6 @@ using Xunit;
 public class ReportReleaseTests
 {
     private const string FailureMessage = "failure";
-    private const string DefaultFailureMessage = "A recoverable error has been detected.";
 
     public ReportReleaseTests()
     {
@@ -34,10 +33,12 @@ public class ReportReleaseTests
         {
             action();
         }
+#pragma warning disable CA1031 // Do not catch general exception types
         catch (Exception e)
         {
             Assert.False(false, e.Message);
         }
+#pragma warning restore CA1031 // Do not catch general exception types
 
         Assert.True(true);
     }

@@ -24,9 +24,15 @@ namespace Validation
         {
             Type[] typeArgs;
             var typeInfo = type.GetTypeInfo();
-            if (typeInfo.IsGenericType && type.GetGenericTypeDefinition() == wrapper && (typeArgs = typeInfo.GenericTypeArguments).Length == 1)
+            if (typeInfo.IsGenericType && type.GetGenericTypeDefinition() == wrapper)
             {
-                return typeArgs[0];
+                typeArgs = typeInfo.GenericTypeArguments;
+                if (typeArgs.Length == 1)
+                {
+                    return typeArgs[0];
+                }
+
+                return type;
             }
             else
             {
