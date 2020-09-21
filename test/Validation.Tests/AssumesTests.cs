@@ -121,7 +121,6 @@ public partial class AssumesTests : IDisposable
         Assumes.Present("hi");
     }
 
-#if !NETCOREAPP3_1
     [Fact]
     public void InternalErrorException_IsSerializable()
     {
@@ -142,5 +141,4 @@ public partial class AssumesTests : IDisposable
             Assert.Equal(ex.Message, ex2.Message);
         }
     }
-#endif
 }

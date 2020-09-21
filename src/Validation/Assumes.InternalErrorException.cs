@@ -25,20 +25,18 @@ namespace Validation
             /// Initializes a new instance of the <see cref="InternalErrorException"/> class.
             /// </summary>
             [DebuggerStepThrough]
-            public InternalErrorException(string? message = null, bool showAssert = true)
+            public InternalErrorException(string? message = null)
                 : base(message ?? Strings.InternalExceptionMessage)
             {
-                this.ShowAssertDialog(showAssert);
             }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="InternalErrorException"/> class.
             /// </summary>
             [DebuggerStepThrough]
-            public InternalErrorException(string? message, Exception? innerException, bool showAssert = true)
+            public InternalErrorException(string? message, Exception? innerException)
                 : base(message ?? Strings.InternalExceptionMessage, innerException)
             {
-                this.ShowAssertDialog(showAssert);
             }
 
             /// <summary>
@@ -48,32 +46,6 @@ namespace Validation
             private InternalErrorException(SerializationInfo info, StreamingContext context)
                 : base(info, context)
             {
-            }
-
-            /// <summary>
-            /// Show the assert if showAssert==true.
-            /// </summary>
-            /// <param name="showAssert">Whether to show the assert.</param>
-            /// <remarks>
-            /// The assertion dialog may yet be suppressed if
-            /// ((DefaultTraceListener)System.Diagnostics.Trace.Listeners["Default"]).AssertUiEnabled == false
-            /// </remarks>
-            [DebuggerStepThrough]
-            private void ShowAssertDialog(bool showAssert)
-            {
-                if (showAssert)
-                {
-                    // In debug builds, throw up a dialog.  This allows a dev to
-                    // attach a debugger right at the point where the exception is
-                    // thrown rather than at the point where the exception is caught.
-                    string message = this.Message;
-                    if (this.InnerException != null)
-                    {
-                        message += " " + this.InnerException;
-                    }
-
-                    Report.Fail(message);
-                }
             }
         }
     }
