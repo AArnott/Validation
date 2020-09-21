@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net48;netcoreapp3.1</TargetFrameworks>
+    <LangVersion>8</LangVersion>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="4.14.5" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <PackageReference Include="coverlet.msbuild" Version="2.9.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Validation\Validation.csproj" />
+  </ItemGroup>
+</Project>

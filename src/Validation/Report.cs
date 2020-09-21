@@ -1,13 +1,16 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
+// Enable calling the Debug class even in Release builds,
+// and be able to call other methods in this same class.
+#define DEBUG
+
 namespace Validation
 {
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Runtime;
-    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// Common runtime checks that trace messages and invoke an assertion failure,
@@ -20,7 +23,6 @@ namespace Validation
         /// </summary>
         [Conditional("DEBUG")]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Fail([Localizable(false)] string? message = null)
         {
             if (message is null)
@@ -37,7 +39,6 @@ namespace Validation
         /// </summary>
         [Conditional("DEBUG")]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Fail([Localizable(false)] string message, params object?[] args)
         {
             Fail(PrivateErrorHelpers.Format(message, args));
@@ -48,7 +49,6 @@ namespace Validation
         /// </summary>
         [Conditional("DEBUG")]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void If(bool condition, [Localizable(false)] string? message = null)
         {
             if (condition)
@@ -62,7 +62,6 @@ namespace Validation
         /// </summary>
         [Conditional("DEBUG")]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void IfNot(bool condition, [Localizable(false)] string? message = null)
         {
             if (!condition)
@@ -76,7 +75,6 @@ namespace Validation
         /// </summary>
         [Conditional("DEBUG")]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void IfNot(bool condition, [Localizable(false)] string message, object? arg1)
         {
             if (!condition)
@@ -90,7 +88,6 @@ namespace Validation
         /// </summary>
         [Conditional("DEBUG")]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void IfNot(bool condition, [Localizable(false)] string message, object? arg1, object? arg2)
         {
             if (!condition)
@@ -104,7 +101,6 @@ namespace Validation
         /// </summary>
         [Conditional("DEBUG")]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void IfNot(bool condition, [Localizable(false)] string message, params object?[] args)
         {
             if (!condition)
@@ -119,7 +115,6 @@ namespace Validation
         /// <typeparam name="T">The interface of the imported part.</typeparam>
         [Conditional("DEBUG")]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void IfNotPresent<T>(T part)
         {
             if (part is null)

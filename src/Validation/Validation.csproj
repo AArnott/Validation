@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netstandard2.0;netstandard1.3;net45</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;net45</TargetFrameworks>
+    <LangVersion>8</LangVersion>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <CodeAnalysisRuleSet>Validation.ruleset</CodeAnalysisRuleSet>
@@ -57,15 +57,7 @@
     <!--<PackageReference Include="PdbGit" Version="3.0.41" />-->
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta004" />
     <PackageReference Include="MSBuild.Sdk.Extras" Version="1.1.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.1'">
-    <PackageReference Include="Nullable" Version="1.3.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-    <PackageReference Include="System.ComponentModel.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
+    <PackageReference Include="Nullable" Version="1.3.0" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

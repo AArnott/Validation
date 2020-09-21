@@ -10,21 +10,19 @@ namespace Validation
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Runtime;
-    using System.Runtime.CompilerServices;
 
     /// <summary>
-    /// Common runtime checks that throw public error exceptions upon failure.
+    /// Common runtime checks that throw <see cref="InternalErrorException" /> exceptions upon failure.
     /// </summary>
     public static partial class Assumes
     {
         /// <summary>
-        /// Throws an public exception.
+        /// Throws an <see cref="InternalErrorException" />.
         /// </summary>
         /// <returns>Nothing, as this method always throws.  The signature allows for "throwing" Fail so C# knows execution will stop.</returns>
         [DebuggerStepThrough]
         [DoesNotReturn]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Exception Fail([Localizable(false)] string? message = null)
         {
             var exception = new InternalErrorException(message);
@@ -42,7 +40,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an public exception.
+        /// Throws an <see cref="InternalErrorException" />.
         /// </summary>
         /// <returns>Nothing, as this method always throws.  The signature allows for "throwing" Fail so C# knows execution will stop.</returns>
         [DebuggerStepThrough]
@@ -52,12 +50,11 @@ namespace Validation
         public static Exception Fail([Localizable(false)] string? message = null, bool showAssert = true) => Fail(message);
 
         /// <summary>
-        /// Throws an public exception.
+        /// Throws an <see cref="InternalErrorException" />.
         /// </summary>
         /// <returns>Nothing, as this method always throws.  The signature allows for "throwing" Fail so C# knows execution will stop.</returns>
         [DoesNotReturn]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Exception Fail([Localizable(false)] string? message, Exception? innerException)
         {
             var exception = new InternalErrorException(message, innerException);
@@ -75,7 +72,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an public exception.
+        /// Throws an <see cref="InternalErrorException" />.
         /// </summary>
         /// <returns>Nothing, as this method always throws.  The signature allows for "throwing" Fail so C# knows execution will stop.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -84,11 +81,10 @@ namespace Validation
         public static Exception Fail([Localizable(false)] string? message, Exception? innerException, bool showAssert = true) => Fail(message, innerException);
 
         /// <summary>
-        /// Throws an public exception if a condition evaluates to true.
+        /// Throws an <see cref="InternalErrorException" /> if a condition evaluates to true.
         /// </summary>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void False([DoesNotReturnIf(true)] bool condition, [Localizable(false)] string? message = null)
         {
             if (condition)
@@ -98,11 +94,10 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an public exception if a condition evaluates to true.
+        /// Throws an <see cref="InternalErrorException" /> if a condition evaluates to true.
         /// </summary>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void False([DoesNotReturnIf(true)] bool condition, [Localizable(false)] string unformattedMessage, object? arg1)
         {
             if (condition)
@@ -112,11 +107,10 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an public exception if a condition evaluates to true.
+        /// Throws an <see cref="InternalErrorException" /> if a condition evaluates to true.
         /// </summary>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void False([DoesNotReturnIf(true)] bool condition, [Localizable(false)] string unformattedMessage, params object?[] args)
         {
             if (condition)
@@ -132,7 +126,6 @@ namespace Validation
         /// <param name="value">The value to test.</param>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Is<T>([NotNull] object? value)
         {
             True(value is T);
@@ -144,7 +137,6 @@ namespace Validation
         /// <typeparam name="T">The type of value to test.</typeparam>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotNull<T>([ValidatedNotNull, NotNull] T? value)
             where T : class
         {
@@ -157,7 +149,6 @@ namespace Validation
         /// <typeparam name="T">The type of value to test.</typeparam>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotNull<T>([ValidatedNotNull, NotNull] T? value)
             where T : struct
         {
@@ -169,7 +160,6 @@ namespace Validation
         /// </summary>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotNullOrEmpty([ValidatedNotNull, NotNull] string? value)
         {
             NotNull(value);
@@ -183,7 +173,6 @@ namespace Validation
         /// <typeparam name="T">The type of value to test.</typeparam>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotNullOrEmpty<T>([ValidatedNotNull, NotNull] ICollection<T>? values)
         {
             NotNull(values);
@@ -196,7 +185,6 @@ namespace Validation
         /// <typeparam name="T">The type of value to test.</typeparam>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void NotNullOrEmpty<T>([ValidatedNotNull, NotNull] IEnumerable<T>? values)
         {
             NotNull(values);
@@ -210,7 +198,6 @@ namespace Validation
         [DebuggerStepThrough]
         [DoesNotReturn]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Exception NotReachable()
         {
             // Keep these two as separate lines of code, so the debugger can come in during the assert dialog
@@ -238,7 +225,6 @@ namespace Validation
         [DebuggerStepThrough]
         [DoesNotReturn]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [return: MaybeNull]
         public static T NotReachable<T>()
         {
@@ -265,7 +251,6 @@ namespace Validation
         /// <typeparam name="T">The type of value to test.</typeparam>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Null<T>(T? value)
             where T : class
         {
@@ -278,7 +263,6 @@ namespace Validation
         /// <typeparam name="T">The type of value to test.</typeparam>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Null<T>(T? value)
             where T : struct
         {
@@ -291,7 +275,6 @@ namespace Validation
         /// <typeparam name="T">The interface of the imported part.</typeparam>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Present<T>([NotNull] T component)
         {
             if (component is null)
@@ -302,11 +285,10 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an public exception if a condition evaluates to false.
+        /// Throws an <see cref="InternalErrorException" /> if a condition evaluates to false.
         /// </summary>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void True([DoesNotReturnIf(false)] bool condition, [Localizable(false)] string? message = null)
         {
             if (!condition)
@@ -316,11 +298,10 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an public exception if a condition evaluates to false.
+        /// Throws an <see cref="InternalErrorException" /> if a condition evaluates to false.
         /// </summary>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void True([DoesNotReturnIf(false)] bool condition, [Localizable(false)] string unformattedMessage, object? arg1)
         {
             if (!condition)
@@ -330,11 +311,10 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an public exception if a condition evaluates to false.
+        /// Throws an <see cref="InternalErrorException" /> if a condition evaluates to false.
         /// </summary>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void True([DoesNotReturnIf(false)] bool condition, [Localizable(false)] string unformattedMessage, params object?[] args)
         {
             if (!condition)
