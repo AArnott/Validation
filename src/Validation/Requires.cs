@@ -4,10 +4,12 @@
 namespace Validation
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Common runtime checks that throw ArgumentExceptions upon failure.
@@ -154,7 +156,7 @@ namespace Validation
         /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotDefault<T>(T value, string parameterName)
+        public static void NotDefault<T>(T? value, string parameterName)
             where T : struct
         {
             var defaultValue = default(T);
@@ -211,7 +213,7 @@ namespace Validation
         /// </remarks>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNull([ValidatedNotNull, NotNull] System.Threading.Tasks.Task value, string? parameterName)
+        public static void NotNull([ValidatedNotNull, NotNull] Task? value, string? parameterName)
         {
             if (value is null)
             {
@@ -232,7 +234,7 @@ namespace Validation
         /// </remarks>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNull<T>([ValidatedNotNull, NotNull] System.Threading.Tasks.Task<T> value, string? parameterName)
+        public static void NotNull<T>([ValidatedNotNull, NotNull] Task<T>? value, string? parameterName)
         {
             if (value is null)
             {
@@ -250,7 +252,7 @@ namespace Validation
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static T NotNull<T>([ValidatedNotNull, NotNull] T value, string? parameterName)
+        public static T? NotNull<T>([ValidatedNotNull, NotNull] T? value, string? parameterName)
             where T : class // ensures value-types aren't passed to a null checking method
         {
             if (value is null)
@@ -275,7 +277,7 @@ namespace Validation
         /// </remarks>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static T NotNullAllowStructs<T>([ValidatedNotNull, NotNull] T value, string? parameterName)
+        public static T NotNullAllowStructs<T>([ValidatedNotNull, NotNull, AllowNull] T value, string? parameterName)
         {
             if (value is null)
             {
@@ -295,7 +297,7 @@ namespace Validation
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNullEmptyOrNullElements<T>([ValidatedNotNull, NotNull] IEnumerable<T> values, string? parameterName)
+        public static void NotNullEmptyOrNullElements<T>([ValidatedNotNull, NotNull] IEnumerable<T?>? values, string? parameterName)
             where T : class // ensures value-types aren't passed to a null checking method
         {
             NotNull(values, parameterName);
@@ -325,7 +327,7 @@ namespace Validation
         /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNullOrEmpty([ValidatedNotNull, NotNull] string value, string? parameterName)
+        public static void NotNullOrEmpty([ValidatedNotNull, NotNull] string? value, string? parameterName)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
@@ -350,7 +352,7 @@ namespace Validation
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNullOrEmpty([ValidatedNotNull, NotNull] System.Collections.IEnumerable values, string? parameterName)
+        public static void NotNullOrEmpty([ValidatedNotNull, NotNull] IEnumerable? values, string? parameterName)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
@@ -376,7 +378,7 @@ namespace Validation
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNullOrEmpty<T>([ValidatedNotNull, NotNull] IEnumerable<T> values, string? parameterName)
+        public static void NotNullOrEmpty<T>([ValidatedNotNull, NotNull] IEnumerable<T>? values, string? parameterName)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
@@ -401,7 +403,7 @@ namespace Validation
         /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNullOrWhiteSpace([ValidatedNotNull, NotNull] string value, string? parameterName)
+        public static void NotNullOrWhiteSpace([ValidatedNotNull, NotNull] string? value, string? parameterName)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
@@ -432,7 +434,7 @@ namespace Validation
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NullOrNotNullElements<T>(IEnumerable<T> values, string? parameterName)
+        public static void NullOrNotNullElements<T>(IEnumerable<T>? values, string? parameterName)
         {
             if (values is object)
             {

@@ -275,7 +275,7 @@ namespace Validation
         /// <typeparam name="T">The interface of the imported part.</typeparam>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void Present<T>([NotNull] T component)
+        public static void Present<T>([NotNull, AllowNull] T component)
         {
             if (component is null)
             {
