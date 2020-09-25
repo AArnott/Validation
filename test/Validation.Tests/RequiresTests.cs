@@ -2,13 +2,10 @@
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
-
 using Validation;
-
 using Xunit;
 using Xunit.Abstractions;
 
@@ -107,7 +104,7 @@ public class RequiresTests
     [Fact]
     public void Fail_Exception_ObjectArray()
     {
-        ArgumentException? ex = Assert.Throws<ArgumentException>(() => Requires.Fail(new InvalidOperationException(), "message", "arg1"));
+        ArgumentException ex = Assert.Throws<ArgumentException>(() => Requires.Fail(new InvalidOperationException(), "message", "arg1"));
         Assert.IsType<InvalidOperationException>(ex.InnerException);
     }
 
@@ -140,7 +137,7 @@ public class RequiresTests
         Assert.Throws<ArgumentNullException>(() => Requires.NotNullOrEmpty(null!, "paramName"));
         Assert.Throws<ArgumentException>(() => Requires.NotNullOrEmpty(string.Empty, "paramName"));
         Assert.Throws<ArgumentException>(() => Requires.NotNullOrEmpty("\0", "paramName"));
-        ArgumentException? ex = Assert.Throws<ArgumentException>(() => Requires.NotNullOrEmpty(string.Empty, null));
+        ArgumentException ex = Assert.Throws<ArgumentException>(() => Requires.NotNullOrEmpty(string.Empty, null));
         Assert.Null(ex.ParamName);
     }
 
@@ -151,20 +148,16 @@ public class RequiresTests
         Assert.Throws<ArgumentNullException>(() => Requires.NotNullOrWhiteSpace(null!, "paramName"));
         Assert.Throws<ArgumentException>(() => Requires.NotNullOrWhiteSpace(string.Empty, "paramName"));
         Assert.Throws<ArgumentException>(() => Requires.NotNullOrWhiteSpace("\0", "paramName"));
-        ArgumentException? ex = Assert.Throws<ArgumentException>(() => Requires.NotNullOrWhiteSpace(" \t\n\r ", "paramName"));
+        ArgumentException ex = Assert.Throws<ArgumentException>(() => Requires.NotNullOrWhiteSpace(" \t\n\r ", "paramName"));
         Assert.Equal("paramName", ex.ParamName);
     }
 
     [Fact]
     public void NotNullOrEmpty_Collection()
     {
-        IEnumerable? nullCollection = null;
-#if NET45
-        var emptyCollection = new string[0];
-#else
-        var emptyCollection = Array.Empty<string>();
-#endif
-        var collection = new[] { "hi" };
+        System.Collections.IEnumerable? nullCollection = null;
+        System.Collections.IEnumerable emptyCollection = Array.Empty<string>();
+        System.Collections.IEnumerable collection = new[] { "hi" };
         Requires.NotNullOrEmpty(collection, "param");
         Assert.Throws<ArgumentNullException>(() => Requires.NotNullOrEmpty(nullCollection!, "param"));
         Assert.Throws<ArgumentException>(() => Requires.NotNullOrEmpty(emptyCollection, "param"));
@@ -174,12 +167,8 @@ public class RequiresTests
     public void NotNullOrEmpty_CollectionOfT()
     {
         IEnumerable<string>? nullCollection = null;
-#if NET45
-        var emptyCollection = new string[0];
-#else
-        var emptyCollection = Array.Empty<string>();
-#endif
-        var collection = new[] { "hi" };
+        IEnumerable<string> emptyCollection = Array.Empty<string>();
+        IEnumerable<string> collection = new[] { "hi" };
         Requires.NotNullOrEmpty(collection, "param");
         Assert.Throws<ArgumentNullException>(() => Requires.NotNullOrEmpty(nullCollection!, "param"));
         Assert.Throws<ArgumentException>(() => Requires.NotNullOrEmpty(emptyCollection, "param"));
@@ -189,12 +178,8 @@ public class RequiresTests
     public void NotNullOrEmpty_CollectionOfT_Struct()
     {
         IEnumerable<int>? nullCollection = null;
-#if NET45
-        var emptyCollection = new string[0];
-#else
-        var emptyCollection = Array.Empty<string>();
-#endif
-        var collection = new[] { 5 };
+        IEnumerable<int> emptyCollection = Array.Empty<int>();
+        IEnumerable<int> collection = new[] { 5 };
         Requires.NotNullOrEmpty(collection, "param");
         Assert.Throws<ArgumentNullException>(() => Requires.NotNullOrEmpty(nullCollection!, "param"));
         Assert.Throws<ArgumentException>(() => Requires.NotNullOrEmpty(emptyCollection, "param"));
@@ -204,13 +189,9 @@ public class RequiresTests
     public void NotNullEmptyOrNullElements()
     {
         ICollection<string>? nullCollection = null;
-#if NET45
-        var emptyCollection = new string[0];
-#else
-        var emptyCollection = Array.Empty<string>();
-#endif
-        var collection = new[] { "hi" };
-        var collectionWithNullElement = new[] { "hi", null!, "bye" };
+        ICollection<string> emptyCollection = Array.Empty<string>();
+        ICollection<string> collection = new[] { "hi" };
+        ICollection<string> collectionWithNullElement = new[] { "hi", null!, "bye" };
 
         Requires.NotNullEmptyOrNullElements(collection, "param");
         Assert.Throws<ArgumentNullException>(() => Requires.NotNullEmptyOrNullElements(nullCollection!, "param"));
@@ -222,13 +203,9 @@ public class RequiresTests
     public void NullOrNotNullElements()
     {
         IEnumerable<string>? nullCollection = null;
-#if NET45
-        var emptyCollection = new string[0];
-#else
-        var emptyCollection = Array.Empty<string>();
-#endif
-        var collection = new[] { "hi" };
-        var collectionWithNullElement = new[] { "hi", null, "bye" };
+        IEnumerable<string> emptyCollection = Array.Empty<string>();
+        IEnumerable<string> collection = new[] { "hi" };
+        IEnumerable<string?> collectionWithNullElement = new[] { "hi", null, "bye" };
 
         Requires.NullOrNotNullElements(nullCollection!, "param");
         Requires.NullOrNotNullElements(emptyCollection, "param");
@@ -240,7 +217,7 @@ public class RequiresTests
     public void Defined()
     {
         Requires.Defined(ConsoleColor.Black, "parameterName");
-        InvalidEnumArgumentException? ex = Assert.Throws<InvalidEnumArgumentException>("parameterName", () => Requires.Defined((ConsoleColor)88, "parameterName"));
+        InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>("parameterName", () => Requires.Defined((ConsoleColor)88, "parameterName"));
         this.logger.WriteLine(ex.Message);
     }
 
@@ -248,7 +225,7 @@ public class RequiresTests
     public void Defined_Int64Enum()
     {
         Requires.Defined(BigEnum.First, "parameterName");
-        InvalidEnumArgumentException? ex = Assert.Throws<InvalidEnumArgumentException>(() => Requires.Defined((BigEnum)0x100000000, "parameterName"));
+        InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => Requires.Defined((BigEnum)0x100000000, "parameterName"));
         this.logger.WriteLine(ex.Message);
     }
 }

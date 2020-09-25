@@ -6,13 +6,77 @@ namespace Validation
     using System;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Runtime;
+    using System.Runtime.InteropServices;
 
     /// <summary>
     /// Common runtime checks that throw exceptions upon failure.
     /// </summary>
-    public static class Verify
+    public static partial class Verify
     {
+        /// <summary>
+        /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
+        /// </summary>
+        [DebuggerStepThrough]
+        public static void Operation([DoesNotReturnIf(false)] bool condition, string? message)
+        {
+            if (!condition)
+            {
+                throw new InvalidOperationException(message);
+            }
+        }
+
+        /// <summary>
+        /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
+        /// </summary>
+        [DebuggerStepThrough]
+        public static void Operation([DoesNotReturnIf(false)] bool condition, string unformattedMessage, object? arg1)
+        {
+            if (!condition)
+            {
+                throw new InvalidOperationException(PrivateErrorHelpers.Format(unformattedMessage, arg1));
+            }
+        }
+
+        /// <summary>
+        /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
+        /// </summary>
+        [DebuggerStepThrough]
+        public static void Operation([DoesNotReturnIf(false)] bool condition, string unformattedMessage, object? arg1, object? arg2)
+        {
+            if (!condition)
+            {
+                throw new InvalidOperationException(PrivateErrorHelpers.Format(unformattedMessage, arg1, arg2));
+            }
+        }
+
+        /// <summary>
+        /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
+        /// </summary>
+        [DebuggerStepThrough]
+        public static void Operation([DoesNotReturnIf(false)] bool condition, string unformattedMessage, params object?[] args)
+        {
+            if (!condition)
+            {
+                throw new InvalidOperationException(PrivateErrorHelpers.Format(unformattedMessage, args));
+            }
+        }
+
+        /// <summary>
+        /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
+        /// </summary>
+        [DebuggerStepThrough]
+        public static void OperationWithHelp([DoesNotReturnIf(false)] bool condition, string? message, string? helpLink)
+        {
+            if (!condition)
+            {
+                var ex = new InvalidOperationException(message)
+                {
+                    HelpLink = helpLink,
+                };
+                throw ex;
+            }
+        }
+
         /// <summary>
         /// Throws an <see cref="InvalidOperationException"/>.
         /// </summary>
@@ -23,43 +87,15 @@ namespace Validation
         /// </returns>
         [DebuggerStepThrough]
         [DoesNotReturn]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
         public static Exception FailOperation(string message, params object?[] args)
         {
             throw new InvalidOperationException(PrivateErrorHelpers.Format(message, args));
         }
 
         /// <summary>
-        /// Throws an exception if the given value is negative.
-        /// </summary>
-        /// <param name="hresult">The HRESULT corresponding to the desired exception.</param>
-        /// <param name="ignorePreviousComCalls">If true, prevents <c>ThrowExceptionForHR</c> from returning an exception from a previous COM call and instead always use the HRESULT specified.</param>
-        /// <remarks>
-        /// No exception is thrown for S_FALSE.
-        /// </remarks>
-        [DebuggerStepThrough]
-        [System.Security.SecurityCritical]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void HResult(int hresult, bool ignorePreviousComCalls = false)
-        {
-            if (hresult < 0)
-            {
-                if (ignorePreviousComCalls)
-                {
-                    System.Runtime.InteropServices.Marshal.ThrowExceptionForHR(hresult, new IntPtr(-1));
-                }
-                else
-                {
-                    System.Runtime.InteropServices.Marshal.ThrowExceptionForHR(hresult);
-                }
-            }
-        }
-
-        /// <summary>
         /// Throws an <see cref="ObjectDisposedException"/> if an object is disposed.
         /// </summary>
         [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
         public static void NotDisposed(IDisposableObservable disposedValue, string? message = null)
         {
             Requires.NotNull(disposedValue, nameof(disposedValue));
@@ -82,7 +118,6 @@ namespace Validation
         /// Throws an <see cref="ObjectDisposedException"/> if a condition is false.
         /// </summary>
         [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
         public static void NotDisposed([DoesNotReturnIf(false)] bool condition, object? disposedValue, string? message = null)
         {
             if (!condition)
@@ -103,7 +138,6 @@ namespace Validation
         /// Throws an <see cref="ObjectDisposedException"/> if a condition is false.
         /// </summary>
         [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
         public static void NotDisposed([DoesNotReturnIf(false)] bool condition, string? message)
         {
             if (!condition)
@@ -113,70 +147,27 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
+        /// Throws an exception if the given value is negative.
         /// </summary>
+        /// <param name="hresult">The HRESULT corresponding to the desired exception.</param>
+        /// <param name="ignorePreviousComCalls">If true, prevents <c>ThrowExceptionForHR</c> from returning an exception from a previous COM call and instead always use the HRESULT specified.</param>
+        /// <remarks>
+        /// No exception is thrown for S_FALSE.
+        /// </remarks>
         [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void Operation([DoesNotReturnIf(false)] bool condition, string? message)
+        [System.Security.SecurityCritical]
+        public static void HResult(int hresult, bool ignorePreviousComCalls = false)
         {
-            if (!condition)
+            if (hresult < 0)
             {
-                throw new InvalidOperationException(message);
-            }
-        }
-
-        /// <summary>
-        /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
-        /// </summary>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void Operation([DoesNotReturnIf(false)] bool condition, string unformattedMessage, object? arg1)
-        {
-            if (!condition)
-            {
-                throw new InvalidOperationException(PrivateErrorHelpers.Format(unformattedMessage, arg1));
-            }
-        }
-
-        /// <summary>
-        /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
-        /// </summary>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void Operation([DoesNotReturnIf(false)] bool condition, string unformattedMessage, object? arg1, object? arg2)
-        {
-            if (!condition)
-            {
-                throw new InvalidOperationException(PrivateErrorHelpers.Format(unformattedMessage, arg1, arg2));
-            }
-        }
-
-        /// <summary>
-        /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
-        /// </summary>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void Operation([DoesNotReturnIf(false)] bool condition, string unformattedMessage, params object?[] args)
-        {
-            if (!condition)
-            {
-                throw new InvalidOperationException(PrivateErrorHelpers.Format(unformattedMessage, args));
-            }
-        }
-
-        /// <summary>
-        /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
-        /// </summary>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void OperationWithHelp([DoesNotReturnIf(false)] bool condition, string? message, string? helpLink)
-        {
-            if (!condition)
-            {
-                throw new InvalidOperationException(message)
+                if (ignorePreviousComCalls)
                 {
-                    HelpLink = helpLink,
-                };
+                    Marshal.ThrowExceptionForHR(hresult, new IntPtr(-1));
+                }
+                else
+                {
+                    Marshal.ThrowExceptionForHR(hresult);
+                }
             }
         }
     }

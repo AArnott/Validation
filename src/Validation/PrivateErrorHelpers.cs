@@ -23,16 +23,9 @@ namespace Validation
         internal static Type TrimGenericWrapper(Type type, Type? wrapper)
         {
             Type[] typeArgs;
-            TypeInfo? typeInfo = type.GetTypeInfo();
-            if (typeInfo.IsGenericType && type.GetGenericTypeDefinition() == wrapper)
+            if (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == wrapper && (typeArgs = type.GenericTypeArguments).Length == 1)
             {
-                typeArgs = typeInfo.GenericTypeArguments;
-                if (typeArgs.Length == 1)
-                {
-                    return typeArgs[0];
-                }
-
-                return type;
+                return typeArgs[0];
             }
             else
             {
@@ -43,8 +36,6 @@ namespace Validation
         /// <summary>
         /// Helper method that formats string arguments.
         /// </summary>
-        /// <param name="format">The unformatted string.</param>
-        /// <param name="arguments">The formatting arguments.</param>
         /// <returns>The formatted string.</returns>
         internal static string Format(string format, params object?[] arguments)
         {

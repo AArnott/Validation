@@ -3,23 +3,20 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-
 using Validation;
-
 using Xunit;
 
-public partial class AssumesTests
+public partial class AssumesTests : IDisposable
 {
     private const string TestMessage = "Some test message.";
+    private AssertDialogSuppression suppressAssertUi = new AssertDialogSuppression();
 
-    public AssumesTests()
+    public void Dispose()
     {
-        Trace.Listeners.Clear();
-        Trace.Listeners.Add(new TestingTraceListener());
+        this.suppressAssertUi.Dispose();
     }
 
     [Fact]
@@ -77,7 +74,7 @@ public partial class AssumesTests
     [Fact]
     public void NotNullOrEmpty()
     {
-        var collection = new string[] { "foo" };
+        ICollection<string> collection = new string[] { "foo" };
 
         Assert.ThrowsAny<Exception>(() => Assumes.NotNullOrEmpty(null));
         Assert.ThrowsAny<Exception>(() => Assumes.NotNullOrEmpty(string.Empty));

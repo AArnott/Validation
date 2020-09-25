@@ -4,8 +4,8 @@
 namespace Validation
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime;
@@ -17,169 +17,24 @@ namespace Validation
     public static class Requires
     {
         /// <summary>
-        /// Throws an ArgumentException if a condition does not evaluate to true.
-        /// </summary>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string? message)
-        {
-            if (!condition)
-            {
-                throw new ArgumentException(message, parameterName);
-            }
-        }
-
-        /// <summary>
-        /// Throws an ArgumentException if a condition does not evaluate to true.
-        /// </summary>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, object? arg1)
-        {
-            if (!condition)
-            {
-                throw new ArgumentException(PrivateErrorHelpers.Format(message, arg1), parameterName);
-            }
-        }
-
-        /// <summary>
-        /// Throws an ArgumentException if a condition does not evaluate to true.
-        /// </summary>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, object? arg1, object? arg2)
-        {
-            if (!condition)
-            {
-                throw new ArgumentException(PrivateErrorHelpers.Format(message, arg1, arg2), parameterName);
-            }
-        }
-
-        /// <summary>
-        /// Throws an ArgumentException if a condition does not evaluate to true.
-        /// </summary>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, params object?[] args)
-        {
-            if (!condition)
-            {
-                throw new ArgumentException(PrivateErrorHelpers.Format(message, args), parameterName);
-            }
-        }
-
-        /// <summary>
-        /// Throws an <see cref="System.ComponentModel.InvalidEnumArgumentException"/> if a given value is not a named value of the enum type.
-        /// </summary>
-        /// <typeparam name="TEnum">The type of enum that may define the <paramref name="value"/>.</typeparam>
-        /// <param name="value">The value that may be named by <typeparamref name="TEnum"/>.</param>
-        /// <param name="parameterName">The name of the parameter to include in the exception, if thrown.</param>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void Defined<TEnum>(TEnum value, string parameterName)
-            where TEnum : struct, Enum
-        {
-            if (!Enum.IsDefined(typeof(TEnum), value))
-            {
-                if (typeof(int) == Enum.GetUnderlyingType(typeof(TEnum)))
-                {
-                    throw new System.ComponentModel.InvalidEnumArgumentException(parameterName, (int)(object)value, typeof(TEnum));
-                }
-                else
-                {
-                    throw new System.ComponentModel.InvalidEnumArgumentException(PrivateErrorHelpers.Format(Strings.Argument_NotEnum, parameterName, value, typeof(TEnum).FullName));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Throws an ArgumentException.
-        /// </summary>
-        /// <returns>Nothing, as this method always throws. The signature allows for "throwing" Fail so C# knows execution will stop.</returns>        [DebuggerStepThrough]
-        [DoesNotReturn]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static Exception Fail(Exception? innerException, string unformattedMessage, params object?[] args)
-        {
-            throw new ArgumentException(PrivateErrorHelpers.Format(unformattedMessage, args), innerException);
-        }
-
-        /// <summary>
-        /// Throws an ArgumentException.
-        /// </summary>
-        /// <returns>Nothing, as this method always throws. The signature allows for "throwing" Fail so C# knows execution will stop.</returns>        [DebuggerStepThrough]
-        [DebuggerStepThrough]
-        [DoesNotReturn]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static Exception Fail(string unformattedMessage, params object?[] args)
-        {
-            throw Fail(PrivateErrorHelpers.Format(unformattedMessage, args));
-        }
-
-        /// <summary>
-        /// Throws an ArgumentException.
-        /// </summary>
-        /// <returns>Nothing, as this method always throws. The signature allows for "throwing" Fail so C# knows execution will stop.</returns>        [DebuggerStepThrough]
-        [DebuggerStepThrough]
-        [DoesNotReturn]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static Exception Fail(string? message)
-        {
-            throw new ArgumentException(message);
-        }
-
-        /// <summary>
-        /// Throws an <see cref="ArgumentOutOfRangeException"/> if a condition does not evaluate to true.
-        /// </summary>
-        /// <returns>Nothing, as this method always throws. The signature allows for "throwing" Fail so C# knows execution will stop.</returns>        [DebuggerStepThrough]
-        [DebuggerStepThrough]
-        [DoesNotReturn]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static Exception FailRange(string? parameterName, string? message = null)
-        {
-            if (string.IsNullOrEmpty(message))
-            {
-                throw new ArgumentOutOfRangeException(parameterName);
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException(parameterName, message);
-            }
-        }
-
-        /// <summary>
-        /// Throws an <see cref="ArgumentException"/> if the specified parameter's value is equal to the
-        /// default value of the <see cref="Type"/> <typeparamref name="T"/>.
+        /// Throws an exception if the specified parameter's value is null.
         /// </summary>
         /// <typeparam name="T">The type of the parameter.</typeparam>
         /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
+        /// <returns>The value of the parameter.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotDefault<T>(T? value, string parameterName)
-            where T : struct
+        public static T NotNull<T>([ValidatedNotNull, NotNull] T value, string? parameterName)
+            where T : class // ensures value-types aren't passed to a null checking method
         {
-            var defaultValue = default(T);
-            if (defaultValue.Equals(value))
+            if (value is null)
             {
-                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_StructIsDefault, parameterName, typeof(T).FullName), parameterName);
+                throw new ArgumentNullException(parameterName);
             }
-        }
 
-        /// <summary>
-        /// Throws an exception if the specified parameter's value is <see cref="Guid.Empty"/>.
-        /// </summary>
-        /// <param name="value">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is an empty guid (<see cref="Guid.Empty"/>.)</exception>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotEmpty(Guid value, string? parameterName)
-        {
-            if (value == Guid.Empty)
-            {
-                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_EmptyGuid, parameterName), parameterName);
-            }
+            return value;
         }
 
         /// <summary>
@@ -213,7 +68,7 @@ namespace Validation
         /// </remarks>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNull([ValidatedNotNull, NotNull] Task? value, string? parameterName)
+        public static void NotNull([ValidatedNotNull, NotNull] Task value, string? parameterName)
         {
             if (value is null)
             {
@@ -234,33 +89,12 @@ namespace Validation
         /// </remarks>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNull<T>([ValidatedNotNull, NotNull] Task<T>? value, string? parameterName)
+        public static void NotNull<T>([ValidatedNotNull, NotNull] Task<T> value, string? parameterName)
         {
             if (value is null)
             {
                 throw new ArgumentNullException(parameterName);
             }
-        }
-
-        /// <summary>
-        /// Throws an exception if the specified parameter's value is null.
-        /// </summary>
-        /// <typeparam name="T">The type of the parameter.</typeparam>
-        /// <param name="value">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <returns>The value of the parameter.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static T? NotNull<T>([ValidatedNotNull, NotNull] T? value, string? parameterName)
-            where T : class // ensures value-types aren't passed to a null checking method
-        {
-            if (value is null)
-            {
-                throw new ArgumentNullException(parameterName);
-            }
-
-            return value;
         }
 
         /// <summary>
@@ -276,8 +110,7 @@ namespace Validation
         /// may or may not be a class, but certainly cannot be null.
         /// </remarks>
         [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static T NotNullAllowStructs<T>([ValidatedNotNull, NotNull, AllowNull] T value, string? parameterName)
+        public static T NotNullAllowStructs<T>([ValidatedNotNull, NotNull] T value, string? parameterName)
         {
             if (value is null)
             {
@@ -288,46 +121,13 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is null,
-        /// has no elements or has an element with a null value.
-        /// </summary>
-        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
-        /// <param name="values">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
-        [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNullEmptyOrNullElements<T>([ValidatedNotNull, NotNull] IEnumerable<T?>? values, string? parameterName)
-            where T : class // ensures value-types aren't passed to a null checking method
-        {
-            NotNull(values, parameterName);
-
-            bool hasElements = false;
-            foreach (T? value in values)
-            {
-                hasElements = true;
-
-                if (value is null)
-                {
-                    throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_NullElement, parameterName), parameterName);
-                }
-            }
-
-            if (!hasElements)
-            {
-                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_EmptyArray, parameterName), parameterName);
-            }
-        }
-
-        /// <summary>
         /// Throws an exception if the specified parameter's value is null or empty.
         /// </summary>
         /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
         [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNullOrEmpty([ValidatedNotNull, NotNull] string? value, string? parameterName)
+        public static void NotNullOrEmpty([ValidatedNotNull, NotNull] string value, string? parameterName)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
@@ -339,7 +139,35 @@ namespace Validation
 
             if (value.Length == 0 || value[0] == '\0')
             {
-                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_EmptyString, parameterName), parameterName);
+                throw new ArgumentException(Format(Strings.Argument_EmptyString, parameterName), parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Throws an exception if the specified parameter's value is null, empty, or whitespace.
+        /// </summary>
+        /// <param name="value">The value of the argument.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
+        [DebuggerStepThrough]
+        public static void NotNullOrWhiteSpace([ValidatedNotNull, NotNull] string value, string? parameterName)
+        {
+            // To whoever is doing random code cleaning:
+            // Consider the performance when changing the code to delegate to NotNull.
+            // In general do not chain call to another function, check first and return as earlier as possible.
+            if (value is null)
+            {
+                throw new ArgumentNullException(parameterName);
+            }
+
+            if (value.Length == 0 || value[0] == '\0')
+            {
+                throw new ArgumentException(Format(Strings.Argument_EmptyString, parameterName), parameterName);
+            }
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentException(Strings.Argument_Whitespace, parameterName);
             }
         }
 
@@ -351,8 +179,7 @@ namespace Validation
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNullOrEmpty([ValidatedNotNull, NotNull] IEnumerable? values, string? parameterName)
+        public static void NotNullOrEmpty([ValidatedNotNull, NotNull] System.Collections.IEnumerable values, string? parameterName)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
@@ -362,9 +189,16 @@ namespace Validation
                 throw new ArgumentNullException(parameterName);
             }
 
-            if (!values.GetEnumerator().MoveNext())
+            bool hasElements = false;
+            foreach (object value in values)
             {
-                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_EmptyArray, parameterName), parameterName);
+                hasElements = true;
+                break;
+            }
+
+            if (!hasElements)
+            {
+                throw new ArgumentException(Format(Strings.Argument_EmptyArray, parameterName), parameterName);
             }
         }
 
@@ -377,8 +211,7 @@ namespace Validation
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNullOrEmpty<T>([ValidatedNotNull, NotNull] IEnumerable<T>? values, string? parameterName)
+        public static void NotNullOrEmpty<T>([ValidatedNotNull, NotNull] IEnumerable<T> values, string? parameterName)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
@@ -388,39 +221,47 @@ namespace Validation
                 throw new ArgumentNullException(parameterName);
             }
 
-            using IEnumerator<T> e = values.GetEnumerator();
-            if (!e.MoveNext())
+            bool hasElements = false;
+            foreach (T value in values)
             {
-                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_EmptyArray, parameterName), parameterName);
+                hasElements = true;
+                break;
+            }
+
+            if (!hasElements)
+            {
+                throw new ArgumentException(Format(Strings.Argument_EmptyArray, parameterName), parameterName);
             }
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is null, empty, or whitespace.
+        /// Throws an exception if the specified parameter's value is null,
+        /// has no elements or has an element with a null value.
         /// </summary>
-        /// <param name="value">The value of the argument.</param>
+        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+        /// <param name="values">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
+        /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNullOrWhiteSpace([ValidatedNotNull, NotNull] string? value, string? parameterName)
+        public static void NotNullEmptyOrNullElements<T>([ValidatedNotNull, NotNull] IEnumerable<T> values, string? parameterName)
+            where T : class // ensures value-types aren't passed to a null checking method
         {
-            // To whoever is doing random code cleaning:
-            // Consider the performance when changing the code to delegate to NotNull.
-            // In general do not chain call to another function, check first and return as earlier as possible.
-            if (value is null)
+            NotNull(values, parameterName);
+
+            bool hasElements = false;
+            foreach (T? value in values)
             {
-                throw new ArgumentNullException(parameterName);
+                hasElements = true;
+
+                if (value is null)
+                {
+                    throw new ArgumentException(Format(Strings.Argument_NullElement, parameterName), parameterName);
+                }
             }
 
-            if (value.Length == 0 || value[0] == '\0')
+            if (!hasElements)
             {
-                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_EmptyString, parameterName), parameterName);
-            }
-
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                throw new ArgumentException(Strings.Argument_Whitespace, parameterName);
+                throw new ArgumentException(Format(Strings.Argument_EmptyArray, parameterName), parameterName);
             }
         }
 
@@ -433,8 +274,7 @@ namespace Validation
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NullOrNotNullElements<T>(IEnumerable<T>? values, string? parameterName)
+        public static void NullOrNotNullElements<T>(IEnumerable<T> values, string? parameterName)
         {
             if (values is object)
             {
@@ -442,9 +282,24 @@ namespace Validation
                 {
                     if (value is null)
                     {
-                        throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_NullElement, parameterName), parameterName);
+                        throw new ArgumentException(Format(Strings.Argument_NullElement, parameterName), parameterName);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Throws an exception if the specified parameter's value is <see cref="Guid.Empty"/>.
+        /// </summary>
+        /// <param name="value">The value of the argument.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is an empty guid (<see cref="Guid.Empty"/>.)</exception>
+        [DebuggerStepThrough]
+        public static void NotEmpty(Guid value, string? parameterName)
+        {
+            if (value == Guid.Empty)
+            {
+                throw new ArgumentException(Format(Strings.Argument_EmptyGuid, parameterName), parameterName);
             }
         }
 
@@ -452,7 +307,6 @@ namespace Validation
         /// Throws an <see cref="ArgumentOutOfRangeException"/> if a condition does not evaluate to true.
         /// </summary>
         [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
         public static void Range([DoesNotReturnIf(false)] bool condition, string? parameterName, string? message = null)
         {
             if (!condition)
@@ -462,35 +316,133 @@ namespace Validation
         }
 
         /// <summary>
-        /// Validates some expression describing the acceptable condition for an argument evaluates to true.
+        /// Throws an <see cref="ArgumentOutOfRangeException"/> if a condition does not evaluate to true.
         /// </summary>
-        /// <param name="condition">The expression that must evaluate to true to avoid an <see cref="ArgumentException"/>.</param>
-        /// <param name="parameterName">Name of the parameter.</param>
-        /// <param name="unformattedMessage">The unformatted message.</param>
-        /// <param name="args">Formatting arguments.</param>
+        /// <returns>Nothing.  This method always throws.</returns>
         [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void That(bool condition, string? parameterName, string unformattedMessage, params object?[] args)
+        [DoesNotReturn]
+        public static Exception FailRange(string? parameterName, string? message = null)
         {
-            if (!condition)
+            if (string.IsNullOrEmpty(message))
             {
-                throw new ArgumentException(PrivateErrorHelpers.Format(unformattedMessage, args), parameterName);
+                throw new ArgumentOutOfRangeException(parameterName);
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(parameterName, message);
             }
         }
 
         /// <summary>
-        /// Validates some expression describing the acceptable condition for an argument evaluates to true.
+        /// Throws an ArgumentException if a condition does not evaluate to true.
         /// </summary>
-        /// <param name="condition">The expression that must evaluate to true to avoid an <see cref="InvalidOperationException"/>.</param>
-        /// <param name="message">The message to include with the exception.</param>
         [DebuggerStepThrough]
-        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void ValidState(bool condition, string message)
+        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string? message)
         {
             if (!condition)
             {
-                throw new InvalidOperationException(message);
+                throw new ArgumentException(message, parameterName);
             }
+        }
+
+        /// <summary>
+        /// Throws an ArgumentException if a condition does not evaluate to true.
+        /// </summary>
+        [DebuggerStepThrough]
+        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, object? arg1)
+        {
+            if (!condition)
+            {
+                throw new ArgumentException(Format(message, arg1), parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Throws an ArgumentException if a condition does not evaluate to true.
+        /// </summary>
+        [DebuggerStepThrough]
+        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, object? arg1, object? arg2)
+        {
+            if (!condition)
+            {
+                throw new ArgumentException(Format(message, arg1, arg2), parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Throws an ArgumentException if a condition does not evaluate to true.
+        /// </summary>
+        [DebuggerStepThrough]
+        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, params object?[] args)
+        {
+            if (!condition)
+            {
+                throw new ArgumentException(Format(message, args), parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Throws an ArgumentException.
+        /// </summary>
+        /// <returns>Nothing.  It always throws.</returns>
+        [DebuggerStepThrough]
+        [DoesNotReturn]
+        public static Exception Fail(string? message)
+        {
+            throw new ArgumentException(message);
+        }
+
+        /// <summary>
+        /// Throws an ArgumentException.
+        /// </summary>
+        /// <returns>Nothing.  It always throws.</returns>
+        [DebuggerStepThrough]
+        [DoesNotReturn]
+        public static Exception Fail(string unformattedMessage, params object?[] args)
+        {
+            throw Fail(Format(unformattedMessage, args));
+        }
+
+        /// <summary>
+        /// Throws an ArgumentException.
+        /// </summary>
+        /// <returns>Nothing. This method always throws.</returns>
+        [DebuggerStepThrough]
+        [DoesNotReturn]
+        public static Exception Fail(Exception? innerException, string unformattedMessage, params object?[] args)
+        {
+            throw new ArgumentException(Format(unformattedMessage, args), innerException);
+        }
+
+        /// <summary>
+        /// Throws an <see cref="InvalidEnumArgumentException"/> if a given value is not a named value of the enum type.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of enum that may define the <paramref name="value"/>.</typeparam>
+        /// <param name="value">The value that may be named by <typeparamref name="TEnum"/>.</param>
+        /// <param name="parameterName">The name of the parameter to include in the exception, if thrown.</param>
+        [DebuggerStepThrough]
+        public static void Defined<TEnum>(TEnum value, string parameterName)
+            where TEnum : struct, Enum
+        {
+            if (!Enum.IsDefined(typeof(TEnum), value))
+            {
+                if (typeof(int) == typeof(TEnum).GetEnumUnderlyingType())
+                {
+                    throw new InvalidEnumArgumentException(parameterName, (int)(object)value, typeof(TEnum));
+                }
+                else
+                {
+                    throw new InvalidEnumArgumentException(Format(Strings.Argument_NotEnum, parameterName, value, typeof(TEnum).FullName));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Helper method that formats string arguments.
+        /// </summary>
+        private static string Format(string format, params object?[] arguments)
+        {
+            return PrivateErrorHelpers.Format(format, arguments);
         }
     }
 }
