@@ -27,22 +27,6 @@ public class ReportReleaseTests
         Trace.Listeners.Add(new TestingTraceListener());
     }
 
-    private void AssertDoesNotThrow(Action action)
-    {
-        try
-        {
-            action();
-        }
-#pragma warning disable CA1031 // Do not catch general exception types
-        catch (Exception e)
-        {
-            Assert.False(false, e.Message);
-        }
-#pragma warning restore CA1031 // Do not catch general exception types
-
-        Assert.True(true);
-    }
-
     [Fact]
     public void If()
     {
@@ -97,5 +81,21 @@ public class ReportReleaseTests
     public void Fail_DefaultMessage()
     {
         AssertDoesNotThrow(() => Report.Fail());
+    }
+
+    private static void AssertDoesNotThrow(Action action)
+    {
+        try
+        {
+            action();
+        }
+#pragma warning disable CA1031 // Do not catch general exception types
+        catch (Exception e)
+        {
+            Assert.False(false, e.Message);
+        }
+#pragma warning restore CA1031 // Do not catch general exception types
+
+        Assert.True(true);
     }
 }

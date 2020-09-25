@@ -5,17 +5,17 @@ VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{223AEE15-59AF-40A6-BCBA-78D2A3CA598D}"
 	ProjectSection(SolutionItems) = preProject
-		..\.gitignore = ..\.gitignore
-		..\appveyor.yml = ..\appveyor.yml
-		..\LICENSE.txt = ..\LICENSE.txt
+		.gitignore = .gitignore
+		azure-pipelines\dotnet.yml = azure-pipelines\dotnet.yml
+		LICENSE.txt = LICENSE.txt
 		nuget.config = nuget.config
-		..\README.md = ..\README.md
+		README.md = README.md
 		version.json = version.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Validation", "Validation\Validation.csproj", "{6F3A7183-5A94-43A4-B259-9512EA7B3378}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Validation", "src\Validation\Validation.csproj", "{6F3A7183-5A94-43A4-B259-9512EA7B3378}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Validation.Tests", "..\test\Validation.Tests\Validation.Tests.csproj", "{DA1E2A2C-8DC2-4BEE-ADD9-C84716F5CFF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Validation.Tests", "test\Validation.Tests\Validation.Tests.csproj", "{DA1E2A2C-8DC2-4BEE-ADD9-C84716F5CFF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

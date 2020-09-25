@@ -23,7 +23,7 @@ namespace Validation
         internal static Type TrimGenericWrapper(Type type, Type? wrapper)
         {
             Type[] typeArgs;
-            var typeInfo = type.GetTypeInfo();
+            TypeInfo? typeInfo = type.GetTypeInfo();
             if (typeInfo.IsGenericType && type.GetGenericTypeDefinition() == wrapper)
             {
                 typeArgs = typeInfo.GenericTypeArguments;

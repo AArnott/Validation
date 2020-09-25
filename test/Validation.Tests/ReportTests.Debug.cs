@@ -28,22 +28,6 @@ public class ReportDebugTests
         Trace.Listeners.Add(new TestingTraceListener());
     }
 
-    private void AssertDoesNotThrow(Action action)
-    {
-        try
-        {
-            action();
-        }
-#pragma warning disable CA1031 // Do not catch general exception types
-        catch (Exception e)
-        {
-            Assert.False(false, e.Message);
-        }
-#pragma warning restore CA1031 // Do not catch general exception types
-
-        Assert.True(true);
-    }
-
     [Fact]
     public void If()
     {
@@ -87,7 +71,7 @@ public class ReportDebugTests
         AssertDoesNotThrow(() => Report.IfNotPresent(possiblyPresent));
 
         possiblyPresent = null;
-        Assert.Contains(missingTypeName, Assert.ThrowsAny<Exception>(() => Report.IfNotPresent(possiblyPresent)).Message);
+        Assert.Contains(missingTypeName, Assert.ThrowsAny<Exception>(() => Report.IfNotPresent(possiblyPresent)).Message, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -100,5 +84,21 @@ public class ReportDebugTests
     public void Fail_DefaultMessage()
     {
         Assert.Equal(DefaultFailureMessage, Assert.ThrowsAny<Exception>(() => Report.Fail()).Message);
+    }
+
+    private static void AssertDoesNotThrow(Action action)
+    {
+        try
+        {
+            action();
+        }
+#pragma warning disable CA1031 // Do not catch general exception types
+        catch (Exception e)
+        {
+            Assert.False(false, e.Message);
+        }
+#pragma warning restore CA1031 // Do not catch general exception types
+
+        Assert.True(true);
     }
 }

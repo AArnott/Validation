@@ -28,7 +28,7 @@ public class VerifyTests
     public void OperationWithHelp()
     {
         Verify.OperationWithHelp(true, "message", "helpLink");
-        var ex = Assert.Throws<InvalidOperationException>(() => Verify.OperationWithHelp(false, "message", "helpLink"));
+        InvalidOperationException? ex = Assert.Throws<InvalidOperationException>(() => Verify.OperationWithHelp(false, "message", "helpLink"));
         Assert.Equal("message", ex.Message);
         Assert.Equal("helpLink", ex.HelpLink);
     }
@@ -37,7 +37,7 @@ public class VerifyTests
     public void NotDisposed()
     {
         Verify.NotDisposed(true, "message");
-        var actualException = Assert.Throws<ObjectDisposedException>(() => Verify.NotDisposed(false, "message"));
+        ObjectDisposedException? actualException = Assert.Throws<ObjectDisposedException>(() => Verify.NotDisposed(false, "message"));
         Assert.Equal(string.Empty, actualException.ObjectName);
         Assert.Equal("message", actualException.Message);
 
