@@ -5,6 +5,9 @@ resources:
   pipelines:
   - pipeline: CI
     source: Validation
+    trigger:
+      tags:
+      - auto-release
 
 stages:
 - stage: GitHubRelease
