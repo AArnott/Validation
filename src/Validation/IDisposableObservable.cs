@@ -13,7 +13,7 @@ namespace Validation
         /// <summary>
         /// Gets a value indicating whether this instance has been disposed.
         /// </summary>
-        /// <value><c>true</c> if this instance has been disposed.</value>
+        /// <value><see langword="true"/> if this instance has been disposed.</value>
         bool IsDisposed { get; }
     }
 }

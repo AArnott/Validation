@@ -6,7 +6,7 @@ namespace Validation
     using System;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
+    using System.Runtime.Serialization;
 
     /// <content>
     /// Contains the inner exception thrown by Assumes.
@@ -16,53 +16,36 @@ namespace Validation
         /// <summary>
         /// The exception that is thrown when an internal assumption failed.
         /// </summary>
+        [Serializable]
         [SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic", Justification = "Internal exceptions should not be caught.")]
-        private class InternalErrorException : Exception
+        [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors", Justification = "This is an internal exception type and we don't use the recommended ctors.")]
+        private sealed class InternalErrorException : Exception
         {
             /// <summary>
             /// Initializes a new instance of the <see cref="InternalErrorException"/> class.
             /// </summary>
             [DebuggerStepThrough]
-            public InternalErrorException(string message = null, bool showAssert = true)
+            public InternalErrorException(string? message = null)
                 : base(message ?? Strings.InternalExceptionMessage)
             {
-                this.ShowAssertDialog(showAssert);
             }
 
             /// <summary>
             /// Initializes a new instance of the <see cref="InternalErrorException"/> class.
             /// </summary>
             [DebuggerStepThrough]
-            public InternalErrorException(string message, Exception innerException, bool showAssert = true)
+            public InternalErrorException(string? message, Exception? innerException)
                 : base(message ?? Strings.InternalExceptionMessage, innerException)
             {
-                this.ShowAssertDialog(showAssert);
             }
 
             /// <summary>
-            /// Show the assert if showAssert==true.
+            /// Initializes a new instance of the <see cref="InternalErrorException"/> class.
             /// </summary>
-            /// <param name="showAssert">Whether to show the assert.</param>
-            /// <remarks>
-            /// The assertion dialog may yet be suppressed if
-            /// ((DefaultTraceListener)System.Diagnostics.Trace.Listeners["Default"]).AssertUiEnabled == false
-            /// </remarks>
             [DebuggerStepThrough]
-            private void ShowAssertDialog(bool showAssert)
+            private InternalErrorException(SerializationInfo info, StreamingContext context)
+                : base(info, context)
             {
-                if (showAssert)
-                {
-                    // In debug builds, throw up a dialog.  This allows a dev to
-                    // attach a debugger right at the point where the exception is
-                    // thrown rather than at the point where the exception is caught.
-                    string message = this.Message;
-                    if (this.InnerException != null)
-                    {
-                        message += " " + this.InnerException;
-                    }
-
-                    Report.Fail(message);
-                }
             }
         }
     }

@@ -10,7 +10,6 @@
 
 namespace Validation {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -20,7 +19,7 @@ namespace Validation {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Strings {
@@ -40,7 +39,7 @@ namespace Validation {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Validation.Strings", typeof(Strings).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Validation.Strings", typeof(Strings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -89,6 +88,15 @@ namespace Validation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value of argument &apos;{0}&apos; ({1}) is invalid for Enum type &apos;{2}&apos;..
+        /// </summary>
+        internal static string Argument_NotEnum {
+            get {
+                return ResourceManager.GetString("Argument_NotEnum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; cannot contain a null (Nothing in Visual Basic) element..
         /// </summary>
         internal static string Argument_NullElement {
@@ -107,7 +115,7 @@ namespace Validation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The parameter &quot;{0}&quot; cannot consist entirely of white space characters..
+        ///   Looks up a localized string similar to The argument cannot consist entirely of white space characters..
         /// </summary>
         internal static string Argument_Whitespace {
             get {
@@ -121,6 +129,15 @@ namespace Validation {
         internal static string InternalExceptionMessage {
             get {
                 return ResourceManager.GetString("InternalExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value of argument &apos;{0}&apos; ({1}) is invalid for Enum type &apos;{2}&apos;..
+        /// </summary>
+        internal static string InvalidEnumArgument {
+            get {
+                return ResourceManager.GetString("InvalidEnumArgument", resourceCulture);
             }
         }
         
