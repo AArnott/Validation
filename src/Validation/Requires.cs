@@ -289,21 +289,6 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is <see cref="Guid.Empty"/>.
-        /// </summary>
-        /// <param name="value">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is an empty guid (<see cref="Guid.Empty"/>.)</exception>
-        [DebuggerStepThrough]
-        public static void NotEmpty(Guid value, string? parameterName)
-        {
-            if (value == Guid.Empty)
-            {
-                throw new ArgumentException(Format(Strings.Argument_EmptyGuid, parameterName), parameterName);
-            }
-        }
-
-        /// <summary>
         /// Throws an <see cref="ArgumentOutOfRangeException"/> if a condition does not evaluate to true.
         /// </summary>
         [DebuggerStepThrough]
@@ -434,6 +419,55 @@ namespace Validation
                 {
                     throw new InvalidEnumArgumentException(Format(Strings.Argument_NotEnum, parameterName, value, typeof(TEnum).FullName));
                 }
+            }
+        }
+
+        /// <summary>
+        /// Throws an <see cref="ArgumentException"/> if the specified parameter's value is equal to the
+        /// default value of the <see cref="Type"/> <typeparamref name="T"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the parameter.</typeparam>
+        /// <param name="value">The value of the argument.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
+        [DebuggerStepThrough]
+        public static void NotDefault<T>(T value, string parameterName)
+            where T : struct
+        {
+            var defaultValue = default(T);
+            if (defaultValue.Equals(value))
+            {
+                throw new ArgumentException(PrivateErrorHelpers.Format(Strings.Argument_StructIsDefault, parameterName, typeof(T).FullName), parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Validates some expression describing the acceptable condition for an argument evaluates to true.
+        /// </summary>
+        /// <param name="condition">The expression that must evaluate to true to avoid an <see cref="ArgumentException"/>.</param>
+        /// <param name="parameterName">Name of the parameter.</param>
+        /// <param name="unformattedMessage">The unformatted message.</param>
+        /// <param name="args">Formatting arguments.</param>
+        [DebuggerStepThrough]
+        public static void That([DoesNotReturnIf(false)] bool condition, string? parameterName, string unformattedMessage, params object?[] args)
+        {
+            if (!condition)
+            {
+                throw new ArgumentException(PrivateErrorHelpers.Format(unformattedMessage, args), parameterName);
+            }
+        }
+
+        /// <summary>
+        /// Validates some expression describing the acceptable condition for an argument evaluates to true.
+        /// </summary>
+        /// <param name="condition">The expression that must evaluate to true to avoid an <see cref="InvalidOperationException"/>.</param>
+        /// <param name="message">The message to include with the exception.</param>
+        [DebuggerStepThrough]
+        public static void ValidState(bool condition, string message)
+        {
+            if (!condition)
+            {
+                throw new InvalidOperationException(message);
             }
         }
 

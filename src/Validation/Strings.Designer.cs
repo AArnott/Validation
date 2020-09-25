@@ -10,7 +10,6 @@
 
 namespace Validation {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -40,7 +39,7 @@ namespace Validation {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Validation.Strings", typeof(Strings).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Validation.Strings", typeof(Strings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -67,15 +66,6 @@ namespace Validation {
         internal static string Argument_EmptyArray {
             get {
                 return ResourceManager.GetString("Argument_EmptyArray", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; cannot be an empty guid..
-        /// </summary>
-        internal static string Argument_EmptyGuid {
-            get {
-                return ResourceManager.GetString("Argument_EmptyGuid", resourceCulture);
             }
         }
         
