@@ -238,5 +238,14 @@ public class RequiresTests
         Assert.Throws<ArgumentException>(() => Requires.ValidElements(new[] { "a", string.Empty, "b", null }, x => !string.IsNullOrWhiteSpace(x), "param", "test"));
         Requires.ValidElements(new[] { "a", "b", "c", "d" }, x => !string.IsNullOrWhiteSpace(x), "param", "test");
         Requires.ValidElements(new[] { 1, 2 }, v => v > 0, "param", "Must be greater than 0.");
+
+        Assert.Throws<ArgumentNullException>(() => Requires.ValidElements(new[] { -1 }, null!, "param", "Must be greater than 0."));
+
+        Assert.Throws<ArgumentException>(() => Requires.ValidElements(new[] { -1 }, v => v > 0, "param", "{0} must be greater than 0.", "param"));
+        Assert.Throws<ArgumentException>(() => Requires.ValidElements(new[] { "a", string.Empty, "b", null }, x => !string.IsNullOrWhiteSpace(x), "param", "test message: {0}", "param"));
+        Requires.ValidElements(new[] { "a", "b", "c", "d" }, x => !string.IsNullOrWhiteSpace(x), "param", "test message: {0}", "param");
+        Requires.ValidElements(new[] { 1, 2 }, v => v > 0, "param", "{0} must be greater than 0.", "param");
+
+        Assert.Throws<ArgumentNullException>(() => Requires.ValidElements(new[] { -1 }, null!, "param", "{0} must be greater than 0.", "param"));
     }
 }
