@@ -235,7 +235,7 @@ public class RequiresTests
     public void ValidElements()
     {
         Assert.Throws<ArgumentException>(() => Requires.ValidElements(new[] { -1 }, v => v > 0, "param", "Must be greater than 0."));
-        Assert.Throws<ArgumentException>(() => Requires.ValidElements(new[] { "a", "", "b", null }, x => !string.IsNullOrWhiteSpace(x), "param", "test"));
+        Assert.Throws<ArgumentException>(() => Requires.ValidElements(new[] { "a", string.Empty, "b", null }, x => !string.IsNullOrWhiteSpace(x), "param", "test"));
         Requires.ValidElements(new[] { "a", "b", "c", "d" }, x => !string.IsNullOrWhiteSpace(x), "param", "test");
         Requires.ValidElements(new[] { 1, 2 }, v => v > 0, "param", "Must be greater than 0.");
     }
