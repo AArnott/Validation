@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+
 using Validation;
+
 using Xunit;
 using Xunit.Abstractions;
 
@@ -227,5 +229,14 @@ public class RequiresTests
         Requires.Defined(BigEnum.First, "parameterName");
         InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => Requires.Defined((BigEnum)0x100000000, "parameterName"));
         this.logger.WriteLine(ex.Message);
+    }
+
+    [Fact]
+    public void ValidElements()
+    {
+        Assert.Throws<ArgumentException>(() => Requires.ValidElements(new[] { -1 }, v => v > 0, "param", "Must be greater than 0."));
+        Assert.Throws<ArgumentException>(() => Requires.ValidElements(new[] { "a", "", "b", null }, x => !string.IsNullOrWhiteSpace(x), "param", "test"));
+        Requires.ValidElements(new[] { "a", "b", "c", "d" }, x => !string.IsNullOrWhiteSpace(x), "param", "test");
+        Requires.ValidElements(new[] { 1, 2 }, v => v > 0, "param", "Must be greater than 0.");
     }
 }

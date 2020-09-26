@@ -458,6 +458,69 @@ namespace Validation
         }
 
         /// <summary>
+        /// Throws an exception if the specified parameter's value is not null
+        /// <em>and</em> has an element which does not match the given predicate.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+        /// <param name="values">The value of the argument.</param>
+        /// <param name="predicate">The predicate used to test the elements.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <param name="message">A message to be used in the resulting exception.</param>
+        /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="predicate"/> is <see langword="null"/>.</exception>
+        [DebuggerStepThrough]
+        public static void ValidElements<T>([ValidatedNotNull] IEnumerable<T>? values, Predicate<T> predicate, string parameterName, string message)
+        {
+            if (predicate is null)
+            {
+                throw new ArgumentNullException(nameof(predicate));
+            }
+
+            if (values is object)
+            {
+                foreach (T value in values)
+                {
+                    if (!predicate(value))
+                    {
+                        throw new ArgumentException(message, parameterName);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Throws an exception if the specified parameter's value is not null
+        /// <em>and</em> has an element which does not match the given predicate.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
+        /// <param name="values">The value of the argument.</param>
+        /// <param name="predicate">The predicate used to test the elements.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <param name="unformattedMessage">The unformatted message.</param>
+        /// <param name="args">Formatting arguments.</param>
+        /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="predicate"/> is <see langword="null"/>.</exception>
+        [DebuggerStepThrough]
+        public static void ValidElements<T>([ValidatedNotNull] IEnumerable<T>? values, Predicate<T> predicate, string parameterName, string unformattedMessage, params object?[] args)
+        {
+            if (predicate is null)
+            {
+                throw new ArgumentNullException(nameof(predicate));
+            }
+
+            if (values is object)
+            {
+                foreach (T value in values)
+                {
+                    if (!predicate(value))
+                    {
+                        throw new ArgumentException(PrivateErrorHelpers.Format(unformattedMessage, args), parameterName);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Validates some expression describing the acceptable condition for an argument evaluates to true.
         /// </summary>
         /// <param name="condition">The expression that must evaluate to true to avoid an <see cref="InvalidOperationException"/>.</param>
