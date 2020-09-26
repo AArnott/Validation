@@ -242,8 +242,8 @@ public class RequiresTests
 
         Assert.Throws<ArgumentNullException>("values", () => Requires.ValidElements((IEnumerable<string>)null!, x => !string.IsNullOrWhiteSpace(x), "param", "test message: {0}", "param"));
         Assert.Throws<ArgumentNullException>("predicate", () => Requires.ValidElements(new[] { -1 }, null!, "param", "{0} must be greater than 0.", "param"));
-        Assert.Contains("param must be greater than 0.", Assert.Throws<ArgumentException>("param", () => Requires.ValidElements(new[] { -1 }, v => v > 0, "param", "{0} must be greater than 0.", "param")).Message);
-        Assert.Contains("test message: param", Assert.Throws<ArgumentException>("param", () => Requires.ValidElements(new[] { "a", string.Empty, "b", null }, x => !string.IsNullOrWhiteSpace(x), "param", "test message: {0}", "param")).Message);
+        Assert.Contains("param must be greater than 0.", Assert.Throws<ArgumentException>("param", () => Requires.ValidElements(new[] { -1 }, v => v > 0, "param", "{0} must be greater than 0.", "param")).Message, StringComparison.InvariantCultureIgnoreCase);
+        Assert.Contains("test message: param", Assert.Throws<ArgumentException>("param", () => Requires.ValidElements(new[] { "a", string.Empty, "b", null }, x => !string.IsNullOrWhiteSpace(x), "param", "test message: {0}", "param")).Message, StringComparison.InvariantCultureIgnoreCase);
         Assert.ThrowsAny<Exception>(() => Requires.ValidElements(new[] { "a", "b", "c", "d" }, x => throw new InvalidOperationException(), "param", "test message: {0}", "param"));
         Requires.ValidElements(new[] { "a", "b", "c", "d" }, x => !string.IsNullOrWhiteSpace(x), "param", "test message: {0}", "param");
         Requires.ValidElements(new[] { 1, 2 }, v => v > 0, "param", "{0} must be greater than 0.", "param");
