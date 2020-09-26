@@ -469,21 +469,26 @@ namespace Validation
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="predicate"/> is <see langword="null"/>.</exception>
         [DebuggerStepThrough]
-        public static void ValidElements<T>([ValidatedNotNull] IEnumerable<T>? values, Predicate<T> predicate, string parameterName, string message)
+        public static void ValidElements<T>([ValidatedNotNull] IEnumerable<T> values, Predicate<T> predicate, string parameterName, string message)
         {
+            // To whoever is doing random code cleaning:
+            // Consider the performance when changing the code to delegate to NotNull.
+            // In general do not chain call to another function, check first and return as earlier as possible.
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
             if (predicate is null)
             {
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            if (values is object)
+            foreach (T value in values)
             {
-                foreach (T value in values)
+                if (!predicate(value))
                 {
-                    if (!predicate(value))
-                    {
-                        throw new ArgumentException(message, parameterName);
-                    }
+                    throw new ArgumentException(message, parameterName);
                 }
             }
         }
@@ -501,21 +506,26 @@ namespace Validation
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="predicate"/> is <see langword="null"/>.</exception>
         [DebuggerStepThrough]
-        public static void ValidElements<T>([ValidatedNotNull] IEnumerable<T>? values, Predicate<T> predicate, string parameterName, string unformattedMessage, params object?[] args)
+        public static void ValidElements<T>([ValidatedNotNull] IEnumerable<T> values, Predicate<T> predicate, string parameterName, string unformattedMessage, params object?[] args)
         {
+            // To whoever is doing random code cleaning:
+            // Consider the performance when changing the code to delegate to NotNull.
+            // In general do not chain call to another function, check first and return as earlier as possible.
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
             if (predicate is null)
             {
                 throw new ArgumentNullException(nameof(predicate));
             }
 
-            if (values is object)
+            foreach (T value in values)
             {
-                foreach (T value in values)
+                if (!predicate(value))
                 {
-                    if (!predicate(value))
-                    {
-                        throw new ArgumentException(PrivateErrorHelpers.Format(unformattedMessage, args), parameterName);
-                    }
+                    throw new ArgumentException(PrivateErrorHelpers.Format(unformattedMessage, args), parameterName);
                 }
             }
         }
