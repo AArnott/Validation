@@ -131,7 +131,7 @@ namespace Validation
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
-            // In general do not chain call to another function, check first and return as earlier as possible.
+            // In general do not chain call to another function, check first and return as early as possible.
             if (value is null)
             {
                 throw new ArgumentNullException(parameterName);
@@ -154,7 +154,7 @@ namespace Validation
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
-            // In general do not chain call to another function, check first and return as earlier as possible.
+            // In general do not chain call to another function, check first and return as early as possible.
             if (value is null)
             {
                 throw new ArgumentNullException(parameterName);
@@ -183,7 +183,7 @@ namespace Validation
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
-            // In general do not chain call to another function, check first and return as earlier as possible.
+            // In general do not chain call to another function, check first and return as early as possible.
             if (values is null)
             {
                 throw new ArgumentNullException(parameterName);
@@ -215,7 +215,7 @@ namespace Validation
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
-            // In general do not chain call to another function, check first and return as earlier as possible.
+            // In general do not chain call to another function, check first and return as early as possible.
             if (values is null)
             {
                 throw new ArgumentNullException(parameterName);
@@ -458,7 +458,8 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is not null
+        /// Throws an exception if <paramref name="values"/> is null,
+        /// <paramref name="predicate"/> is null, or if <paramref name="values"/> is not null
         /// <em>and</em> has an element which does not match the given predicate.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
@@ -467,13 +468,13 @@ namespace Validation
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <param name="message">A message to be used in the resulting exception.</param>
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="predicate"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="predicate"/> or <paramref name="values"/> is <see langword="null"/>.</exception>
         [DebuggerStepThrough]
-        public static void ValidElements<T>([ValidatedNotNull] IEnumerable<T> values, Predicate<T> predicate, string parameterName, string message)
+        public static void ValidElements<T>([ValidatedNotNull] IEnumerable<T> values, Predicate<T> predicate, string? parameterName, string? message)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
-            // In general do not chain call to another function, check first and return as earlier as possible.
+            // In general do not chain call to another function, check first and return as early as possible.
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
@@ -494,7 +495,8 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is not null
+        /// Throws an exception if <paramref name="values"/> is null,
+        /// <paramref name="predicate"/> is null, or if <paramref name="values"/> is not null
         /// <em>and</em> has an element which does not match the given predicate.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
@@ -506,11 +508,11 @@ namespace Validation
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="predicate"/> is <see langword="null"/>.</exception>
         [DebuggerStepThrough]
-        public static void ValidElements<T>([ValidatedNotNull] IEnumerable<T> values, Predicate<T> predicate, string parameterName, string unformattedMessage, params object?[] args)
+        public static void ValidElements<T>([ValidatedNotNull] IEnumerable<T> values, Predicate<T> predicate, string? parameterName, string unformattedMessage, params object?[] args)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
-            // In general do not chain call to another function, check first and return as earlier as possible.
+            // In general do not chain call to another function, check first and return as early as possible.
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
