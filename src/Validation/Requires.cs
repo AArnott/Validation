@@ -190,9 +190,20 @@ namespace Validation
                 throw new ArgumentNullException(parameterName);
             }
 
-            if (!values.GetEnumerator().MoveNext())
+            IEnumerator enumerator = values.GetEnumerator();
+            try
             {
-                throw new ArgumentException(Format(Strings.Argument_EmptyArray, parameterName), parameterName);
+                if (!values.GetEnumerator().MoveNext())
+                {
+                    throw new ArgumentException(Format(Strings.Argument_EmptyArray, parameterName), parameterName);
+                }
+            }
+            finally
+            {
+                if (enumerator is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
             }
         }
 
