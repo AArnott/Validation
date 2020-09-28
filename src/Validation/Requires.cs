@@ -191,18 +191,11 @@ namespace Validation
             }
 
             IEnumerator enumerator = values.GetEnumerator();
-            try
+            using (enumerator as IDisposable)
             {
-                if (!values.GetEnumerator().MoveNext())
+                if (!enumerator.MoveNext())
                 {
                     throw new ArgumentException(Format(Strings.Argument_EmptyArray, parameterName), parameterName);
-                }
-            }
-            finally
-            {
-                if (enumerator is IDisposable disposable)
-                {
-                    disposable.Dispose();
                 }
             }
         }
