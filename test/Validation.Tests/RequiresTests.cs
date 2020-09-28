@@ -248,4 +248,19 @@ public class RequiresTests
         Requires.ValidElements(new[] { "a", "b", "c", "d" }, x => !string.IsNullOrWhiteSpace(x), "param", "test message: {0}", "param");
         Requires.ValidElements(new[] { 1, 2 }, v => v > 0, "param", "{0} must be greater than 0.", "param");
     }
+
+    [Fact]
+    public void That()
+    {
+        Requires.That(true, "param", "{0} must be true.", "param");
+        Assert.Contains("param must be true", Assert.Throws<ArgumentException>(() => Requires.That(false, "param", "{0} must be true.", "param")).Message, StringComparison.InvariantCultureIgnoreCase);
+        Assert.Contains("param must be true", Assert.Throws<ArgumentException>(() => Requires.That(false, null, "{0} must be true.", "param")).Message, StringComparison.InvariantCultureIgnoreCase);
+    }
+
+    [Fact]
+    public void ValidState()
+    {
+        Requires.ValidState(true, "Condition must be true.");
+        Assert.Contains("Condition must be true", Assert.Throws<InvalidOperationException>(() => Requires.ValidState(false, "Condition must be true.")).Message, StringComparison.InvariantCultureIgnoreCase);
+    }
 }
