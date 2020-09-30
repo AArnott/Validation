@@ -62,6 +62,17 @@ public class RequiresTests
     }
 
     [Fact]
+    public void NotDefault()
+    {
+        Requires.NotDefault(-1, "foo");
+        Assert.Throws<ArgumentException>(() => Requires.NotDefault(default(int), "foo"));
+
+        Requires.NotDefault('a', "foo");
+        Assert.Throws<ArgumentException>(() => Requires.NotDefault(default(char), "foo"));
+        Assert.Throws<ArgumentException>(() => Requires.NotDefault('\0', "foo"));
+    }
+
+    [Fact]
     public void Argument_Bool_String_String()
     {
         Requires.Argument(true, "a", "b");
