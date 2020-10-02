@@ -5,7 +5,7 @@ Validation
 exceptions when failures are detected.*
 
 [![NuGet package](https://img.shields.io/nuget/v/Validation.svg)](https://nuget.org/packages/Validation)
-[![Build Status](https://andrewarnott.visualstudio.com/OSS/_apis/build/status/validation?branchName=master)](https://andrewarnott.visualstudio.com/OSS/_build/latest?definitionId=47&branchName=master)
+[![Build Status](https://dev.azure.com/andrewarnott/OSS/_apis/build/status/Validation?branchName=master)](https://dev.azure.com/andrewarnott/OSS/_build/latest?definitionId=47&branchName=master)
 [![codecov](https://codecov.io/gh/AArnott/Validation/branch/master/graph/badge.svg)](https://codecov.io/gh/AArnott/Validation)
 
 This project is available as the [Validation][1] NuGet package.
