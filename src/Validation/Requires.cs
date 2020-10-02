@@ -447,6 +447,7 @@ namespace Validation
         /// <param name="unformattedMessage">The unformatted message.</param>
         /// <param name="args">Formatting arguments.</param>
         [DebuggerStepThrough]
+        [Obsolete("Use Argument(bool, string, string, object[]) instead.")]
         public static void That([DoesNotReturnIf(false)] bool condition, string? parameterName, string unformattedMessage, params object?[] args)
         {
             if (!condition)
@@ -536,6 +537,7 @@ namespace Validation
         /// <param name="condition">The expression that must evaluate to true to avoid an <see cref="InvalidOperationException"/>.</param>
         /// <param name="message">The message to include with the exception.</param>
         [DebuggerStepThrough]
+        [Obsolete("Use Verify.Operation(bool, string) instead.")]
         public static void ValidState(bool condition, string message)
         {
             if (!condition)

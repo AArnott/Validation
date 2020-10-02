@@ -62,6 +62,17 @@ public class RequiresTests
     }
 
     [Fact]
+    public void NotDefault()
+    {
+        Requires.NotDefault(-1, "foo");
+        Assert.Throws<ArgumentException>(() => Requires.NotDefault(default(int), "foo"));
+
+        Requires.NotDefault('a', "foo");
+        Assert.Throws<ArgumentException>(() => Requires.NotDefault(default(char), "foo"));
+        Assert.Throws<ArgumentException>(() => Requires.NotDefault('\0', "foo"));
+    }
+
+    [Fact]
     public void Argument_Bool_String_String()
     {
         Requires.Argument(true, "a", "b");
@@ -249,6 +260,7 @@ public class RequiresTests
         Requires.ValidElements(new[] { 1, 2 }, v => v > 0, "param", "{0} must be greater than 0.", "param");
     }
 
+#pragma warning disable 0618 //Requires.That(bool, string?, string, params object?[])' is obsolete
     [Fact]
     public void That()
     {
@@ -256,11 +268,14 @@ public class RequiresTests
         Assert.Contains("param must be true", Assert.Throws<ArgumentException>(() => Requires.That(false, "param", "{0} must be true.", "param")).Message, StringComparison.InvariantCultureIgnoreCase);
         Assert.Contains("param must be true", Assert.Throws<ArgumentException>(() => Requires.That(false, null, "{0} must be true.", "param")).Message, StringComparison.InvariantCultureIgnoreCase);
     }
+#pragma warning restore 0618
 
+#pragma warning disable 0618 //Requires.ValidState(bool, string)' is obsolete
     [Fact]
     public void ValidState()
     {
         Requires.ValidState(true, "Condition must be true.");
         Assert.Contains("Condition must be true", Assert.Throws<InvalidOperationException>(() => Requires.ValidState(false, "Condition must be true.")).Message, StringComparison.InvariantCultureIgnoreCase);
     }
+#pragma warning restore 0618
 }
