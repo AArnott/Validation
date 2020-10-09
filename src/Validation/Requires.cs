@@ -18,13 +18,13 @@ namespace Validation
     public static class Requires
     {
         /// <summary>
-        /// Throws an exception if the specified parameter's value is null.
+        /// Throws an exception if the specified parameter's value is <see langword="null"/>.
         /// </summary>
         /// <typeparam name="T">The type of the parameter.</typeparam>
         /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <returns>The value of the parameter.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <see langword="null"/>.</exception>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
         public static T NotNull<T>([ValidatedNotNull, NotNull] T value, string? parameterName)
@@ -58,11 +58,11 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is null.
+        /// Throws an exception if the specified parameter's value is <see langword="null"/>.
         /// </summary>
         /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <see langword="null"/>.</exception>
         /// <remarks>
         /// This method allows async methods to use Requires.NotNull without having to assign the result
         /// to local variables to avoid C# warnings.
@@ -78,12 +78,12 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is null.
+        /// Throws an exception if the specified parameter's value is <see langword="null"/>.
         /// </summary>
         /// <typeparam name="T">The type of the return value of the task.</typeparam>
         /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <see langword="null"/>.</exception>
         /// <remarks>
         /// This method allows async methods to use Requires.NotNull without having to assign the result
         /// to local variables to avoid C# warnings.
@@ -99,16 +99,16 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is null.
+        /// Throws an exception if the specified parameter's value is <see langword="null"/>.
         /// </summary>
         /// <typeparam name="T">The type of the parameter.</typeparam>
         /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
         /// <returns>The value of the parameter.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <see langword="null"/>.</exception>
         /// <remarks>
         /// This method exists for callers who themselves only know the type as a generic parameter which
-        /// may or may not be a class, but certainly cannot be null.
+        /// may or may not be a class, but certainly cannot be <see langword="null"/>.
         /// </remarks>
         [DebuggerStepThrough]
         public static T NotNullAllowStructs<T>([ValidatedNotNull, NotNull] T value, string? parameterName)
@@ -122,11 +122,11 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is null or empty.
+        /// Throws an exception if the specified parameter's value is <see langword="null"/> or empty.
         /// </summary>
         /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <see langword="null"/> or empty.</exception>
         [DebuggerStepThrough]
         public static void NotNullOrEmpty([ValidatedNotNull, NotNull] string value, string? parameterName)
         {
@@ -145,11 +145,11 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is null, empty, or whitespace.
+        /// Throws an exception if the specified parameter's value is <see langword="null"/>, empty, or whitespace.
         /// </summary>
         /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <see langword="null"/> or empty.</exception>
         [DebuggerStepThrough]
         public static void NotNullOrWhiteSpace([ValidatedNotNull, NotNull] string value, string? parameterName)
         {
@@ -173,7 +173,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is null,
+        /// Throws an exception if the specified parameter's value is <see langword="null"/>,
         /// has no elements.
         /// </summary>
         /// <param name="values">The value of the argument.</param>
@@ -201,7 +201,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is null,
+        /// Throws an exception if the specified parameter's value is <see langword="null"/>,
         /// has no elements.
         /// </summary>
         /// <typeparam name="T">The type produced by the enumeration.</typeparam>
@@ -227,8 +227,8 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is null,
-        /// has no elements or has an element with a null value.
+        /// Throws an exception if the specified parameter's value is <see langword="null"/>,
+        /// has no elements or has an element with a <see langword="null"/> value.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
         /// <param name="values">The value of the argument.</param>
@@ -264,8 +264,8 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if the specified parameter's value is not null
-        /// <em>and</em> has an element with a null value.
+        /// Throws an exception if the specified parameter's value is not <see langword="null"/>
+        /// <em>and</em> has an element with a <see langword="null"/> value.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
         /// <param name="values">The value of the argument.</param>
@@ -427,7 +427,7 @@ namespace Validation
         /// <typeparam name="T">The type of the parameter.</typeparam>
         /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
-        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <c>null</c> or empty.</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <see langword="null"/> or empty.</exception>
         [DebuggerStepThrough]
         public static void NotDefault<T>(T value, string parameterName)
             where T : struct
@@ -457,8 +457,8 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if <paramref name="values"/> is null,
-        /// <paramref name="predicate"/> is null, or if <paramref name="values"/> is not null
+        /// Throws an exception if <paramref name="values"/> is <see langword="null"/>,
+        /// <paramref name="predicate"/> is <see langword="null"/>, or if <paramref name="values"/> is not <see langword="null"/>
         /// <em>and</em> has an element which does not match the given predicate.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
@@ -494,8 +494,8 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an exception if <paramref name="values"/> is null,
-        /// <paramref name="predicate"/> is null, or if <paramref name="values"/> is not null
+        /// Throws an exception if <paramref name="values"/> is <see langword="null"/>,
+        /// <paramref name="predicate"/> is <see langword="null"/>, or if <paramref name="values"/> is not <see langword="null"/>
         /// <em>and</em> has an element which does not match the given predicate.
         /// </summary>
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>

@@ -10,8 +10,8 @@
 
 namespace Validation {
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -23,15 +23,15 @@ namespace Validation {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Strings {
-        
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Strings() {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace Validation {
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -59,7 +59,7 @@ namespace Validation {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; must contain at least one element..
         /// </summary>
@@ -68,16 +68,16 @@ namespace Validation {
                 return ResourceManager.GetString("Argument_EmptyArray", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; cannot be an empty string (&quot;&quot;) or start with the null character..
+        ///   Looks up a localized string similar to &apos;{0}&apos; cannot be an empty string (&quot;&quot;) or start with the <see langword="null"/> character..
         /// </summary>
         internal static string Argument_EmptyString {
             get {
                 return ResourceManager.GetString("Argument_EmptyString", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; must be set to a value defined by the enum &apos;{1}&apos;..
         /// </summary>
@@ -86,7 +86,7 @@ namespace Validation {
                 return ResourceManager.GetString("Argument_EnumNotDefined", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The value of argument &apos;{0}&apos; ({1}) is invalid for Enum type &apos;{2}&apos;..
         /// </summary>
@@ -95,16 +95,16 @@ namespace Validation {
                 return ResourceManager.GetString("Argument_NotEnum", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; cannot contain a null (Nothing in Visual Basic) element..
+        ///   Looks up a localized string similar to &apos;{0}&apos; cannot contain a <see langword="null"/> (Nothing in Visual Basic) element..
         /// </summary>
         internal static string Argument_NullElement {
             get {
                 return ResourceManager.GetString("Argument_NullElement", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; cannot be the default value defined by &apos;{1}&apos;..
         /// </summary>
@@ -113,7 +113,7 @@ namespace Validation {
                 return ResourceManager.GetString("Argument_StructIsDefault", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The argument cannot consist entirely of white space characters..
         /// </summary>
@@ -122,7 +122,7 @@ namespace Validation {
                 return ResourceManager.GetString("Argument_Whitespace", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to An internal error occurred. Please contact customer support..
         /// </summary>
@@ -131,7 +131,7 @@ namespace Validation {
                 return ResourceManager.GetString("InternalExceptionMessage", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The value of argument &apos;{0}&apos; ({1}) is invalid for Enum type &apos;{2}&apos;..
         /// </summary>
@@ -140,7 +140,7 @@ namespace Validation {
                 return ResourceManager.GetString("InvalidEnumArgument", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Cannot find an instance of the {0} service..
         /// </summary>

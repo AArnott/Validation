@@ -18,7 +18,7 @@ namespace Validation
     public static partial class Assumes
     {
         /// <summary>
-        /// Throws <see cref="InternalErrorException" /> if the specified value is null.
+        /// Throws <see cref="InternalErrorException" /> if the specified value is <see langword="null"/>.
         /// </summary>
         /// <typeparam name="T">The type of value to test.</typeparam>
         [DebuggerStepThrough]
@@ -30,7 +30,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws <see cref="InternalErrorException" /> if the specified value is null.
+        /// Throws <see cref="InternalErrorException" /> if the specified value is <see langword="null"/>.
         /// </summary>
         /// <typeparam name="T">The type of value to test.</typeparam>
         [DebuggerStepThrough]
@@ -42,7 +42,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws <see cref="InternalErrorException" /> if the specified value is null or empty.
+        /// Throws <see cref="InternalErrorException" /> if the specified value is <see langword="null"/> or empty.
         /// </summary>
         [DebuggerStepThrough]
         public static void NotNullOrEmpty([ValidatedNotNull, NotNull] string? value)
@@ -53,7 +53,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws <see cref="InternalErrorException" /> if the specified value is null or empty.
+        /// Throws <see cref="InternalErrorException" /> if the specified value is <see langword="null"/> or empty.
         /// </summary>
         /// <typeparam name="T">The type of value to test.</typeparam>
         [DebuggerStepThrough]
@@ -64,7 +64,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws <see cref="InternalErrorException" /> if the specified value is null or empty.
+        /// Throws <see cref="InternalErrorException" /> if the specified value is <see langword="null"/> or empty.
         /// </summary>
         /// <typeparam name="T">The type of value to test.</typeparam>
         [DebuggerStepThrough]
@@ -75,7 +75,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws <see cref="InternalErrorException" /> if the specified value is not null.
+        /// Throws <see cref="InternalErrorException" /> if the specified value is not <see langword="null"/>.
         /// </summary>
         /// <typeparam name="T">The type of value to test.</typeparam>
         [DebuggerStepThrough]
@@ -87,7 +87,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws <see cref="InternalErrorException" /> if the specified value is not null.
+        /// Throws <see cref="InternalErrorException" /> if the specified value is not <see langword="null"/>.
         /// </summary>
         /// <typeparam name="T">The type of value to test.</typeparam>
         [DebuggerStepThrough]
@@ -241,7 +241,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Verifies that a value is not null, and throws <see cref="InternalErrorException" /> about a missing service otherwise.
+        /// Verifies that a value is not <see langword="null"/>, and throws <see cref="InternalErrorException" /> about a missing service otherwise.
         /// </summary>
         /// <typeparam name="T">The interface of the imported part.</typeparam>
         [DebuggerStepThrough]
