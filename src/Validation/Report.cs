@@ -18,7 +18,7 @@ namespace Validation
     public static class Report
     {
         /// <summary>
-        /// Verifies that a value is not null, and reports an error about a missing MEF component otherwise.
+        /// Verifies that a value is not <see langword="null"/>, and reports an error about a missing MEF component otherwise.
         /// </summary>
         /// <typeparam name="T">The interface of the imported part.</typeparam>
         [Conditional("DEBUG")]
