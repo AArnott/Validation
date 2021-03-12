@@ -126,9 +126,10 @@ namespace Validation
         /// </summary>
         /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <returns>The value of the parameter.</returns>
         /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <see langword="null"/> or empty.</exception>
         [DebuggerStepThrough]
-        public static void NotNullOrEmpty([ValidatedNotNull, NotNull] string value, string? parameterName)
+        public static string NotNullOrEmpty([ValidatedNotNull, NotNull] string value, string? parameterName)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
@@ -142,6 +143,8 @@ namespace Validation
             {
                 throw new ArgumentException(Format(Strings.Argument_EmptyString, parameterName), parameterName);
             }
+
+            return value;
         }
 
         /// <summary>
@@ -149,9 +152,10 @@ namespace Validation
         /// </summary>
         /// <param name="value">The value of the argument.</param>
         /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <returns>The value of the parameter.</returns>
         /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <see langword="null"/> or empty.</exception>
         [DebuggerStepThrough]
-        public static void NotNullOrWhiteSpace([ValidatedNotNull, NotNull] string value, string? parameterName)
+        public static string NotNullOrWhiteSpace([ValidatedNotNull, NotNull] string value, string? parameterName)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
@@ -170,6 +174,8 @@ namespace Validation
             {
                 throw new ArgumentException(Strings.Argument_Whitespace, parameterName);
             }
+
+            return value;
         }
 
         /// <summary>
