@@ -319,7 +319,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an ArgumentException if a condition does not evaluate to true.
+        /// Throws an <see cref="ArgumentException"/> if a condition does not evaluate to true.
         /// </summary>
         [DebuggerStepThrough]
         public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string? message)
@@ -331,7 +331,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an ArgumentException if a condition does not evaluate to true.
+        /// Throws an <see cref="ArgumentException"/> if a condition does not evaluate to true.
         /// </summary>
         [DebuggerStepThrough]
         public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, object? arg1)
@@ -343,7 +343,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an ArgumentException if a condition does not evaluate to true.
+        /// Throws an <see cref="ArgumentException"/> if a condition does not evaluate to true.
         /// </summary>
         [DebuggerStepThrough]
         public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, object? arg1, object? arg2)
@@ -355,7 +355,7 @@ namespace Validation
         }
 
         /// <summary>
-        /// Throws an ArgumentException if a condition does not evaluate to true.
+        /// Throws an <see cref="ArgumentException"/> if a condition does not evaluate to true.
         /// </summary>
         [DebuggerStepThrough]
         public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, params object?[] args)
