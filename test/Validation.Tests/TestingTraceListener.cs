@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 public class TestingTraceListener : DefaultTraceListener
 {
-    public override void Fail(string message, string detailMessage)
+    public override void Fail(string? message, string? detailMessage)
     {
         throw new Exception(message + detailMessage);
     }

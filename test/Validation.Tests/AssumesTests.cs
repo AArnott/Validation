@@ -130,6 +130,7 @@ public partial class AssumesTests : IDisposable
         catch (Exception ex)
 #pragma warning restore CA1031 // Do not catch general exception types
         {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
             var formatter = new BinaryFormatter();
             using var ms = new MemoryStream();
             formatter.Serialize(ms, ex);
@@ -137,6 +138,7 @@ public partial class AssumesTests : IDisposable
             var ex2 = (Exception)formatter.Deserialize(ms);
             Assert.IsType(ex.GetType(), ex2);
             Assert.Equal(ex.Message, ex2.Message);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
         }
     }
 }
