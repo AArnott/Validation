@@ -13,8 +13,8 @@ This project is available as the [Validation][1] NuGet package.
 Basic input validation via the `Requires` class throws an ArgumentException.
 
 ```cs
-Requires.NotNull(arg1, "arg1");
-Requires.NotNullOrEmpty(arg2, "arg2");
+Requires.NotNull(arg1, nameof(arg1));
+Requires.NotNullOrEmpty(arg2, nameof(arg2));
 ```
 
 State validation via the `Verify` class throws an InvalidOperationException.
