@@ -56,8 +56,8 @@ stages:
         deploy:
           steps:
           - download: CI
-            artifact: deployables-Linux
-            displayName: Download deployables-Linux artifact
+            artifact: deployables-Windows
+            displayName: Download deployables-Windows artifact
           - task: NuGetToolInstaller@1
             displayName: Use NuGet 5.x
             inputs:
@@ -66,6 +66,6 @@ stages:
             displayName: NuGet push
             inputs:
               command: push
-              packagesToPush: $(Pipeline.Workspace)/CI/deployables-Linux/NuGet/*.nupkg
+              packagesToPush: $(Pipeline.Workspace)/CI/deployables-Windows/NuGet/*.nupkg
               nuGetFeedType: external
               publishFeedCredentials: nuget.org
