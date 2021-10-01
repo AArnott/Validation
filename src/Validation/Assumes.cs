@@ -249,8 +249,12 @@ namespace Validation
         {
             if (component is null)
             {
+#if NET35
+                Fail(string.Format(CultureInfo.CurrentCulture, Strings.ServiceMissing, typeof(T).FullName));
+#else
                 Type coreType = PrivateErrorHelpers.TrimGenericWrapper(typeof(T), typeof(Lazy<>));
                 Fail(string.Format(CultureInfo.CurrentCulture, Strings.ServiceMissing, coreType.FullName));
+#endif
             }
         }
 

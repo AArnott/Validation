@@ -1,7 +1,6 @@
 jobs:
-- job: Linux
-  pool:
-    vmImage: Ubuntu 18.04
+- job: Windows
+  pool: Hosted Windows 2019 with VS2019
   steps:
   - checkout: self
     clean: true

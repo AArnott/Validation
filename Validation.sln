@@ -18,6 +18,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Validation", "src\Validatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Validation.Tests", "test\Validation.Tests\Validation.Tests.csproj", "{DA1E2A2C-8DC2-4BEE-ADD9-C84716F5CFF1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A00A4F4E-4D58-494C-8E2D-935A4D3B3CD1}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+		src\Directory.Build.targets = src\Directory.Build.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{10CF67D8-30A7-4039-AFA2-8CE07E60AD8C}"
+	ProjectSection(SolutionItems) = preProject
+		test\.editorconfig = test\.editorconfig
+		test\Directory.Build.props = test\Directory.Build.props
+		test\Directory.Build.targets = test\Directory.Build.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +48,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6F3A7183-5A94-43A4-B259-9512EA7B3378} = {A00A4F4E-4D58-494C-8E2D-935A4D3B3CD1}
+		{DA1E2A2C-8DC2-4BEE-ADD9-C84716F5CFF1} = {10CF67D8-30A7-4039-AFA2-8CE07E60AD8C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05583C92-D853-47B9-8EC0-6CC2578D4013}

@@ -1,9 +1,13 @@
 steps:
-- script: dotnet build --no-restore -c $(BuildConfiguration) /v:m /bl:"$(Build.ArtifactStagingDirectory)/build_logs/build.binlog"
-  displayName: dotnet build
-
-- script: dotnet pack --no-build -c $(BuildConfiguration) /v:m /bl:"$(Build.ArtifactStagingDirectory)/build_logs/pack.binlog"
-  displayName: dotnet pack
+- task: VSBuild@1
+  displayName: Build Visual Studio solution
+  inputs:
+    msbuildArgs: /t:build,pack /m /bl:"$(Build.ArtifactStagingDirectory)/build_logs/msbuild.binlog"
+    platform: Any CPU
+    configuration: $(BuildConfiguration)
+  env:
+    SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+  condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
 
 - task: DotNetCoreCLI@2
   displayName: dotnet test -f net472
@@ -13,19 +17,19 @@ steps:
     testRunTitle: net472-$(Agent.JobName)
 
 - task: DotNetCoreCLI@2
-  displayName: dotnet test -f netcoreapp2.1
-  inputs:
-    command: test
-    arguments: --no-build -c $(BuildConfiguration) -f netcoreapp2.1 --filter "TestCategory!=FailsInCloudTest" -v n /p:CollectCoverage=true --settings "$(Build.Repository.LocalPath)/azure-pipelines/$(Agent.OS).runsettings"
-    testRunTitle: netcoreapp2.1-$(Agent.JobName)
-  condition: succeededOrFailed()
-
-- task: DotNetCoreCLI@2
   displayName: dotnet test -f netcoreapp3.1
   inputs:
     command: test
     arguments: --no-build -c $(BuildConfiguration) -f netcoreapp3.1 --filter "TestCategory!=FailsInCloudTest" -v n /p:CollectCoverage=true --settings "$(Build.Repository.LocalPath)/azure-pipelines/$(Agent.OS).runsettings"
     testRunTitle: netcoreapp3.1-$(Agent.JobName)
+  condition: succeededOrFailed()
+
+- task: DotNetCoreCLI@2
+  displayName: dotnet test -f net5.0
+  inputs:
+    command: test
+    arguments: --no-build -c $(BuildConfiguration) -f net5.0 --filter "TestCategory!=FailsInCloudTest" -v n /p:CollectCoverage=true --settings "$(Build.Repository.LocalPath)/azure-pipelines/$(Agent.OS).runsettings"
+    testRunTitle: net5.0-$(Agent.JobName)
   condition: succeededOrFailed()
 
 - powershell: azure-pipelines/variables/_pipelines.ps1
