@@ -26,8 +26,12 @@ namespace Validation
         {
             if (part is null)
             {
+#if NET35
+                Fail(Strings.ServiceMissing, typeof(T).FullName);
+#else
                 Type coreType = PrivateErrorHelpers.TrimGenericWrapper(typeof(T), typeof(Lazy<>));
                 Fail(Strings.ServiceMissing, coreType.FullName);
+#endif
             }
         }
 

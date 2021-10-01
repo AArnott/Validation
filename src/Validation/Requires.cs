@@ -12,7 +12,6 @@ namespace Validation
     using System.Globalization;
     using System.Resources;
     using System.Runtime;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Common runtime checks that throw ArgumentExceptions upon failure.
@@ -59,6 +58,7 @@ namespace Validation
             return value;
         }
 
+#if !NET35
         /// <summary>
         /// Throws an exception if the specified parameter's value is <see langword="null"/>.
         /// </summary>
@@ -71,7 +71,7 @@ namespace Validation
         /// </remarks>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNull([ValidatedNotNull, NotNull] Task value, string? parameterName)
+        public static void NotNull([ValidatedNotNull, NotNull] System.Threading.Tasks.Task value, string? parameterName)
         {
             if (value is null)
             {
@@ -92,13 +92,14 @@ namespace Validation
         /// </remarks>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNull<T>([ValidatedNotNull, NotNull] Task<T> value, string? parameterName)
+        public static void NotNull<T>([ValidatedNotNull, NotNull] System.Threading.Tasks.Task<T> value, string? parameterName)
         {
             if (value is null)
             {
                 throw new ArgumentNullException(parameterName);
             }
         }
+#endif
 
         /// <summary>
         /// Throws an exception if the specified parameter's value is <see langword="null"/>.
@@ -146,6 +147,7 @@ namespace Validation
             }
         }
 
+#if !NET35
         /// <summary>
         /// Throws an exception if the specified parameter's value is <see langword="null"/>, empty, or whitespace.
         /// </summary>
@@ -173,6 +175,7 @@ namespace Validation
                 throw new ArgumentException(Strings.Argument_Whitespace, parameterName);
             }
         }
+#endif
 
         /// <summary>
         /// Throws an exception if the specified parameter's value is <see langword="null"/>,
@@ -465,6 +468,7 @@ namespace Validation
             throw new ArgumentException(Format(unformattedMessage, args), innerException);
         }
 
+#if !NET35
         /// <summary>
         /// Throws an <see cref="InvalidEnumArgumentException"/> if a given value is not a named value of the enum type.
         /// </summary>
@@ -487,6 +491,7 @@ namespace Validation
                 }
             }
         }
+#endif
 
         /// <summary>
         /// Throws an <see cref="ArgumentException"/> if the specified parameter's value is equal to the
