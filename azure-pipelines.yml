@@ -4,12 +4,13 @@ trigger:
     include:
     - master
     - 'v*'
-    - validate/*
+    - 'validate/*'
   paths:
     exclude:
     - doc/
     - '*.md'
     - .vscode/
+    - .github/
 
 variables:
   TreatWarningsAsErrors: true

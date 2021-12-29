@@ -58,6 +58,7 @@ stages:
           - download: CI
             artifact: deployables-Windows
             displayName: Download deployables-Windows artifact
+            patterns: 'deployables-Windows/*'
           - task: NuGetToolInstaller@1
             displayName: Use NuGet 5.x
             inputs:
@@ -66,6 +67,6 @@ stages:
             displayName: NuGet push
             inputs:
               command: push
-              packagesToPush: $(Pipeline.Workspace)/CI/deployables-Windows/NuGet/*.nupkg
+              packagesToPush: $(Pipeline.Workspace)/CI/deployables-Windows/*.nupkg
               nuGetFeedType: external
               publishFeedCredentials: nuget.org
