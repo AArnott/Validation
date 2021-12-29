@@ -1,11 +1,17 @@
+parameters:
+- name: windowsPool
+  type: object
+  default:
+    vmImage: windows-2022
+
 jobs:
 - job: Windows
-  pool: Hosted Windows 2019 with VS2019
+  pool: ${{ parameters.windowsPool }}
   steps:
   - checkout: self
     clean: true
   - template: install-dependencies.yml
-  - powershell: '& (./azure-pipelines/Get-nbgv.ps1) cloud'
+  - powershell: '& (./azure-pipelines/Get-nbgv.ps1) cloud -c'
     displayName: Set build number
   - template: dotnet.yml
   - template: publish-codecoverage.yml
