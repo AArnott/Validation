@@ -1,7 +1,7 @@
 steps:
 - task: PublishSymbols@2
   inputs:
-    SymbolsFolder: $(Build.ArtifactStagingDirectory)/symbols
+    SymbolsFolder: $(Build.ArtifactStagingDirectory)/symbols-Windows
     SearchPattern: '**/*.pdb'
     IndexSources: false
     SymbolServerType: TeamServices
@@ -9,7 +9,7 @@ steps:
 
 - task: PublishSymbols@2
   inputs:
-    SymbolsFolder: $(Build.ArtifactStagingDirectory)/test_symbols
+    SymbolsFolder: $(Build.ArtifactStagingDirectory)/test_symbols-Windows
     SearchPattern: '**/*.pdb'
     IndexSources: false
     SymbolServerType: TeamServices
