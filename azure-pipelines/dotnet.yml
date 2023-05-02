@@ -3,8 +3,15 @@ parameters:
 
 steps:
 
-- script: dotnet build -t:build,pack --no-restore -c $(BuildConfiguration) /bl:"$(Build.ArtifactStagingDirectory)/build_logs/build.binlog"
-  displayName: 🛠 dotnet build
+  # We use msbuild instead of dotnet build because only msbuild can build net35 targeted projects.
+- task: VSBuild@1
+  displayName: 🛠 Build Visual Studio solution
+  inputs:
+    msbuildArgs: /t:build,pack /m /bl:"$(Build.ArtifactStagingDirectory)/build_logs/msbuild.binlog"
+    configuration: $(BuildConfiguration)
+  env:
+    SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+  condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
 
 - powershell: azure-pipelines/dotnet-test-cloud.ps1 -Configuration $(BuildConfiguration) -Agent $(Agent.JobName) -PublishResults
   displayName: 🧪 dotnet test
