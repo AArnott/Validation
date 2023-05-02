@@ -1,9 +1,5 @@
 steps:
-- download: current
-  artifact: coverageResults-Windows
-  displayName: 🔻 Download Windows code coverage results
-  continueOnError: true
-- powershell: azure-pipelines/Merge-CodeCoverage.ps1 -Path '$(Pipeline.Workspace)' -OutputFile coveragereport/merged.cobertura.xml -Format Cobertura -Verbose
+- powershell: azure-pipelines/Merge-CodeCoverage.ps1 -Path '$(Build.ArtifactStagingDirectory)\coverageResults-Windows' -OutputFile coveragereport/merged.cobertura.xml -Format Cobertura -Verbose
   displayName: ⚙ Merge coverage
 - task: PublishCodeCoverageResults@1
   displayName: 📢 Publish code coverage results to Azure DevOps
