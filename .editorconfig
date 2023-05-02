@@ -19,12 +19,12 @@ indent_size = 4
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-# Xml project files
-[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj,msbuildproj}]
+# MSBuild project files
+[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj,msbuildproj,props,targets}]
 indent_size = 2
 
 # Xml config files
-[*.{props,targets,ruleset,config,nuspec,resx,vsixmanifest,vsct,runsettings}]
+[*.{ruleset,config,nuspec,resx,vsixmanifest,vsct,runsettings}]
 indent_size = 2
 
 # JSON files
@@ -164,14 +164,26 @@ csharp_prefer_braces = true:silent
 # SA1130: Use lambda syntax
 dotnet_diagnostic.SA1130.severity = silent
 
+# IDE1006: Naming Styles - StyleCop handles these for us
+dotnet_diagnostic.IDE1006.severity = none
+
+dotnet_diagnostic.DOC100.severity = silent
+dotnet_diagnostic.DOC104.severity = warning
+dotnet_diagnostic.DOC105.severity = warning
+dotnet_diagnostic.DOC106.severity = warning
+dotnet_diagnostic.DOC107.severity = warning
+dotnet_diagnostic.DOC108.severity = warning
+dotnet_diagnostic.DOC200.severity = warning
+dotnet_diagnostic.DOC202.severity = warning
+
+# CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = warning
+
 # SA1611: Element parameters should be documented
 dotnet_diagnostic.SA1611.severity = suggestion
 
 # SA1615: Element return value should be documented
 dotnet_diagnostic.SA1615.severity = suggestion
-
-# IDE1006: Naming Styles - StyleCop handles these for us
-dotnet_diagnostic.IDE1006.severity = none
 
 [*.sln]
 indent_style = tab
