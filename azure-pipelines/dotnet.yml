@@ -7,7 +7,7 @@ steps:
 - task: VSBuild@1
   displayName: 🛠 Build Visual Studio solution
   inputs:
-    msbuildArgs: /t:build,pack /m /bl:"$(Build.ArtifactStagingDirectory)/build_logs/msbuild.binlog"
+    msbuildArgs: /t:build,pack -warnaserror /bl:"$(Build.ArtifactStagingDirectory)/build_logs/msbuild.binlog"
     configuration: $(BuildConfiguration)
   env:
     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
