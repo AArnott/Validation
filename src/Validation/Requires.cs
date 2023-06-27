@@ -12,6 +12,7 @@ namespace Validation
     using System.Globalization;
     using System.Resources;
     using System.Runtime;
+    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// Common runtime checks that throw ArgumentExceptions upon failure.
@@ -23,12 +24,12 @@ namespace Validation
         /// </summary>
         /// <typeparam name="T">The type of the parameter.</typeparam>
         /// <param name="value">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception. If this argument is omitted (explicitly writing <see langword="null" /> does not qualify), the expression used in the first argument will be used as the parameter name.</param>
         /// <returns>The value of the parameter.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <see langword="null"/>.</exception>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static T NotNull<T>([ValidatedNotNull, NotNull] T value, string? parameterName)
+        public static T NotNull<T>([ValidatedNotNull, NotNull] T value, [CallerArgumentExpression(nameof(value))] string? parameterName = null)
             where T : class // ensures value-types aren't passed to a null checking method
         {
             if (value is null)
@@ -43,12 +44,12 @@ namespace Validation
         /// Throws an exception if the specified parameter's value is IntPtr.Zero.
         /// </summary>
         /// <param name="value">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception. If this argument is omitted (explicitly writing <see langword="null" /> does not qualify), the expression used in the first argument will be used as the parameter name.</param>
         /// <returns>The value of the parameter.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <see cref="IntPtr.Zero"/>.</exception>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static IntPtr NotNull(IntPtr value, string? parameterName)
+        public static IntPtr NotNull(IntPtr value, [CallerArgumentExpression(nameof(value))] string? parameterName = null)
         {
             if (value == IntPtr.Zero)
             {
@@ -63,7 +64,7 @@ namespace Validation
         /// Throws an exception if the specified parameter's value is <see langword="null"/>.
         /// </summary>
         /// <param name="value">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception. If this argument is omitted (explicitly writing <see langword="null" /> does not qualify), the expression used in the first argument will be used as the parameter name.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <see langword="null"/>.</exception>
         /// <remarks>
         /// This method allows async methods to use Requires.NotNull without having to assign the result
@@ -71,7 +72,7 @@ namespace Validation
         /// </remarks>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNull([ValidatedNotNull, NotNull] System.Threading.Tasks.Task value, string? parameterName)
+        public static void NotNull([ValidatedNotNull, NotNull] System.Threading.Tasks.Task value, [CallerArgumentExpression(nameof(value))] string? parameterName = null)
         {
             if (value is null)
             {
@@ -84,7 +85,7 @@ namespace Validation
         /// </summary>
         /// <typeparam name="T">The type of the return value of the task.</typeparam>
         /// <param name="value">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception. If this argument is omitted (explicitly writing <see langword="null" /> does not qualify), the expression used in the first argument will be used as the parameter name.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <see langword="null"/>.</exception>
         /// <remarks>
         /// This method allows async methods to use Requires.NotNull without having to assign the result
@@ -92,7 +93,7 @@ namespace Validation
         /// </remarks>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void NotNull<T>([ValidatedNotNull, NotNull] System.Threading.Tasks.Task<T> value, string? parameterName)
+        public static void NotNull<T>([ValidatedNotNull, NotNull] System.Threading.Tasks.Task<T> value, [CallerArgumentExpression(nameof(value))] string? parameterName = null)
         {
             if (value is null)
             {
@@ -106,7 +107,7 @@ namespace Validation
         /// </summary>
         /// <typeparam name="T">The type of the parameter.</typeparam>
         /// <param name="value">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception. If this argument is omitted (explicitly writing <see langword="null" /> does not qualify), the expression used in the first argument will be used as the parameter name.</param>
         /// <returns>The value of the parameter.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> is <see langword="null"/>.</exception>
         /// <remarks>
@@ -114,7 +115,7 @@ namespace Validation
         /// may or may not be a class, but certainly cannot be <see langword="null"/>.
         /// </remarks>
         [DebuggerStepThrough]
-        public static T NotNullAllowStructs<T>([ValidatedNotNull, NotNull] T value, string? parameterName)
+        public static T NotNullAllowStructs<T>([ValidatedNotNull, NotNull] T value, [CallerArgumentExpression(nameof(value))] string? parameterName = null)
         {
             if (value is null)
             {
@@ -128,10 +129,10 @@ namespace Validation
         /// Throws an exception if the specified parameter's value is <see langword="null"/> or empty.
         /// </summary>
         /// <param name="value">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception. If this argument is omitted (explicitly writing <see langword="null" /> does not qualify), the expression used in the first argument will be used as the parameter name.</param>
         /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <see langword="null"/> or empty.</exception>
         [DebuggerStepThrough]
-        public static void NotNullOrEmpty([ValidatedNotNull, NotNull] string value, string? parameterName)
+        public static void NotNullOrEmpty([ValidatedNotNull, NotNull] string value, [CallerArgumentExpression(nameof(value))] string? parameterName = null)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
@@ -152,10 +153,10 @@ namespace Validation
         /// Throws an exception if the specified parameter's value is <see langword="null"/>, empty, or whitespace.
         /// </summary>
         /// <param name="value">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception. If this argument is omitted (explicitly writing <see langword="null" /> does not qualify), the expression used in the first argument will be used as the parameter name.</param>
         /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <see langword="null"/> or empty.</exception>
         [DebuggerStepThrough]
-        public static void NotNullOrWhiteSpace([ValidatedNotNull, NotNull] string value, string? parameterName)
+        public static void NotNullOrWhiteSpace([ValidatedNotNull, NotNull] string value, [CallerArgumentExpression(nameof(value))] string? parameterName = null)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
@@ -182,10 +183,10 @@ namespace Validation
         /// has no elements.
         /// </summary>
         /// <param name="values">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception. If this argument is omitted (explicitly writing <see langword="null" /> does not qualify), the expression used in the first argument will be used as the parameter name.</param>
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
-        public static void NotNullOrEmpty([ValidatedNotNull, NotNull] IEnumerable values, string? parameterName)
+        public static void NotNullOrEmpty([ValidatedNotNull, NotNull] IEnumerable values, [CallerArgumentExpression(nameof(values))] string? parameterName = null)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
@@ -211,10 +212,10 @@ namespace Validation
         /// </summary>
         /// <typeparam name="T">The type produced by the enumeration.</typeparam>
         /// <param name="values">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception. If this argument is omitted (explicitly writing <see langword="null" /> does not qualify), the expression used in the first argument will be used as the parameter name.</param>
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
-        public static void NotNullOrEmpty<T>([ValidatedNotNull, NotNull] IEnumerable<T> values, string? parameterName)
+        public static void NotNullOrEmpty<T>([ValidatedNotNull, NotNull] IEnumerable<T> values, [CallerArgumentExpression(nameof(values))] string? parameterName = null)
         {
             // To whoever is doing random code cleaning:
             // Consider the performance when changing the code to delegate to NotNull.
@@ -237,10 +238,10 @@ namespace Validation
         /// </summary>
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
         /// <param name="values">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception. If this argument is omitted (explicitly writing <see langword="null" /> does not qualify), the expression used in the first argument will be used as the parameter name.</param>
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
-        public static void NotNullEmptyOrNullElements<T>([ValidatedNotNull, NotNull] IEnumerable<T> values, string? parameterName)
+        public static void NotNullEmptyOrNullElements<T>([ValidatedNotNull, NotNull] IEnumerable<T> values, [CallerArgumentExpression(nameof(values))] string? parameterName = null)
             where T : class // ensures value-types aren't passed to a null checking method
         {
             // To whoever is doing random code cleaning:
@@ -274,10 +275,10 @@ namespace Validation
         /// </summary>
         /// <typeparam name="T">The type of the elements in the sequence.</typeparam>
         /// <param name="values">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception. If this argument is omitted (explicitly writing <see langword="null" /> does not qualify), the expression used in the first argument will be used as the parameter name.</param>
         /// <exception cref="ArgumentException">Thrown if the tested condition is false.</exception>
         [DebuggerStepThrough]
-        public static void NullOrNotNullElements<T>(IEnumerable<T> values, string? parameterName)
+        public static void NullOrNotNullElements<T>(IEnumerable<T> values, [CallerArgumentExpression(nameof(values))] string? parameterName = null)
         {
             if (values is object)
             {
@@ -474,9 +475,9 @@ namespace Validation
         /// </summary>
         /// <typeparam name="TEnum">The type of enum that may define the <paramref name="value"/>.</typeparam>
         /// <param name="value">The value that may be named by <typeparamref name="TEnum"/>.</param>
-        /// <param name="parameterName">The name of the parameter to include in the exception, if thrown.</param>
+        /// <param name="parameterName">The name of the parameter to include in the exception, if thrown. If this argument is omitted (explicitly writing <see langword="null" /> does not qualify), the expression used in the first argument will be used as the parameter name.</param>
         [DebuggerStepThrough]
-        public static void Defined<TEnum>(TEnum value, string parameterName)
+        public static void Defined<TEnum>(TEnum value, [CallerArgumentExpression(nameof(value))] string? parameterName = null)
             where TEnum : struct, Enum
         {
             if (!Enum.IsDefined(typeof(TEnum), value))
@@ -499,10 +500,10 @@ namespace Validation
         /// </summary>
         /// <typeparam name="T">The type of the parameter.</typeparam>
         /// <param name="value">The value of the argument.</param>
-        /// <param name="parameterName">The name of the parameter to include in any thrown exception.</param>
+        /// <param name="parameterName">The name of the parameter to include in any thrown exception. If this argument is omitted (explicitly writing <see langword="null" /> does not qualify), the expression used in the first argument will be used as the parameter name.</param>
         /// <exception cref="ArgumentException">Thrown if <paramref name="value"/> is <see langword="null"/> or empty.</exception>
         [DebuggerStepThrough]
-        public static void NotDefault<T>(T value, string parameterName)
+        public static void NotDefault<T>(T value, [CallerArgumentExpression(nameof(value))] string? parameterName = null)
             where T : struct
         {
             var defaultValue = default(T);

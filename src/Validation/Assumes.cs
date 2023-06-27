@@ -11,6 +11,7 @@ namespace Validation
     using System.Globalization;
     using System.Linq;
     using System.Runtime;
+    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// Common runtime checks that throw <see cref="InternalErrorException" /> exceptions upon failure.
@@ -115,7 +116,7 @@ namespace Validation
         /// </summary>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void False([DoesNotReturnIf(true)] bool condition, [Localizable(false)] string? message = null)
+        public static void False([DoesNotReturnIf(true)] bool condition, [CallerArgumentExpression(nameof(condition)), Localizable(false)] string? message = null)
         {
             if (condition)
             {
@@ -154,7 +155,7 @@ namespace Validation
         /// </summary>
         [DebuggerStepThrough]
         [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
-        public static void True([DoesNotReturnIf(false)] bool condition, [Localizable(false)] string? message = null)
+        public static void True([DoesNotReturnIf(false)] bool condition, [CallerArgumentExpression(nameof(condition)), Localizable(false)] string? message = null)
         {
             if (!condition)
             {
