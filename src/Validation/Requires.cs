@@ -1,4 +1,4 @@
-﻿// Copyright (c) Andrew Arnott. All rights reserved.
+// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
 namespace Validation
@@ -371,7 +371,7 @@ namespace Validation
         }
 
 #if NET9_0_OR_GREATER
-        /// <inheritdoc cref="Argument(bool, string?, string, object?[])"/>"
+        /// <inheritdoc cref="Argument(bool, string?, string, object?[])"/>
         [DebuggerStepThrough]
         public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, params ReadOnlySpan<object?> args)
         {
