@@ -1,9 +1,11 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
-using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Resources;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Validation;
@@ -58,6 +60,18 @@ public static partial class Verify
         if (!condition)
         {
             throw new InvalidOperationException(PrivateErrorHelpers.Format(unformattedMessage, args));
+        }
+    }
+
+    /// <summary>
+    /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
+    /// </summary>
+    [DebuggerStepThrough]
+    public static void Operation([DoesNotReturnIf(false)] bool condition, [InterpolatedStringHandlerArgument("condition")] ref ValidationInterpolatedStringHandler message)
+    {
+        if (!condition)
+        {
+            throw new InvalidOperationException(message.ToStringAndClear());
         }
     }
 

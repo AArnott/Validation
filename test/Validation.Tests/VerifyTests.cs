@@ -23,6 +23,24 @@ public class VerifyTests
     }
 
     [Fact]
+    public void Operation_InterpolatedString()
+    {
+        int formatCount = 0;
+        string FormattingMethod()
+        {
+            formatCount++;
+            return "generated string";
+        }
+
+        Verify.Operation(true, $"Some {FormattingMethod()} method.");
+        Assert.Equal(0, formatCount);
+
+        InvalidOperationException ex = Assert.Throws<InvalidOperationException>(() => Verify.Operation(false, $"Some {FormattingMethod()} method."));
+        Assert.Equal(1, formatCount);
+        Assert.StartsWith("Some generated string method.", ex.Message);
+    }
+
+    [Fact]
     public void Operation_ResourceManager()
     {
         AssertThrows(TestStrings.GetResourceString(TestStrings.SomeError), c => Verify.Operation(c, TestStrings.ResourceManager, TestStrings.SomeError));

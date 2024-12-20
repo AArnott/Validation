@@ -452,6 +452,18 @@ public static class Requires
         }
     }
 
+    /// <summary>
+    /// Throws an <see cref="ArgumentException"/> if a condition does not evaluate to true.
+    /// </summary>
+    [DebuggerStepThrough]
+    public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, [InterpolatedStringHandlerArgument("condition")] ref ValidationInterpolatedStringHandler message)
+    {
+        if (!condition)
+        {
+            throw new ArgumentException(message.ToStringAndClear(), parameterName);
+        }
+    }
+
 #if NET9_0_OR_GREATER
     /// <inheritdoc cref="Argument(bool, string?, ResourceManager, string, object?[])"/>
     [DebuggerStepThrough]

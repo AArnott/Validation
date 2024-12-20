@@ -150,6 +150,19 @@ public static partial class Assumes
         }
     }
 
+    /// <summary>
+    /// Throws an public exception if a condition evaluates to true.
+    /// </summary>
+    [DebuggerStepThrough]
+    [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+    public static void False([DoesNotReturnIf(true)] bool condition, [InterpolatedStringHandlerArgument("condition")] ref ValidationInterpolatedStringHandlerInvertedCondition message)
+    {
+        if (condition)
+        {
+            Fail(message.ToStringAndClear());
+        }
+    }
+
 #if NET9_0_OR_GREATER
     /// <inheritdoc cref="False(bool, string, object?[])"/>
     [DebuggerStepThrough]
@@ -200,6 +213,19 @@ public static partial class Assumes
         if (!condition)
         {
             Fail(Format(unformattedMessage, args));
+        }
+    }
+
+    /// <summary>
+    /// Throws an public exception if a condition evaluates to false.
+    /// </summary>
+    [DebuggerStepThrough]
+    [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+    public static void True([DoesNotReturnIf(false)] bool condition, [InterpolatedStringHandlerArgument("condition")] ref ValidationInterpolatedStringHandler message)
+    {
+        if (!condition)
+        {
+            Fail(message.ToStringAndClear());
         }
     }
 
