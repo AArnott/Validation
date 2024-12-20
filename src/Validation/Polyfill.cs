@@ -1,5 +1,5 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 // This file was copied from the https://github.com/microsoft/vs-validation repo. Its copyright and license information follows:
 // Copyright (c) Microsoft. All rights reserved.
