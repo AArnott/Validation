@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
-using System;
 using System.Diagnostics;
 
 /// <summary>
@@ -25,7 +24,7 @@ internal class AssertDialogSuppression : IDisposable
     /// </summary>
     public AssertDialogSuppression()
     {
-#if NETCOREAPP
+#if NET
         Trace.Listeners.Clear();
 #else
         // We disable the assertion dialog so it doesn't block tests, as we expect some tests to test failure cases.

@@ -1,13 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using Validation;
-using Xunit;
 
 public partial class AssumesTests : IDisposable
 {
@@ -35,6 +29,42 @@ public partial class AssumesTests : IDisposable
         Assert.ThrowsAny<Exception>(() => Assumes.False(true, TestMessage));
         Assert.ThrowsAny<Exception>(() => Assumes.False(true, TestMessage, "arg1"));
         Assert.ThrowsAny<Exception>(() => Assumes.False(true, TestMessage, "arg1", "arg2"));
+    }
+
+    [Fact]
+    public void True_InterpolatedString()
+    {
+        int formatCount = 0;
+        string FormattingMethod()
+        {
+            formatCount++;
+            return "generated string";
+        }
+
+        Assumes.True(true, $"Some {FormattingMethod()} method.");
+        Assert.Equal(0, formatCount);
+
+        Exception ex = Assert.ThrowsAny<Exception>(() => Assumes.True(false, $"Some {FormattingMethod()} method."));
+        Assert.Equal(1, formatCount);
+        Assert.StartsWith("Some generated string method.", ex.Message);
+    }
+
+    [Fact]
+    public void False_InterpolatedString()
+    {
+        int formatCount = 0;
+        string FormattingMethod()
+        {
+            formatCount++;
+            return "generated string";
+        }
+
+        Assumes.False(false, $"Some {FormattingMethod()} method.");
+        Assert.Equal(0, formatCount);
+
+        Exception ex = Assert.ThrowsAny<Exception>(() => Assumes.False(true, $"Some {FormattingMethod()} method."));
+        Assert.Equal(1, formatCount);
+        Assert.StartsWith("Some generated string method.", ex.Message);
     }
 
     [Fact]

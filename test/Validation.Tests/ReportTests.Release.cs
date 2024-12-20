@@ -1,15 +1,12 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 // Ensure the tests defined in this file always emulate a client compiled for Release
 #undef DEBUG
 
-using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Moq;
-using Validation;
-using Xunit;
 
 /// <summary>
 /// Verify that the message does NOT propagate to the trace listeners when
@@ -74,6 +71,25 @@ public class ReportReleaseTests : IDisposable
         {
             Report.IfNot(true, "a{0}{1}{2}e", "b", "c", "d");
             Report.IfNot(false, "a{0}{1}{2}e", "b", "c", "d");
+        }
+    }
+
+    [Fact]
+    public void IfNot_InterpolatedString()
+    {
+        int formatCount = 0;
+        string FormattingMethod()
+        {
+            formatCount++;
+            return "b";
+        }
+
+        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        {
+            Report.IfNot(true, $"a{FormattingMethod()}c");
+            Assert.Equal(0, formatCount);
+            Report.IfNot(false, $"a{FormattingMethod()}c");
+            Assert.Equal(0, formatCount);
         }
     }
 

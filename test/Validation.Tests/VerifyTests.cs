@@ -1,10 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
-using System;
 using System.Runtime.InteropServices;
-using Validation;
-using Xunit;
 
 public class VerifyTests
 {
@@ -20,6 +17,41 @@ public class VerifyTests
         Assert.Throws<InvalidOperationException>(() => Verify.Operation(false, "throw", "arg1"));
         Assert.Throws<InvalidOperationException>(() => Verify.Operation(false, "throw", "arg1", "arg2"));
         Assert.Throws<InvalidOperationException>(() => Verify.Operation(false, "throw", "arg1", "arg2", "arg3"));
+    }
+
+    [Fact]
+    public void Operation_InterpolatedString()
+    {
+        int formatCount = 0;
+        string FormattingMethod()
+        {
+            formatCount++;
+            return "generated string";
+        }
+
+        Verify.Operation(true, $"Some {FormattingMethod()} method.");
+        Assert.Equal(0, formatCount);
+
+        InvalidOperationException ex = Assert.Throws<InvalidOperationException>(() => Verify.Operation(false, $"Some {FormattingMethod()} method."));
+        Assert.Equal(1, formatCount);
+        Assert.StartsWith("Some generated string method.", ex.Message);
+    }
+
+    [Fact]
+    public void Operation_ResourceManager()
+    {
+        AssertThrows(TestStrings.GetResourceString(TestStrings.SomeError), c => Verify.Operation(c, TestStrings.ResourceManager, TestStrings.SomeError));
+        AssertThrows(TestStrings.FormatSomeError1Arg("A"), c => Verify.Operation(c, TestStrings.ResourceManager, TestStrings.SomeError1Arg, "A"));
+        AssertThrows(TestStrings.FormatSomeError2Args("A", "B"), c => Verify.Operation(c, TestStrings.ResourceManager, TestStrings.SomeError2Args, "A", "B"));
+        AssertThrows(TestStrings.FormatSomeError3Args("A", "B", "C"), c => Verify.Operation(c, TestStrings.ResourceManager, TestStrings.SomeError3Args, "A", "B", "C"));
+
+        static void AssertThrows(string? expectedMessage, Action<bool> action)
+        {
+            action(true);
+
+            InvalidOperationException actual = Assert.Throws<InvalidOperationException>(() => action(false));
+            Assert.Equal(expectedMessage, actual.Message);
+        }
     }
 
     [Fact]

@@ -1,14 +1,7 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
-// Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
+// Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Threading.Tasks;
-using Validation;
-using Validation.Tests;
-using Xunit;
-using Xunit.Abstractions;
 
 public class RequiresTests
 {
@@ -119,37 +112,54 @@ public class RequiresTests
     [Fact]
     public void Argument_Bool_String_ResourceManager_String()
     {
-        Requires.Argument(true, "someParameter", TestStrings.ResourceManager, nameof(TestStrings.SomeError));
-        ArgumentException ex = Assert.Throws<ArgumentException>(() => Requires.Argument(false, "someParameter", TestStrings.ResourceManager, nameof(TestStrings.SomeError)));
+        Requires.Argument(true, "someParameter", TestStrings.ResourceManager, TestStrings.SomeError);
+        ArgumentException ex = Assert.Throws<ArgumentException>(() => Requires.Argument(false, "someParameter", TestStrings.ResourceManager, TestStrings.SomeError));
         Assert.Equal("someParameter", ex.ParamName);
-        Assert.StartsWith(TestStrings.SomeError, ex.Message);
+        Assert.StartsWith(TestStrings.GetResourceString(TestStrings.SomeError), ex.Message);
     }
 
     [Fact]
     public void Argument_Bool_String_ResourceManager_String_Object()
     {
-        Requires.Argument(true, "someParameter", TestStrings.ResourceManager, nameof(TestStrings.SomeError1Arg), "arg1");
-        ArgumentException ex = Assert.Throws<ArgumentException>(() => Requires.Argument(false, "someParameter", TestStrings.ResourceManager, nameof(TestStrings.SomeError1Arg), "arg1"));
+        Requires.Argument(true, "someParameter", TestStrings.ResourceManager, TestStrings.SomeError1Arg, "arg1");
+        ArgumentException ex = Assert.Throws<ArgumentException>(() => Requires.Argument(false, "someParameter", TestStrings.ResourceManager, TestStrings.SomeError1Arg, "arg1"));
         Assert.Equal("someParameter", ex.ParamName);
-        Assert.StartsWith("Error text arg1", ex.Message);
+        Assert.StartsWith(TestStrings.FormatSomeError1Arg("arg1"), ex.Message);
     }
 
     [Fact]
     public void Argument_Bool_String_ResourceManager_String_Object_Object()
     {
-        Requires.Argument(true, "someParameter", TestStrings.ResourceManager, nameof(TestStrings.SomeError2Args), "arg1", "arg2");
-        ArgumentException ex = Assert.Throws<ArgumentException>(() => Requires.Argument(false, "someParameter", TestStrings.ResourceManager, nameof(TestStrings.SomeError2Args), "arg1", "arg2"));
+        Requires.Argument(true, "someParameter", TestStrings.ResourceManager, TestStrings.SomeError2Args, "arg1", "arg2");
+        ArgumentException ex = Assert.Throws<ArgumentException>(() => Requires.Argument(false, "someParameter", TestStrings.ResourceManager, TestStrings.SomeError2Args, "arg1", "arg2"));
         Assert.Equal("someParameter", ex.ParamName);
-        Assert.StartsWith("Error text arg1 arg2", ex.Message);
+        Assert.StartsWith(TestStrings.FormatSomeError2Args("arg1", "arg2"), ex.Message);
     }
 
     [Fact]
     public void Argument_Bool_String_ResourceManager_String_ObjectArray()
     {
-        Requires.Argument(true, "someParameter", TestStrings.ResourceManager, nameof(TestStrings.SomeError3Args), "arg1", "arg2", "arg3");
-        ArgumentException ex = Assert.Throws<ArgumentException>(() => Requires.Argument(false, "someParameter", TestStrings.ResourceManager, nameof(TestStrings.SomeError3Args), "arg1", "arg2", "arg3"));
+        Requires.Argument(true, "someParameter", TestStrings.ResourceManager, TestStrings.SomeError3Args, "arg1", "arg2", "arg3");
+        ArgumentException ex = Assert.Throws<ArgumentException>(() => Requires.Argument(false, "someParameter", TestStrings.ResourceManager, TestStrings.SomeError3Args, "arg1", "arg2", "arg3"));
         Assert.Equal("someParameter", ex.ParamName);
-        Assert.StartsWith("Error text arg1 arg2 arg3", ex.Message);
+        Assert.StartsWith(TestStrings.FormatSomeError3Args("arg1", "arg2", "arg3"), ex.Message);
+    }
+
+    [Fact]
+    public void Argument_InterpolatedString()
+    {
+        int formatCount = 0;
+        string FormattingMethod()
+        {
+            formatCount++;
+            return "generated string";
+        }
+
+        Requires.Argument(true, "paramName", $"Some {FormattingMethod()} method.");
+        Assert.Equal(0, formatCount);
+        ArgumentException ex = Assert.Throws<ArgumentException>(() => Requires.Argument(false, "paramName", $"Some {FormattingMethod()} method."));
+        Assert.Equal(1, formatCount);
+        Assert.StartsWith("Some generated string method.", ex.Message);
     }
 
     [Fact]
