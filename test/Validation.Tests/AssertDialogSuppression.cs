@@ -25,7 +25,7 @@ internal class AssertDialogSuppression : IDisposable
     /// </summary>
     public AssertDialogSuppression()
     {
-#if NETCOREAPP
+#if NET
         Trace.Listeners.Clear();
 #else
         // We disable the assertion dialog so it doesn't block tests, as we expect some tests to test failure cases.

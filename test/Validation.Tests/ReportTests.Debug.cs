@@ -35,7 +35,7 @@ public class ReportDebugTests : IDisposable
         {
             Report.If(false, FailureMessage);
             listener.Value.Setup(l => l.WriteLine(FailureMessage)).Verifiable();
-#if NETCOREAPP
+#if NET
             listener.Value.Setup(l => l.Fail(FailureMessage, string.Empty)).Verifiable();
 #else
             listener.Value.Setup(l => l.Fail(FailureMessage)).Verifiable();
@@ -51,7 +51,7 @@ public class ReportDebugTests : IDisposable
         {
             Report.IfNot(true, FailureMessage);
             listener.Value.Setup(l => l.WriteLine(FailureMessage)).Verifiable();
-#if NETCOREAPP
+#if NET
             listener.Value.Setup(l => l.Fail(FailureMessage, string.Empty)).Verifiable();
 #else
             listener.Value.Setup(l => l.Fail(FailureMessage)).Verifiable();
@@ -67,7 +67,7 @@ public class ReportDebugTests : IDisposable
         {
             Report.IfNot(true, "a{0}c", "b");
             listener.Value.Setup(l => l.WriteLine("abc")).Verifiable();
-#if NETCOREAPP
+#if NET
             listener.Value.Setup(l => l.Fail("abc", string.Empty)).Verifiable();
 #else
             listener.Value.Setup(l => l.Fail("abc")).Verifiable();
@@ -83,7 +83,7 @@ public class ReportDebugTests : IDisposable
         {
             Report.IfNot(true, "a{0}{1}d", "b", "c");
             listener.Value.Setup(l => l.WriteLine("abcd")).Verifiable();
-#if NETCOREAPP
+#if NET
             listener.Value.Setup(l => l.Fail("abcd", string.Empty)).Verifiable();
 #else
             listener.Value.Setup(l => l.Fail("abcd")).Verifiable();
@@ -99,7 +99,7 @@ public class ReportDebugTests : IDisposable
         {
             Report.IfNot(true, "a{0}{1}{2}e", "b", "c", "d");
             listener.Value.Setup(l => l.WriteLine("abcde")).Verifiable();
-#if NETCOREAPP
+#if NET
             listener.Value.Setup(l => l.Fail("abcde", string.Empty)).Verifiable();
 #else
             listener.Value.Setup(l => l.Fail("abcde")).Verifiable();
@@ -117,7 +117,7 @@ public class ReportDebugTests : IDisposable
             string missingTypeName = possiblyPresent.GetType().FullName!;
             Report.IfNotPresent(possiblyPresent);
             listener.Value.Setup(l => l.WriteLine(It.Is<string>(v => v.Contains(missingTypeName)))).Verifiable();
-#if NETCOREAPP
+#if NET
             listener.Value.Setup(l => l.Fail(It.Is<string>(v => v.Contains(missingTypeName)), string.Empty)).Verifiable();
 #else
             listener.Value.Setup(l => l.Fail(It.Is<string>(v => v.Contains(missingTypeName)))).Verifiable();
@@ -133,7 +133,7 @@ public class ReportDebugTests : IDisposable
         using (DisposableValue<Mock<TraceListener>> listener = Listen())
         {
             listener.Value.Setup(l => l.WriteLine(FailureMessage)).Verifiable();
-#if NETCOREAPP
+#if NET
             listener.Value.Setup(l => l.Fail(FailureMessage, string.Empty)).Verifiable();
 #else
             listener.Value.Setup(l => l.Fail(FailureMessage)).Verifiable();
@@ -148,7 +148,7 @@ public class ReportDebugTests : IDisposable
         using (DisposableValue<Mock<TraceListener>> listener = Listen())
         {
             listener.Value.Setup(l => l.WriteLine(DefaultFailureMessage)).Verifiable();
-#if NETCOREAPP
+#if NET
             listener.Value.Setup(l => l.Fail(DefaultFailureMessage, string.Empty)).Verifiable();
 #else
             listener.Value.Setup(l => l.Fail(DefaultFailureMessage)).Verifiable();
