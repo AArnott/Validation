@@ -119,6 +119,7 @@ public partial class AssumesTests : IDisposable
         Assumes.Present("hi");
     }
 
+#if !NET
     [Fact]
     public void InternalErrorException_IsSerializable()
     {
@@ -141,4 +142,5 @@ public partial class AssumesTests : IDisposable
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
         }
     }
+#endif
 }

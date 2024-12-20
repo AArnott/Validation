@@ -5,16 +5,18 @@ Validation
 exceptions when failures are detected.*
 
 [![NuGet package](https://img.shields.io/nuget/v/Validation.svg)](https://nuget.org/packages/Validation)
-[![Build Status](https://dev.azure.com/andrewarnott/OSS/_apis/build/status/Validation?branchName=master)](https://dev.azure.com/andrewarnott/OSS/_build/latest?definitionId=47&branchName=master)
-[![codecov](https://codecov.io/gh/AArnott/Validation/branch/master/graph/badge.svg)](https://codecov.io/gh/AArnott/Validation)
+[![🏭 Build](https://github.com/AArnott/Validation/actions/workflows/build.yml/badge.svg)](https://github.com/AArnott/Validation/actions/workflows/build.yml)
+[![codecov](https://codecov.io/gh/AArnott/Validation/branch/main/graph/badge.svg)](https://codecov.io/gh/AArnott/Validation)
 
 This project is available as the [Validation][1] NuGet package.
+
+[Check out our full documentation](https://aarnott.github.io/Validation).
 
 Basic input validation via the `Requires` class throws an ArgumentException.
 
 ```cs
-Requires.NotNull(arg1, nameof(arg1));
-Requires.NotNullOrEmpty(arg2, nameof(arg2));
+Requires.NotNull(arg1);
+Requires.NotNullOrEmpty(arg2);
 ```
 
 State validation via the `Verify` class throws an InvalidOperationException.
