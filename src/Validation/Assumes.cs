@@ -150,6 +150,20 @@ namespace Validation
             }
         }
 
+#if NET9_0_OR_GREATER
+        /// <inheritdoc cref="False(bool, string, object?[])"/>
+        [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        public static void False([DoesNotReturnIf(true)] bool condition, [Localizable(false)] string unformattedMessage, params ReadOnlySpan<object?> args)
+        {
+            if (condition)
+            {
+                Fail(Format(unformattedMessage, args));
+            }
+        }
+
+#endif
+
         /// <summary>
         /// Throws an public exception if a condition evaluates to false.
         /// </summary>
@@ -188,6 +202,21 @@ namespace Validation
                 Fail(Format(unformattedMessage, args));
             }
         }
+
+#if NET9_0_OR_GREATER
+
+        /// <inheritdoc cref="True(bool, string, object?[])"/>
+        [DebuggerStepThrough]
+        [TargetedPatchingOptOut("Performance critical to inline across NGen image boundaries")]
+        public static void True([DoesNotReturnIf(false)] bool condition, [Localizable(false)] string unformattedMessage, params ReadOnlySpan<object?> args)
+        {
+            if (!condition)
+            {
+                Fail(Format(unformattedMessage, args));
+            }
+        }
+
+#endif
 
         /// <summary>
         /// Unconditionally throws an <see cref="InternalErrorException"/>.
@@ -324,7 +353,11 @@ namespace Validation
         /// <summary>
         /// Helper method that formats string arguments.
         /// </summary>
+#if NET9_0_OR_GREATER
+        private static string Format(string format, params ReadOnlySpan<object?> arguments)
+#else
         private static string Format(string format, params object?[] arguments)
+#endif
         {
             return PrivateErrorHelpers.Format(format, arguments);
         }

@@ -37,9 +37,16 @@ namespace Validation
         /// Helper method that formats string arguments.
         /// </summary>
         /// <returns>The formatted string.</returns>
+#if NET9_0_OR_GREATER
+        internal static string Format(string format, params ReadOnlySpan<object?> arguments)
+        {
+            return string.Format(CultureInfo.CurrentCulture, format, arguments);
+        }
+#else
         internal static string Format(string format, params object?[] arguments)
         {
             return string.Format(CultureInfo.CurrentCulture, format, arguments);
         }
+#endif
     }
 }

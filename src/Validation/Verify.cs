@@ -61,6 +61,20 @@ namespace Validation
             }
         }
 
+#if NET9_0_OR_GREATER
+
+        /// <inheritdoc cref="Operation(bool, string, object?[])"/>
+        [DebuggerStepThrough]
+        public static void Operation([DoesNotReturnIf(false)] bool condition, string unformattedMessage, params ReadOnlySpan<object?> args)
+        {
+            if (!condition)
+            {
+                throw new InvalidOperationException(PrivateErrorHelpers.Format(unformattedMessage, args));
+            }
+        }
+
+#endif
+
         /// <summary>
         /// Throws an <see cref="InvalidOperationException"/> if a condition is false.
         /// </summary>
@@ -91,6 +105,18 @@ namespace Validation
         {
             throw new InvalidOperationException(PrivateErrorHelpers.Format(message, args));
         }
+
+#if NET9_0_OR_GREATER
+
+        /// <inheritdoc cref="FailOperation(string, object?[])"/>
+        [DebuggerStepThrough]
+        [DoesNotReturn]
+        public static Exception FailOperation(string message, params ReadOnlySpan<object?> args)
+        {
+            throw new InvalidOperationException(PrivateErrorHelpers.Format(message, args));
+        }
+
+#endif
 
         /// <summary>
         /// Throws an <see cref="ObjectDisposedException"/> if an object is disposed.

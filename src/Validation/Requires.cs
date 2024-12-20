@@ -370,6 +370,18 @@ namespace Validation
             }
         }
 
+#if NET9_0_OR_GREATER
+        /// <inheritdoc cref="Argument(bool, string?, string, object?[])"/>"
+        [DebuggerStepThrough]
+        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, string message, params ReadOnlySpan<object?> args)
+        {
+            if (!condition)
+            {
+                throw new ArgumentException(Format(message, args), parameterName);
+            }
+        }
+#endif
+
         /// <summary>
         /// Throws an <see cref="ArgumentException"/> if a condition does not evaluate to true.
         /// </summary>
@@ -440,6 +452,19 @@ namespace Validation
             }
         }
 
+#if NET9_0_OR_GREATER
+        /// <inheritdoc cref="Argument(bool, string?, ResourceManager, string, object?[])"/>
+        [DebuggerStepThrough]
+        public static void Argument([DoesNotReturnIf(false)] bool condition, string? parameterName, ResourceManager resourceManager, string unformattedMessageResourceName, params ReadOnlySpan<object?> args)
+        {
+            NotNull(resourceManager, nameof(resourceManager));
+            if (!condition)
+            {
+                throw new ArgumentException(Format(resourceManager, unformattedMessageResourceName, args), parameterName);
+            }
+        }
+#endif
+
         /// <summary>
         /// Throws an ArgumentException.
         /// </summary>
@@ -462,6 +487,16 @@ namespace Validation
             throw Fail(Format(unformattedMessage, args));
         }
 
+#if NET9_0_OR_GREATER
+        /// <inheritdoc cref="Fail(string, object?[])"/>
+        [DebuggerStepThrough]
+        [DoesNotReturn]
+        public static Exception Fail(string unformattedMessage, params ReadOnlySpan<object?> args)
+        {
+            throw Fail(Format(unformattedMessage, args));
+        }
+#endif
+
         /// <summary>
         /// Throws an ArgumentException.
         /// </summary>
@@ -472,6 +507,16 @@ namespace Validation
         {
             throw new ArgumentException(Format(unformattedMessage, args), innerException);
         }
+
+#if NET9_0_OR_GREATER
+        /// <inheritdoc cref="Fail(Exception, string, object?[])"/>
+        [DebuggerStepThrough]
+        [DoesNotReturn]
+        public static Exception Fail(Exception? innerException, string unformattedMessage, params ReadOnlySpan<object?> args)
+        {
+            throw new ArgumentException(Format(unformattedMessage, args), innerException);
+        }
+#endif
 
 #if !NET35
         /// <summary>
@@ -609,6 +654,35 @@ namespace Validation
             }
         }
 
+#if NET9_0_OR_GREATER
+        /// <inheritdoc cref="ValidElements{T}(IEnumerable{T}, Predicate{T}, string?, string, object?[])"/>
+        [DebuggerStepThrough]
+        public static void ValidElements<T>([ValidatedNotNull] IEnumerable<T> values, Predicate<T> predicate, string? parameterName, string unformattedMessage, params ReadOnlySpan<object?> args)
+        {
+            // To whoever is doing random code cleaning:
+            // Consider the performance when changing the code to delegate to NotNull.
+            // In general do not chain call to another function, check first and return as early as possible.
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            if (predicate is null)
+            {
+                throw new ArgumentNullException(nameof(predicate));
+            }
+
+            foreach (T value in values)
+            {
+                if (!predicate(value))
+                {
+                    throw new ArgumentException(PrivateErrorHelpers.Format(unformattedMessage, args), parameterName);
+                }
+            }
+        }
+
+#endif
+
         /// <summary>
         /// Validates some expression describing the acceptable condition for an argument evaluates to true.
         /// </summary>
@@ -627,12 +701,20 @@ namespace Validation
         /// <summary>
         /// Helper method that formats string arguments.
         /// </summary>
+#if NET9_0_OR_GREATER
+        private static string Format(string format, params ReadOnlySpan<object?> arguments)
+#else
         private static string Format(string format, params object?[] arguments)
+#endif
         {
             return PrivateErrorHelpers.Format(format, arguments);
         }
 
+#if NET9_0_OR_GREATER
+        private static string Format(ResourceManager resourceManager, string resourceName, params ReadOnlySpan<object?> arguments)
+#else
         private static string Format(ResourceManager resourceManager, string resourceName, params object?[] arguments)
+#endif
         {
             return Format(resourceManager.GetString(resourceName, CultureInfo.CurrentCulture) ?? $"Missing resource named {resourceManager}", arguments);
         }
