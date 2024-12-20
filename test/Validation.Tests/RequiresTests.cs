@@ -2,9 +2,6 @@
 // Licensed under the Ms-PL license. See LICENSE file in the project root for full license information.
 
 using System.ComponentModel;
-using Validation;
-using Xunit;
-using Xunit.Abstractions;
 
 public class RequiresTests
 {

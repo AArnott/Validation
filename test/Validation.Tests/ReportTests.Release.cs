@@ -4,12 +4,9 @@
 // Ensure the tests defined in this file always emulate a client compiled for Release
 #undef DEBUG
 
-using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Moq;
-using Validation;
-using Xunit;
 
 /// <summary>
 /// Verify that the message does NOT propagate to the trace listeners when
