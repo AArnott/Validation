@@ -1,5 +1,8 @@
 {
   "settings": {
+    "orderingRules": {
+      "usingDirectivesPlacement": "outsideNamespace"
+    },
     "documentationRules": {
       "xmlHeader": false,
       "companyName": "Andrew Arnott",

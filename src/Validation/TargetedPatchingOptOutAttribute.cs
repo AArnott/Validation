@@ -5,18 +5,17 @@
 
 #pragma warning disable SA1600 // Elements should be documented
 
-namespace System.Runtime
-{
-    [AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    internal sealed class TargetedPatchingOptOutAttribute : Attribute
-    {
-        public TargetedPatchingOptOutAttribute(string reason)
-        {
-            this.Reason = reason;
-        }
+namespace System.Runtime;
 
-        public string Reason { get; }
+[AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+internal sealed class TargetedPatchingOptOutAttribute : Attribute
+{
+    public TargetedPatchingOptOutAttribute(string reason)
+    {
+        this.Reason = reason;
     }
+
+    public string Reason { get; }
 }
 
 #endif

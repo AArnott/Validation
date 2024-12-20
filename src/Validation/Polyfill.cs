@@ -9,14 +9,13 @@
 #pragma warning disable SA1649 // File name should match first type name
 #pragma warning disable SA1600 // Elements should be documented
 
-namespace System.Runtime.CompilerServices
+namespace System.Runtime.CompilerServices;
+
+[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
+internal sealed class CallerArgumentExpressionAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
-    internal sealed class CallerArgumentExpressionAttribute : Attribute
+    internal CallerArgumentExpressionAttribute(string parameterName)
     {
-        internal CallerArgumentExpressionAttribute(string parameterName)
-        {
-        }
     }
 }
 

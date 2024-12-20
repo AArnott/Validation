@@ -1,21 +1,20 @@
 ﻿// Copyright (c) Andrew Arnott. All rights reserved.
 // Licensed under the Ms-PL license. See LICENSE.txt file in the project root for full license information.
 
-namespace Validation
-{
-    using System;
+using System;
 
+namespace Validation;
+
+/// <summary>
+/// Indicates to Code Analysis that a method validates a particular parameter.
+/// </summary>
+[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
+public sealed class ValidatedNotNullAttribute : Attribute
+{
     /// <summary>
-    /// Indicates to Code Analysis that a method validates a particular parameter.
+    /// Initializes a new instance of the <see cref="ValidatedNotNullAttribute"/> class.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
-    public sealed class ValidatedNotNullAttribute : Attribute
+    public ValidatedNotNullAttribute()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ValidatedNotNullAttribute"/> class.
-        /// </summary>
-        public ValidatedNotNullAttribute()
-        {
-        }
     }
 }
