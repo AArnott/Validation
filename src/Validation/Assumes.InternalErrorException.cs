@@ -43,6 +43,9 @@ namespace Validation
             /// Initializes a new instance of the <see cref="InternalErrorException"/> class.
             /// </summary>
             [DebuggerStepThrough]
+#if NET
+            [Obsolete]
+#endif
             private InternalErrorException(SerializationInfo info, StreamingContext context)
                 : base(info, context)
             {

@@ -399,11 +399,13 @@ namespace Validation
             NotNull(resourceManager, nameof(resourceManager));
             if (!condition)
             {
-                throw new ArgumentException(Format(resourceManager.GetString(unformattedMessageResourceName, CultureInfo.CurrentCulture), arg1), parameterName);
+                throw new ArgumentException(Format(resourceManager, unformattedMessageResourceName, arg1), parameterName);
             }
         }
 
-        /// <inheritdoc cref="Argument(bool, string?, ResourceManager, string)"/>
+        /// <inheritdoc cref="Argument(bool, string?, ResourceManager, string)" path="/summary"/>
+        /// <inheritdoc cref="Argument(bool, string?, ResourceManager, string)" path="/remarks"/>
+        /// <inheritdoc cref="Argument(bool, string?, ResourceManager, string)" path="/exception"/>
         /// <param name="unformattedMessageResourceName">The name of the string resource to obtain for the exception message. For example: <c>nameof(Strings.SomeError)</c>.</param>
         /// <param name="condition"><inheritdoc cref="Argument(bool, string?, ResourceManager, string)" path="/param[@name='condition']"/></param>
         /// <param name="parameterName"><inheritdoc cref="Argument(bool, string?, ResourceManager, string)" path="/param[@name='parameterName']"/></param>
@@ -416,11 +418,13 @@ namespace Validation
             NotNull(resourceManager, nameof(resourceManager));
             if (!condition)
             {
-                throw new ArgumentException(Format(resourceManager.GetString(unformattedMessageResourceName, CultureInfo.CurrentCulture), arg1, arg2), parameterName);
+                throw new ArgumentException(Format(resourceManager, unformattedMessageResourceName, arg1, arg2), parameterName);
             }
         }
 
-        /// <inheritdoc cref="Argument(bool, string?, ResourceManager, string)"/>
+        /// <inheritdoc cref="Argument(bool, string?, ResourceManager, string)" path="/summary"/>
+        /// <inheritdoc cref="Argument(bool, string?, ResourceManager, string)" path="/remarks"/>
+        /// <inheritdoc cref="Argument(bool, string?, ResourceManager, string)" path="/exception"/>
         /// <param name="unformattedMessageResourceName">The name of the string resource to obtain for the exception message. For example: <c>nameof(Strings.SomeError)</c>.</param>
         /// <param name="condition"><inheritdoc cref="Argument(bool, string?, ResourceManager, string)" path="/param[@name='condition']"/></param>
         /// <param name="parameterName"><inheritdoc cref="Argument(bool, string?, ResourceManager, string)" path="/param[@name='parameterName']"/></param>
@@ -432,7 +436,7 @@ namespace Validation
             NotNull(resourceManager, nameof(resourceManager));
             if (!condition)
             {
-                throw new ArgumentException(Format(resourceManager.GetString(unformattedMessageResourceName, CultureInfo.CurrentCulture), args), parameterName);
+                throw new ArgumentException(Format(resourceManager, unformattedMessageResourceName, args), parameterName);
             }
         }
 
@@ -626,6 +630,11 @@ namespace Validation
         private static string Format(string format, params object?[] arguments)
         {
             return PrivateErrorHelpers.Format(format, arguments);
+        }
+
+        private static string Format(ResourceManager resourceManager, string resourceName, params object?[] arguments)
+        {
+            return Format(resourceManager.GetString(resourceName, CultureInfo.CurrentCulture) ?? $"Missing resource named {resourceManager}", arguments);
         }
     }
 }

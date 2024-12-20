@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net35;net462</TargetFrameworks>
-    <CodeAnalysisRuleSet>Validation.ruleset</CodeAnalysisRuleSet>
+    <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net462</TargetFrameworks>
+    <TargetFrameworks Condition="'$(MSBuildRuntimeType)'=='Full'">$(TargetFrameworks);net35</TargetFrameworks>
     <Title>Input and runtime validation</Title>
-    <Summary>Provides convenient methods and code snippets for validating input and running state.</Summary>
     <Description>Method input validation and runtime checks that report errors or throw exceptions when failures are detected.</Description>
     <Product>Validation</Product>
     <PackageTags>InputValidation IntegrityCheck</PackageTags>
@@ -18,17 +18,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\README.md">
-      <Pack>true</Pack>
-      <PackagePath>README.md</PackagePath>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Strings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <Target Name="WarnIncompleteBuild" BeforeTargets="Pack" Condition="'$(MSBuildRuntimeType)'!='Full'">
+    <Warning Text="This package will contain a subset of the shipping binaries. Use msbuild.exe on Windows for a complete build." Code="IncompleteBuild" />
+  </Target>
 </Project>
