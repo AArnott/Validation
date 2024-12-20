@@ -4,9 +4,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)AssemblyInfo.cs" Condition=" '$(Language)'=='C#' " />
     <Compile Include="$(MSBuildThisFileDirectory)AssemblyInfo.vb" Condition=" '$(Language)'=='VB' " />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="*.resx" EmitFormatMethods="true" />
-  </ItemGroup>
 
   <Import Project="$([MSBuild]::GetPathOfFileAbove($(MSBuildThisFile), $(MSBuildThisFileDirectory)..))" />
 </Project>

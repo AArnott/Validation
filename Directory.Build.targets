@@ -5,6 +5,9 @@
     <LangVersion Condition="'$(Language)'=='VB'">16.9</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Update="*.resx" EmitFormatMethods="true" AsConstants="$(ResxAsConstants)" />
+  </ItemGroup>
+  <ItemGroup>
     <!-- Avoid compile error about missing namespace when combining ImplicitUsings with .NET Framework target frameworks. -->
     <Using Remove="System.Net.Http" Condition="'$(TargetFrameworkIdentifier)'=='.NETFramework'" />
     <Using Remove="System.Threading.Tasks" Condition="'$(TargetFramework)'=='net35'" />
