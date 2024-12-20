@@ -10,21 +10,6 @@
     <PackageTags>InputValidation IntegrityCheck</PackageTags>
   </PropertyGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Strings.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
   <Target Name="WarnIncompleteBuild" BeforeTargets="Pack" Condition="'$(MSBuildRuntimeType)'!='Full'">
     <Warning Text="This package will contain a subset of the shipping binaries. Use msbuild.exe on Windows for a complete build." Code="IncompleteBuild" />
   </Target>
