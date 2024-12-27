@@ -3,5 +3,4 @@
 
 global using Validation;
 global using Xunit;
-global using Xunit.Abstractions;
 global using TestStrings = Validation.Tests.TestStrings;
