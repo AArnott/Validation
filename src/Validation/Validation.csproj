@@ -4,6 +4,7 @@
     <TargetFrameworks>net8.0;net9.0;netstandard2.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net462</TargetFrameworks>
     <TargetFrameworks Condition="'$(MSBuildRuntimeType)'=='Full'">$(TargetFrameworks);net35</TargetFrameworks>
+    <PackageValidationBaselineVersion>2.6.68</PackageValidationBaselineVersion>
     <Title>Input and runtime validation</Title>
     <Description>Method input validation and runtime checks that report errors or throw exceptions when failures are detected.</Description>
     <Product>Validation</Product>
