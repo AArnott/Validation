@@ -65,7 +65,7 @@ jobs:
         Echo "runid=$runid" >> $env:GITHUB_OUTPUT
 
     - name: 🔻 Download deployables artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: deployables-Windows
         path: ${{ runner.temp }}/deployables
