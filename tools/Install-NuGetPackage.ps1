@@ -1,7 +1,7 @@
 <#
 .SYNOPSIS
     Installs a NuGet package.
-.PARAMETER PackageID
+.PARAMETER PackageId
     The Package ID to install.
 .PARAMETER Version
     The version of the package to install. If unspecified, the latest stable release is installed.
