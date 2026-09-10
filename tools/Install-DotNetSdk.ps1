@@ -36,7 +36,11 @@ if (!(Test-Path $DotNetInstallScriptRoot)) { New-Item -ItemType Directory -Path 
 $DotNetInstallScriptRoot = Resolve-Path $DotNetInstallScriptRoot
 
 # Look up actual required .NET SDK version from global.json
-$sdkVersion = & "$PSScriptRoot/variables/DotNetSdkVersion.ps1"
+$sdks = @(New-Object PSObject -Property @{ Version = & "$PSScriptRoot/variables/DotNetSdkVersion.ps1" })
+
+# Sometimes a repo requires extra SDKs to be installed (e.g. msbuild.locator scenarios running in tests).
+# In such a circumstance, a precise SDK version or a channel can be added as in the example below:
+# $sdks += New-Object PSObject -Property @{ Channel = '8.0' }
 
 If ($IncludeX86 -and ($IsMacOS -or $IsLinux)) {
     Write-Verbose "Ignoring -IncludeX86 switch because 32-bit runtimes are only supported on Windows."
@@ -110,9 +114,12 @@ Function Get-FileFromWeb([Uri]$Uri, $OutDir) {
 Function Get-InstallerExe(
     $Version,
     $Architecture,
-    [ValidateSet('Sdk','Runtime','WindowsDesktop')]
+    [ValidateSet('Sdk','Runtime','WindowsDesktop','AspNetCore')]
     [string]$sku
 ) {
+    $feedSku = if ($sku -eq 'AspNetCore') { 'aspnetcore/Runtime' } else { $sku }
+    $releaseSku = if ($sku -eq 'AspNetCore') { 'aspnetcore-runtime' } else { $sku }
+
     # Get the latest/actual version for the specified one
     $TypedVersion = $null
     if (![Version]::TryParse($Version, [ref] $TypedVersion)) {
@@ -121,7 +128,7 @@ Function Get-InstallerExe(
     }
 
     if ($TypedVersion.Build -eq -1) {
-        $versionInfo = -Split (Invoke-WebRequest -Uri "https://dotnetcli.blob.core.windows.net/dotnet/$sku/$Version/latest.version" -UseBasicParsing)
+        $versionInfo = -Split (Invoke-WebRequest -Uri "https://dotnetcli.blob.core.windows.net/dotnet/$feedSku/$Version/latest.version" -UseBasicParsing)
         $Version = $versionInfo[-1]
     }
 
@@ -135,10 +142,10 @@ Function Get-InstallerExe(
     $url = $null
     foreach ($release in $releases.releases) {
         $filesElement = $null
-        if ($release.$sku.version -eq $Version) {
-            $filesElement = $release.$sku.files
+        if ($release.$releaseSku.version -eq $Version) {
+            $filesElement = $release.$releaseSku.files
         }
-        if (!$filesElement -and ($sku -eq 'sdk') -and $release.sdks) {
+        if (!$filesElement -and ($releaseSku -eq 'sdk') -and $release.sdks) {
             foreach ($sdk in $release.sdks) {
                 if ($sdk.version -eq $Version) {
                     $filesElement = $sdk.files
@@ -168,10 +175,17 @@ Function Get-InstallerExe(
     }
 }
 
-Function Install-DotNet($Version, $Architecture, [ValidateSet('Sdk','Runtime','WindowsDesktop','AspNetCore')][string]$sku = 'Sdk') {
-    Write-Host "Downloading .NET $sku $Version..."
-    $Installer = Get-InstallerExe -Version $Version -Architecture $Architecture -sku $sku
-    Write-Host "Installing .NET $sku $Version..."
+Function Install-DotNet($Version, $Channel, $Architecture, [ValidateSet('Sdk','Runtime','WindowsDesktop','AspNetCore')][string]$sku = 'Sdk') {
+    $versionOrChannel = if ($Version) { $Version } else { $Channel }
+    if (!$Version) {
+        $feedSku = if ($sku -eq 'AspNetCore') { 'aspnetcore/Runtime' } else { $sku }
+        $versionInfo = -Split (Invoke-WebRequest -Uri "https://dotnetcli.blob.core.windows.net/dotnet/$feedSku/$Channel/latest.version" -UseBasicParsing)
+        $versionOrChannel = $versionInfo[-1]
+    }
+
+    Write-Host "Downloading .NET $sku $versionOrChannel..."
+    $Installer = Get-InstallerExe -Version $versionOrChannel -Architecture $Architecture -sku $sku
+    Write-Host "Installing .NET $sku $versionOrChannel..."
     cmd /c start /wait $Installer /install /passive /norestart
     if ($LASTEXITCODE -eq 3010) {
         Write-Verbose "Restart required"
@@ -180,7 +194,6 @@ Function Install-DotNet($Version, $Architecture, [ValidateSet('Sdk','Runtime','W
     }
 }
 
-$switches = @()
 $envVars = @{
     # For locally installed dotnet, skip first time experience which takes a long time
     'DOTNET_SKIP_FIRST_TIME_EXPERIENCE' = 'true';
@@ -191,47 +204,50 @@ if ($InstallLocality -eq 'machine') {
         $DotNetInstallDir = '/usr/share/dotnet'
     } else {
         $restartRequired = $false
-        if ($PSCmdlet.ShouldProcess(".NET SDK $sdkVersion", "Install")) {
-            Install-DotNet -Version $sdkVersion -Architecture $arch
-            $restartRequired = $restartRequired -or ($LASTEXITCODE -eq 3010)
-
-            if ($IncludeX86) {
-                Install-DotNet -Version $sdkVersion -Architecture x86
-                $restartRequired = $restartRequired -or ($LASTEXITCODE -eq 3010)
-            }
-        }
-
-        $runtimeVersions | Sort-Object | Get-Unique |% {
-            if ($PSCmdlet.ShouldProcess(".NET runtime $_", "Install")) {
-                Install-DotNet -Version $_ -sku Runtime -Architecture $arch
+        foreach ($sdk in $sdks) {
+            if ($sdk.Version) { $version = $sdk.Version } else { $version = $sdk.Channel }
+            if ($PSCmdlet.ShouldProcess(".NET SDK $version ($arch)", "Install")) {
+                if ($sdk.Version) { Install-DotNet -Version $sdk.Version -Architecture $arch } else { Install-DotNet -Channel $sdk.Channel -Architecture $arch }
                 $restartRequired = $restartRequired -or ($LASTEXITCODE -eq 3010)
 
                 if ($IncludeX86) {
-                    Install-DotNet -Version $_ -sku Runtime -Architecture x86
+                    if ($sdk.Version) { Install-DotNet -Version $sdk.Version -Architecture x86 } else { Install-DotNet -Channel $sdk.Channel -Architecture x86 }
                     $restartRequired = $restartRequired -or ($LASTEXITCODE -eq 3010)
                 }
             }
         }
 
-        $windowsDesktopRuntimeVersions | Sort-Object | Get-Unique |% {
-            if ($PSCmdlet.ShouldProcess(".NET Windows Desktop $_", "Install")) {
-                Install-DotNet -Version $_ -sku WindowsDesktop -Architecture $arch
+        foreach ($runtimeVersion in ($runtimeVersions | Sort-Object | Get-Unique)) {
+            if ($PSCmdlet.ShouldProcess(".NET runtime $runtimeVersion", "Install")) {
+                Install-DotNet -Version $runtimeVersion -sku Runtime -Architecture $arch
                 $restartRequired = $restartRequired -or ($LASTEXITCODE -eq 3010)
 
                 if ($IncludeX86) {
-                    Install-DotNet -Version $_ -sku WindowsDesktop -Architecture x86
+                    Install-DotNet -Version $runtimeVersion -sku Runtime -Architecture x86
                     $restartRequired = $restartRequired -or ($LASTEXITCODE -eq 3010)
                 }
             }
         }
 
-        $aspnetRuntimeVersions | Sort-Object | Get-Unique |% {
-            if ($PSCmdlet.ShouldProcess("ASP.NET Core $_", "Install")) {
-                Install-DotNet -Version $_ -sku AspNetCore -Architecture $arch
+        foreach ($runtimeVersion in ($windowsDesktopRuntimeVersions | Sort-Object | Get-Unique)) {
+            if ($PSCmdlet.ShouldProcess(".NET Windows Desktop $runtimeVersion", "Install")) {
+                Install-DotNet -Version $runtimeVersion -sku WindowsDesktop -Architecture $arch
                 $restartRequired = $restartRequired -or ($LASTEXITCODE -eq 3010)
 
                 if ($IncludeX86) {
-                    Install-DotNet -Version $_ -sku AspNetCore -Architecture x86
+                    Install-DotNet -Version $runtimeVersion -sku WindowsDesktop -Architecture x86
+                    $restartRequired = $restartRequired -or ($LASTEXITCODE -eq 3010)
+                }
+            }
+        }
+
+        foreach ($runtimeVersion in ($aspnetRuntimeVersions | Sort-Object | Get-Unique)) {
+            if ($PSCmdlet.ShouldProcess("ASP.NET Core $runtimeVersion", "Install")) {
+                Install-DotNet -Version $runtimeVersion -sku AspNetCore -Architecture $arch
+                $restartRequired = $restartRequired -or ($LASTEXITCODE -eq 3010)
+
+                if ($IncludeX86) {
+                    Install-DotNet -Version $runtimeVersion -sku AspNetCore -Architecture x86
                     $restartRequired = $restartRequired -or ($LASTEXITCODE -eq 3010)
                 }
             }
@@ -274,10 +290,10 @@ if ($IncludeX86) {
 }
 
 if ($IsMacOS -or $IsLinux) {
-    $DownloadUri = "https://raw.githubusercontent.com/dotnet/install-scripts/0b09de9bc136cacb5f849a6957ebd4062173c148/src/dotnet-install.sh"
+    $DownloadUri = "https://raw.githubusercontent.com/dotnet/install-scripts/a3fbd0fd625032bac207f1f590e5353fe26faa59/src/dotnet-install.sh"
     $DotNetInstallScriptPath = "$DotNetInstallScriptRoot/dotnet-install.sh"
 } else {
-    $DownloadUri = "https://raw.githubusercontent.com/dotnet/install-scripts/0b09de9bc136cacb5f849a6957ebd4062173c148/src/dotnet-install.ps1"
+    $DownloadUri = "https://raw.githubusercontent.com/dotnet/install-scripts/a3fbd0fd625032bac207f1f590e5353fe26faa59/src/dotnet-install.ps1"
     $DotNetInstallScriptPath = "$DotNetInstallScriptRoot/dotnet-install.ps1"
 }
 
@@ -288,126 +304,141 @@ if (-not (Test-Path $DotNetInstallScriptPath)) {
     }
 }
 
-# In case the script we invoke is in a directory with spaces, wrap it with single quotes.
-# In case the path includes single quotes, escape them.
-$DotNetInstallScriptPathExpression = $DotNetInstallScriptPath.Replace("'", "''")
-$DotNetInstallScriptPathExpression = "& '$DotNetInstallScriptPathExpression'"
-
 $anythingInstalled = $false
 $global:LASTEXITCODE = 0
 
-if ($PSCmdlet.ShouldProcess(".NET SDK $sdkVersion", "Install")) {
-    $anythingInstalled = $true
-    Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Version $sdkVersion -Architecture $arch -InstallDir $DotNetInstallDir $switches"
-
-    if ($LASTEXITCODE -ne 0) {
-        Write-Error ".NET SDK installation failure: $LASTEXITCODE"
-        exit $LASTEXITCODE
-    }
-} else {
-    Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Version $sdkVersion -Architecture $arch -InstallDir $DotNetInstallDir $switches -DryRun"
-}
-
-if ($IncludeX86) {
-    if ($PSCmdlet.ShouldProcess(".NET x86 SDK $sdkVersion", "Install")) {
-        $anythingInstalled = $true
-        Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Version $sdkVersion -Architecture x86 -InstallDir $DotNetX86InstallDir $switches"
-
-        if ($LASTEXITCODE -ne 0) {
-            Write-Error ".NET x86 SDK installation failure: $LASTEXITCODE"
-            exit $LASTEXITCODE
-        }
+Function Invoke-DotNetInstallScript($Version, $Channel, $Runtime, $Architecture, $InstallDir, [switch]$DryRun) {
+    if ($IsMacOS -or $IsLinux) {
+        $installArguments = @()
+        if ($Version) { $installArguments += '-Version', $Version }
+        if ($Channel) { $installArguments += '-Channel', $Channel }
+        if ($Runtime) { $installArguments += '-Runtime', $Runtime }
+        $installArguments += '-Architecture', $Architecture, '-InstallDir', $InstallDir
+        if ($DryRun) { $installArguments += '-DryRun' }
+        & $DotNetInstallScriptPath @installArguments
     } else {
-        Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Version $sdkVersion -Architecture x86 -InstallDir $DotNetX86InstallDir $switches -DryRun"
+        $installParameters = @{
+            Architecture = $Architecture
+            InstallDir = $InstallDir
+        }
+        if ($Version) { $installParameters['Version'] = $Version }
+        if ($Channel) { $installParameters['Channel'] = $Channel }
+        if ($Runtime) { $installParameters['Runtime'] = $Runtime }
+        if ($DryRun) { $installParameters['DryRun'] = $true }
+        & $DotNetInstallScriptPath @installParameters
     }
 }
 
-$dotnetRuntimeSwitches = $switches + '-Runtime','dotnet'
+foreach ($sdk in $sdks) {
+    $sdkVersion = if ($sdk.Version) { $sdk.Version } else { $sdk.Channel }
 
-$runtimeVersions | Sort-Object -Unique |% {
-    if ($PSCmdlet.ShouldProcess(".NET $Arch runtime $_", "Install")) {
+    if ($PSCmdlet.ShouldProcess(".NET SDK $sdkVersion ($arch)", "Install")) {
         $anythingInstalled = $true
-        Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Channel $_ -Architecture $arch -InstallDir $DotNetInstallDir $dotnetRuntimeSwitches"
+        Invoke-DotNetInstallScript -Version $sdk.Version -Channel $sdk.Channel -Architecture $arch -InstallDir $DotNetInstallDir
 
         if ($LASTEXITCODE -ne 0) {
             Write-Error ".NET SDK installation failure: $LASTEXITCODE"
             exit $LASTEXITCODE
         }
     } else {
-        Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Channel $_ -Architecture $arch -InstallDir $DotNetInstallDir $dotnetRuntimeSwitches -DryRun"
+        Invoke-DotNetInstallScript -Version $sdk.Version -Channel $sdk.Channel -Architecture $arch -InstallDir $DotNetInstallDir -DryRun
     }
 
     if ($IncludeX86) {
-        if ($PSCmdlet.ShouldProcess(".NET x86 runtime $_", "Install")) {
+        if ($PSCmdlet.ShouldProcess(".NET x86 SDK $sdkVersion", "Install")) {
             $anythingInstalled = $true
-            Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Channel $_ -Architecture x86 -InstallDir $DotNetX86InstallDir $dotnetRuntimeSwitches"
+            Invoke-DotNetInstallScript -Version $sdk.Version -Channel $sdk.Channel -Architecture x86 -InstallDir $DotNetX86InstallDir
 
             if ($LASTEXITCODE -ne 0) {
-                Write-Error ".NET SDK installation failure: $LASTEXITCODE"
+                Write-Error ".NET x86 SDK installation failure: $LASTEXITCODE"
                 exit $LASTEXITCODE
             }
         } else {
-            Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Channel $_ -Architecture x86 -InstallDir $DotNetX86InstallDir $dotnetRuntimeSwitches -DryRun"
+            Invoke-DotNetInstallScript -Version $sdk.Version -Channel $sdk.Channel -Architecture x86 -InstallDir $DotNetX86InstallDir -DryRun
         }
     }
 }
 
-$windowsDesktopRuntimeSwitches = $switches + '-Runtime','windowsdesktop'
-
-$windowsDesktopRuntimeVersions | Sort-Object -Unique |% {
-    if ($PSCmdlet.ShouldProcess(".NET WindowsDesktop $arch runtime $_", "Install")) {
+foreach ($runtimeVersion in ($runtimeVersions | Sort-Object -Unique)) {
+    if ($PSCmdlet.ShouldProcess(".NET $Arch runtime $runtimeVersion", "Install")) {
         $anythingInstalled = $true
-        Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Channel $_ -Architecture $arch -InstallDir $DotNetInstallDir $windowsDesktopRuntimeSwitches"
+        Invoke-DotNetInstallScript -Channel $runtimeVersion -Runtime dotnet -Architecture $arch -InstallDir $DotNetInstallDir
 
         if ($LASTEXITCODE -ne 0) {
             Write-Error ".NET SDK installation failure: $LASTEXITCODE"
             exit $LASTEXITCODE
         }
     } else {
-        Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Channel $_ -Architecture $arch -InstallDir $DotNetInstallDir $windowsDesktopRuntimeSwitches -DryRun"
+        Invoke-DotNetInstallScript -Channel $runtimeVersion -Runtime dotnet -Architecture $arch -InstallDir $DotNetInstallDir -DryRun
     }
 
     if ($IncludeX86) {
-        if ($PSCmdlet.ShouldProcess(".NET WindowsDesktop x86 runtime $_", "Install")) {
+        if ($PSCmdlet.ShouldProcess(".NET x86 runtime $runtimeVersion", "Install")) {
             $anythingInstalled = $true
-            Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Channel $_ -Architecture x86 -InstallDir $DotNetX86InstallDir $windowsDesktopRuntimeSwitches"
+            Invoke-DotNetInstallScript -Channel $runtimeVersion -Runtime dotnet -Architecture x86 -InstallDir $DotNetX86InstallDir
 
             if ($LASTEXITCODE -ne 0) {
                 Write-Error ".NET SDK installation failure: $LASTEXITCODE"
                 exit $LASTEXITCODE
             }
         } else {
-            Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Channel $_ -Architecture x86 -InstallDir $DotNetX86InstallDir $windowsDesktopRuntimeSwitches -DryRun"
+            Invoke-DotNetInstallScript -Channel $runtimeVersion -Runtime dotnet -Architecture x86 -InstallDir $DotNetX86InstallDir -DryRun
         }
     }
 }
 
-$aspnetRuntimeSwitches = $switches + '-Runtime','aspnetcore'
-
-$aspnetRuntimeVersions | Sort-Object -Unique |% {
-    if ($PSCmdlet.ShouldProcess(".NET ASP.NET Core $arch runtime $_", "Install")) {
+foreach ($runtimeVersion in ($windowsDesktopRuntimeVersions | Sort-Object -Unique)) {
+    if ($PSCmdlet.ShouldProcess(".NET WindowsDesktop $arch runtime $runtimeVersion", "Install")) {
         $anythingInstalled = $true
-        Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Channel $_ -Architecture $arch -InstallDir $DotNetInstallDir $aspnetRuntimeSwitches"
+        Invoke-DotNetInstallScript -Channel $runtimeVersion -Runtime windowsdesktop -Architecture $arch -InstallDir $DotNetInstallDir
 
         if ($LASTEXITCODE -ne 0) {
             Write-Error ".NET SDK installation failure: $LASTEXITCODE"
             exit $LASTEXITCODE
         }
     } else {
-        Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Channel $_ -Architecture $arch -InstallDir $DotNetInstallDir $aspnetRuntimeSwitches -DryRun"
+        Invoke-DotNetInstallScript -Channel $runtimeVersion -Runtime windowsdesktop -Architecture $arch -InstallDir $DotNetInstallDir -DryRun
     }
 
     if ($IncludeX86) {
-        if ($PSCmdlet.ShouldProcess(".NET ASP.NET Core x86 runtime $_", "Install")) {
+        if ($PSCmdlet.ShouldProcess(".NET WindowsDesktop x86 runtime $runtimeVersion", "Install")) {
             $anythingInstalled = $true
-            Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Channel $_ -Architecture x86 -InstallDir $DotNetX86InstallDir $aspnetRuntimeSwitches"
+            Invoke-DotNetInstallScript -Channel $runtimeVersion -Runtime windowsdesktop -Architecture x86 -InstallDir $DotNetX86InstallDir
 
             if ($LASTEXITCODE -ne 0) {
                 Write-Error ".NET SDK installation failure: $LASTEXITCODE"
                 exit $LASTEXITCODE
             }
         } else {
-            Invoke-Expression -Command "$DotNetInstallScriptPathExpression -Channel $_ -Architecture x86 -InstallDir $DotNetX86InstallDir $aspnetRuntimeSwitches -DryRun"
+            Invoke-DotNetInstallScript -Channel $runtimeVersion -Runtime windowsdesktop -Architecture x86 -InstallDir $DotNetX86InstallDir -DryRun
+        }
+    }
+}
+
+foreach ($runtimeVersion in ($aspnetRuntimeVersions | Sort-Object -Unique)) {
+    if ($PSCmdlet.ShouldProcess(".NET ASP.NET Core $arch runtime $runtimeVersion", "Install")) {
+        $anythingInstalled = $true
+        Invoke-DotNetInstallScript -Channel $runtimeVersion -Runtime aspnetcore -Architecture $arch -InstallDir $DotNetInstallDir
+
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error ".NET SDK installation failure: $LASTEXITCODE"
+            exit $LASTEXITCODE
+        }
+    } else {
+        Invoke-DotNetInstallScript -Channel $runtimeVersion -Runtime aspnetcore -Architecture $arch -InstallDir $DotNetInstallDir -DryRun
+    }
+
+    if ($IncludeX86) {
+        if ($PSCmdlet.ShouldProcess(".NET ASP.NET Core x86 runtime $runtimeVersion", "Install")) {
+            $anythingInstalled = $true
+            Invoke-DotNetInstallScript -Channel $runtimeVersion -Runtime aspnetcore -Architecture x86 -InstallDir $DotNetX86InstallDir
+
+            if ($LASTEXITCODE -ne 0) {
+                Write-Error ".NET SDK installation failure: $LASTEXITCODE"
+                exit $LASTEXITCODE
+            }
+        } else {
+            Invoke-DotNetInstallScript -Channel $runtimeVersion -Runtime aspnetcore -Architecture x86 -InstallDir $DotNetX86InstallDir -DryRun
         }
     }
 }

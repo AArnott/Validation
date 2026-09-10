@@ -1,0 +1,70 @@
+<#
+.SYNOPSIS
+    Installs a NuGet package.
+.PARAMETER PackageId
+    The Package ID to install.
+.PARAMETER Version
+    The version of the package to install. If unspecified, the latest stable release is installed.
+.PARAMETER Source
+    The package source feed to find the package to install from.
+.PARAMETER Prerelease
+    Include prerelease packages when searching for the latest version.
+.PARAMETER ExcludeVersion
+    Installs the package without adding the version to the folder name.
+.PARAMETER DirectDownload
+    Bypass the local cache when downloading packages.
+.PARAMETER PackagesDir
+    The directory to install the package to. By default, it uses the Packages folder at the root of the repo.
+.PARAMETER ConfigFile
+    The nuget.config file to use. By default, it uses :/nuget.config.
+.PARAMETER Verbosity
+    The verbosity level to pass to NuGet.
+.OUTPUTS
+    System.String. The path to the installed package.
+#>
+[CmdletBinding(SupportsShouldProcess=$true,ConfirmImpact='Low')]
+Param(
+    [Parameter(Position=1,Mandatory=$true)]
+    [string]$PackageId,
+    [Parameter()]
+    [string]$Version,
+    [Parameter()]
+    [string]$Source,
+    [Parameter()]
+    [switch]$Prerelease,
+    [Parameter()]
+    [switch]$ExcludeVersion,
+    [Parameter()]
+    [switch]$DirectDownload,
+    [Parameter()]
+    [string]$PackagesDir="$PSScriptRoot\..\packages",
+    [Parameter()]
+    [string]$ConfigFile="$PSScriptRoot\..\nuget.config",
+    [Parameter()]
+    [ValidateSet('Quiet','Normal','Detailed')]
+    [string]$Verbosity='Normal'
+)
+
+$nugetPath = & "$PSScriptRoot\Get-NuGetTool.ps1"
+
+Write-Verbose "Installing $PackageId..."
+$nugetArgs = "Install",$PackageId,"-OutputDirectory",$PackagesDir,'-ConfigFile',$ConfigFile
+if ($Version) { $nugetArgs += "-Version",$Version }
+if ($Source) { $nugetArgs += "-FallbackSource",$Source }
+if ($Prerelease) { $nugetArgs += "-Prerelease" }
+if ($ExcludeVersion) { $nugetArgs += '-ExcludeVersion' }
+if ($DirectDownload) { $nugetArgs += '-DirectDownload' }
+$nugetArgs += '-Verbosity',$Verbosity
+
+if ($PSCmdlet.ShouldProcess($PackageId, 'nuget install')) {
+    $p = Start-Process $nugetPath $nugetArgs -NoNewWindow -Wait -PassThru
+    if ($null -ne $p.ExitCode -and $p.ExitCode -ne 0) { throw "NuGet install of package '$PackageId' failed with exit code $($p.ExitCode)." }
+}
+
+# Provide the path to the installed package directory to our caller.
+$packageDirectories = @(Get-ChildItem -LiteralPath $PackagesDir -Directory | Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName "$PackageId.nuspec") } | Sort-Object -Property LastWriteTimeUtc -Descending)
+if (!$packageDirectories) {
+    throw "Package '$PackageId' was not found under '$PackagesDir'."
+}
+
+Write-Output $packageDirectories[0].FullName

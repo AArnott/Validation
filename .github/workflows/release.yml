@@ -11,22 +11,16 @@ on:
 
 run-name: ${{ github.ref_name }}
 
-permissions:
-  actions: read
-  contents: write
-
 jobs:
   release:
     runs-on: ubuntu-24.04
+    permissions:
+      actions: read # Required to download artifacts
+      contents: write # Upload artifacts to Release
+      id-token: write # Required for NuGet CLI Login
+    env:
+      NUGET_USER: ${{ secrets.NUGET_USER }}
     steps:
-    - name: ⚙️ Initialization
-      shell: pwsh
-      run: |
-        if ('${{ secrets.NUGET_API_KEY }}') {
-          Write-Host "NUGET_API_KEY secret detected. NuGet packages will be pushed."
-          echo "NUGET_API_KEY_DEFINED=true" >> $env:GITHUB_ENV
-        }
-
     - name: 🔎 Search for build of ${{ github.ref }}
       shell: pwsh
       id: findrunid
@@ -65,7 +59,7 @@ jobs:
         Echo "runid=$runid" >> $env:GITHUB_OUTPUT
 
     - name: 🔻 Download deployables artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
       with:
         name: deployables-Windows
         path: ${{ runner.temp }}/deployables
@@ -74,15 +68,22 @@ jobs:
 
     - name: 💽 Upload artifacts to release
       shell: pwsh
-      if: ${{ github.event.release.assets_url }} != ''
+      if: ${{ github.event_name == 'release' && github.event.release.assets_url != '' }}
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        Get-ChildItem '${{ runner.temp }}/deployables' |% {
+        Get-ChildItem '${{ runner.temp }}/deployables' -File -Recurse |% {
           Write-Host "Uploading $($_.Name) to release..."
           gh release -R ${{ github.repository }} upload "${{ github.ref_name }}" $_.FullName
         }
 
+    - name: 🪪 Authorize NuGet package push
+      uses: NuGet/login@d22cc5f58ff5b88bf9bd452535b4335137e24544 # v1
+      if: env.NUGET_USER != ''
+      id: nuget-login
+      with:
+        user: ${{ env.NUGET_USER }}
+
     - name: 🚀 Push NuGet packages
-      run: dotnet nuget push ${{ runner.temp }}/deployables/*.nupkg --source https://api.nuget.org/v3/index.json -k '${{ secrets.NUGET_API_KEY }}'
-      if: ${{ env.NUGET_API_KEY_DEFINED == 'true' }}
+      if: steps.nuget-login.outputs.NUGET_API_KEY != ''
+      run: dotnet nuget push ${{ runner.temp }}/deployables/*.nupkg --source https://api.nuget.org/v3/index.json -k '${{ steps.nuget-login.outputs.NUGET_API_KEY }}'
