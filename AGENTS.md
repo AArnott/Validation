@@ -17,7 +17,7 @@
 
 * There should generally be one test project (under the `test` directory) per shipping project (under the `src` directory). Test projects are named after the project being tested with a `.Tests` suffix.
 * Tests use xunit v3 with Microsoft.Testing.Platform (MTP v2). Traditional VSTest `--filter` syntax does NOT work.
-* Some tests are known to be unstable. When running tests, you should skip the unstable ones by using `-- --filter-not-trait "FailsInCloudTest=true"`.
+* Some tests are known to be unstable. When running tests, you should skip the unstable ones by using `-- --filter-not-trait "TestCategory=FailsInCloudTest"`.
 
 ### Running Tests
 
