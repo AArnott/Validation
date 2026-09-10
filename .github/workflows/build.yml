@@ -15,6 +15,9 @@ env:
   # codecov_token: 4dc9e7e2-6b01-4932-a180-847b52b43d35 # Get a new one from https://codecov.io/
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages/
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: 🏭 Build
@@ -29,7 +32,7 @@ jobs:
         - windows-2022
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
       with:
         fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
     - name: ⚙ Install prerequisites
@@ -80,3 +83,13 @@ jobs:
       timeout-minutes: 3
       continue-on-error: true
       if: env.codecov_token != ''
+
+  docs:
+    name: 📃 Docs
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+    - name: 🔗 Markup Link Checker (mlc)
+      uses: becheran/mlc@18a06b3aa2901ca197de59c8b0b1f54fdba6b3fa # v1.0.0
+      with:
+        args: --do-not-warn-for-redirect-to https://learn.microsoft.com*,https://dotnet.microsoft.com/*,https://dev.azure.com/*,https://app.codecov.io/* -p docfx -i https://www.npmjs.com/package/*,https://get.dot.net/
