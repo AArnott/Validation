@@ -174,6 +174,11 @@ Function Get-InstallerExe(
 
 Function Install-DotNet($Version, $Channel, $Architecture, [ValidateSet('Sdk','Runtime','WindowsDesktop','AspNetCore')][string]$sku = 'Sdk') {
     $versionOrChannel = if ($Version) { $Version } else { $Channel }
+    if (!$Version) {
+        $versionInfo = -Split (Invoke-WebRequest -Uri "https://dotnetcli.blob.core.windows.net/dotnet/$sku/$Channel/latest.version" -UseBasicParsing)
+        $versionOrChannel = $versionInfo[-1]
+    }
+
     Write-Host "Downloading .NET $sku $versionOrChannel..."
     $Installer = Get-InstallerExe -Version $versionOrChannel -Architecture $Architecture -sku $sku
     Write-Host "Installing .NET $sku $versionOrChannel..."
