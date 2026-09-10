@@ -62,4 +62,9 @@ if ($PSCmdlet.ShouldProcess($PackageId, 'nuget install')) {
 }
 
 # Provide the path to the installed package directory to our caller.
-Write-Output (Get-ChildItem "$PackagesDir\$PackageId.*")[0].FullName
+$packageDirectories = @(Get-ChildItem -LiteralPath $PackagesDir -Directory | Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName "$PackageId.nuspec") } | Sort-Object -Property LastWriteTimeUtc -Descending)
+if (!$packageDirectories) {
+    throw "Package '$PackageId' was not found under '$PackagesDir'."
+}
+
+Write-Output $packageDirectories[0].FullName

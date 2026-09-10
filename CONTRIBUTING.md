@@ -57,7 +57,7 @@ After publishing the release, the `.github/workflows/release.yml` workflow will 
 
 1. Find the most recent `.github/workflows/build.yml` GitHub workflow run of the tagged release.
 1. Upload the `deployables` artifact from that workflow run to your GitHub Release.
-1. If you have `NUGET_API_KEY` defined as a secret variable for your repo or org, any nuget packages in the `deployables` artifact will be pushed to nuget.org.
+1. If you have `NUGET_USER` defined as a secret variable for your repo or org, any nuget packages in the `deployables` artifact will be pushed to nuget.org.
 
 ### Azure Pipelines
 

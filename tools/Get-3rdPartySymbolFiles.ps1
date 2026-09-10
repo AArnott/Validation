@@ -30,21 +30,22 @@ Function Get-FileFromWeb([Uri]$Uri, $OutFile) {
 #>
 Function Unzip($Path, $OutDir) {
     $OutDir = (New-Item -ItemType Directory -Path $OutDir -Force).FullName
+    $tempOutDir = "$OutDir.out"
     Add-Type -AssemblyName System.IO.Compression.FileSystem
 
     # Start by extracting to a temporary directory so that there are no file conflicts.
-    Remove-Item -LiteralPath "$OutDir.out" -Recurse -Force -ErrorAction Ignore
-    [System.IO.Compression.ZipFile]::ExtractToDirectory($Path, "$OutDir.out")
+    Remove-Item -LiteralPath $tempOutDir -Recurse -Force -ErrorAction Ignore
+    [System.IO.Compression.ZipFile]::ExtractToDirectory($Path, $tempOutDir)
 
     # Now move all files from the temp directory to $OutDir, overwriting any files.
-    Get-ChildItem -Path "$OutDir.out" -Recurse -File | ForEach-Object {
-        $destinationPath = Join-Path -Path $OutDir -ChildPath $_.FullName.Substring("$OutDir.out".Length).TrimStart([io.path]::DirectorySeparatorChar, [io.path]::AltDirectorySeparatorChar)
+    Get-ChildItem -LiteralPath $tempOutDir -Recurse -File | ForEach-Object {
+        $destinationPath = Join-Path -Path $OutDir -ChildPath $_.FullName.Substring($tempOutDir.Length).TrimStart([io.path]::DirectorySeparatorChar, [io.path]::AltDirectorySeparatorChar)
         if (!(Test-Path -Path (Split-Path -Path $destinationPath -Parent))) {
             New-Item -ItemType Directory -Path (Split-Path -Path $destinationPath -Parent) | Out-Null
         }
         Move-Item -Path $_.FullName -Destination $destinationPath -Force
     }
-    Remove-Item -LiteralPath "$OutDir.out" -Recurse -Force
+    Remove-Item -LiteralPath $tempOutDir -Recurse -Force
 }
 
 <#
