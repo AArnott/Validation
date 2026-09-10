@@ -146,14 +146,14 @@ public class ReportDebugTests : IDisposable
     private static void SetupFail(Mock<TraceListener> listener, string message)
     {
 #if !NETFRAMEWORK
-        listener.Setup(l => l.Fail(message, It.IsAny<string>())).Verifiable();
+        listener.Setup(l => l.Fail(message, string.Empty)).Verifiable();
 #endif
     }
 
     private static void SetupFail(Mock<TraceListener> listener, System.Linq.Expressions.Expression<Func<string, bool>> match)
     {
 #if !NETFRAMEWORK
-        listener.Setup(l => l.Fail(It.Is(match), It.IsAny<string>())).Verifiable();
+        listener.Setup(l => l.Fail(It.Is(match), string.Empty)).Verifiable();
 #endif
     }
 
