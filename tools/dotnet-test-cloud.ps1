@@ -13,6 +13,8 @@
     A switch to run the tests in an x86 process.
 .PARAMETER dotnet32
     The path to a 32-bit dotnet executable to use.
+.PARAMETER NoCoverage
+    A switch to skip code coverage collection.
 #>
 [CmdletBinding()]
 Param(
@@ -20,11 +22,13 @@ Param(
     [string]$Agent='Local',
     [switch]$PublishResults,
     [switch]$x86,
-    [string]$dotnet32
+    [string]$dotnet32,
+    [switch]$NoCoverage
 )
 
 $RepoRoot = (Resolve-Path "$PSScriptRoot/..").Path
 $ArtifactStagingFolder = & "$PSScriptRoot/Get-ArtifactsStagingDirectory.ps1"
+$OnCI = ($env:CI -or $env:TF_BUILD)
 
 $dotnet = 'dotnet'
 if ($x86) {
@@ -39,29 +43,97 @@ if ($x86) {
       Write-Host "Running tests using `"$dotnet`"" -ForegroundColor DarkGray
     } else {
       Write-Error "Unable to find 32-bit dotnet.exe"
-      return 1
+      exit 1
     }
   }
 }
 
 $testBinLog = Join-Path $ArtifactStagingFolder (Join-Path build_logs test.binlog)
-$testDiagLog = Join-Path $ArtifactStagingFolder (Join-Path test_logs diag.log)
+$testLogs = Join-Path $ArtifactStagingFolder test_logs
 
-& $dotnet test $RepoRoot `
-    --no-build `
-    -c $Configuration `
-    --filter "TestCategory!=FailsInCloudTest" `
-    --collect "Code Coverage;Format=cobertura" `
-    --settings "$PSScriptRoot/test.runsettings" `
-    --blame-hang-timeout 60s `
-    --blame-crash `
-    -bl:"$testBinLog" `
-    --diag "$testDiagLog;TraceLevel=info" `
-    --logger trx `
+$globalJson = Get-Content $PSScriptRoot/../global.json | ConvertFrom-Json
+$isMTP = $globalJson.test.runner -eq 'Microsoft.Testing.Platform'
+$extraArgs = @()
+$failedTests = 0
+
+if ($isMTP) {
+    if ($OnCI) { $extraArgs += '--no-progress' }
+
+    $dumpSwitches = @(
+        ,'--hangdump'
+        ,'--hangdump-timeout','5m'
+        ,'--crashdump'
+        ,'--crashdump-type','Heap'
+        # The native crash report accompanies the dump and is often the only way to identify the
+        # faulting thread and instruction when a test host dies of an access violation on Linux.
+        ,'--crash-report-if-supported'
+    )
+    $mtpArgs = @(
+        ,'--diagnostic'
+        ,'--diagnostic-output-directory',$testLogs
+        ,'--diagnostic-verbosity','Information'
+        ,'--results-directory',$testLogs
+        ,'--report-trx'
+    )
+
+    if (-not $NoCoverage) {
+        $mtpArgs += @(
+            ,'--coverage'
+            ,'--coverage-output-format','cobertura'
+            ,'--coverage-settings',"$PSScriptRoot/test.runsettings"
+        )
+    }
+
+    $solutionFiles = @(Get-ChildItem -LiteralPath $RepoRoot -File | Where-Object { $_.Extension -in '.sln', '.slnx' })
+    if ($solutionFiles.Count -ne 1) {
+        throw "Expected exactly one solution file in $RepoRoot, but found $($solutionFiles.Count)."
+    }
+
+    $solutionPath = $solutionFiles[0].FullName
+    & $dotnet test $solutionPath `
+        --no-build `
+        -c $Configuration `
+        -bl:"$testBinLog" `
+        -- `
+        --filter-not-trait 'TestCategory=FailsInCloudTest' `
+        @mtpArgs `
+        @dumpSwitches `
+        @extraArgs
+    if ($LASTEXITCODE -ne 0) { $failedTests += 1 }
+
+    $trxFiles = Get-ChildItem -Recurse -Path $testLogs\*.trx
+} else {
+    $testDiagLog = Join-Path $ArtifactStagingFolder (Join-Path test_logs diag.log)
+    $coverageArgs = @()
+    if (-not $NoCoverage) {
+        $coverageArgs = @(
+            ,'--collect','Code Coverage;Format=cobertura'
+            ,'--settings',"$PSScriptRoot/test.runsettings"
+        )
+    }
+
+    & $dotnet test $RepoRoot `
+        --no-build `
+        -c $Configuration `
+        --filter "TestCategory!=FailsInCloudTest" `
+        --blame-hang-timeout 60s `
+        --blame-crash `
+        -bl:"$testBinLog" `
+        --diag "$testDiagLog;TraceLevel=info" `
+        --logger trx `
+        @coverageArgs `
+        @extraArgs
+    if ($LASTEXITCODE -ne 0) { $failedTests += 1 }
+
+    $trxFiles = Get-ChildItem -Recurse -Path $RepoRoot\test\*.trx
+}
 
 $unknownCounter = 0
-Get-ChildItem -Recurse -Path $RepoRoot\test\*.trx |% {
-  Copy-Item $_ -Destination $ArtifactStagingFolder/test_logs/
+$trxFiles |% {
+  New-Item $testLogs -ItemType Directory -Force | Out-Null
+  if (!($_.FullName.StartsWith($testLogs, [StringComparison]::OrdinalIgnoreCase))) {
+    Copy-Item $_ -Destination $testLogs
+  }
 
   if ($PublishResults) {
     $x = [xml](Get-Content -LiteralPath $_)
@@ -83,4 +155,8 @@ Get-ChildItem -Recurse -Path $RepoRoot\test\*.trx |% {
 
     Write-Host "##vso[results.publish type=VSTest;runTitle=$runTitle;publishRunAttachments=true;resultFiles=$_;failTaskOnFailedTests=true;testRunSystem=VSTS - PTR;]"
   }
+}
+
+if ($failedTests -ne 0) {
+    exit $failedTests
 }
