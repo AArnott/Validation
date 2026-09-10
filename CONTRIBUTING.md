@@ -39,7 +39,11 @@ This repository can be built on Windows, Linux, and OSX.
 
 Building, testing, and packing this repository can be done by using the standard dotnet CLI commands (e.g. `dotnet build`, `dotnet test`, `dotnet pack`, etc.).
 
-[pwsh]: https://learn.microsoft.com/powershell/scripting/install/installing-powershell
+## Testing
+
+You can use `dotnet test` to build and/or test the repo.
+
+There may be tests that are known to be unstable or have special requirements. These can be avoided by running tests using the [dotnet-test-cloud.ps1](tools/dotnet-test-cloud.ps1) script *after* running `dotnet build`.
 
 ## Releases
 
@@ -89,10 +93,12 @@ If Renovate is not creating pull requests when you expect it to, check that the 
 
 The best way to keep your repo in sync with Library.Template's evolving features and best practices is to periodically merge the template into your repo:
 
-~~~ps1
+```ps1
 git fetch
 git checkout origin/main
 ./tools/MergeFrom-Template.ps1
 # resolve any conflicts, then commit the merge commit.
 git push origin -u HEAD
-~~~
+```
+
+[pwsh]: https://learn.microsoft.com/powershell/scripting/install/installing-powershell
