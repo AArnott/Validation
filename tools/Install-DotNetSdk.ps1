@@ -304,9 +304,10 @@ $anythingInstalled = $false
 $global:LASTEXITCODE = 0
 
 $sdks |% {
+    $sdkVersion = if ($_.Version) { $_.Version } else { $_.Channel }
     if ($_.Version) { $parameters = '-Version', $_.Version } else { $parameters = '-Channel', $_.Channel }
 
-    if ($PSCmdlet.ShouldProcess(".NET SDK $_ ($arch)", "Install")) {
+    if ($PSCmdlet.ShouldProcess(".NET SDK $sdkVersion ($arch)", "Install")) {
         $anythingInstalled = $true
         Invoke-Expression -Command "$DotNetInstallScriptPathExpression $parameters -Architecture $arch -InstallDir $DotNetInstallDir $switches"
 
@@ -319,7 +320,7 @@ $sdks |% {
     }
 
     if ($IncludeX86) {
-        if ($PSCmdlet.ShouldProcess(".NET x86 SDK $_", "Install")) {
+        if ($PSCmdlet.ShouldProcess(".NET x86 SDK $sdkVersion", "Install")) {
             $anythingInstalled = $true
             Invoke-Expression -Command "$DotNetInstallScriptPathExpression $parameters -Architecture x86 -InstallDir $DotNetX86InstallDir $switches"
 

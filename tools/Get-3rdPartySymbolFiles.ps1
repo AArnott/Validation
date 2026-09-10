@@ -6,8 +6,8 @@ Function Get-FileFromWeb([Uri]$Uri, $OutFile) {
         try {
             (New-Object System.Net.WebClient).DownloadFile($Uri, $OutFile)
         }
-        finally {
-            # This try/finally causes the script to abort
+        catch {
+            throw "Failed to download '$Uri' to '$OutFile'. $($_.Exception.Message)"
         }
     }
 }

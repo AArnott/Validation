@@ -15,6 +15,9 @@ env:
   # codecov_token: 4dc9e7e2-6b01-4932-a180-847b52b43d35 # Get a new one from https://codecov.io/
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages/
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: 🏭 Build

@@ -56,7 +56,7 @@ $nugetArgs += '-Verbosity',$Verbosity
 
 if ($PSCmdlet.ShouldProcess($PackageId, 'nuget install')) {
     $p = Start-Process $nugetPath $nugetArgs -NoNewWindow -Wait -PassThru
-    if ($null -ne $p.ExitCode -and $p.ExitCode -ne 0) { throw }
+    if ($null -ne $p.ExitCode -and $p.ExitCode -ne 0) { throw "NuGet install of package '$PackageId' failed with exit code $($p.ExitCode)." }
 }
 
 # Provide the path to the installed package directory to our caller.
