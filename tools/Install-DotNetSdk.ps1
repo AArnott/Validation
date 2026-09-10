@@ -172,10 +172,11 @@ Function Get-InstallerExe(
     }
 }
 
-Function Install-DotNet($Version, $Architecture, [ValidateSet('Sdk','Runtime','WindowsDesktop','AspNetCore')][string]$sku = 'Sdk') {
-    Write-Host "Downloading .NET $sku $Version..."
-    $Installer = Get-InstallerExe -Version $Version -Architecture $Architecture -sku $sku
-    Write-Host "Installing .NET $sku $Version..."
+Function Install-DotNet($Version, $Channel, $Architecture, [ValidateSet('Sdk','Runtime','WindowsDesktop','AspNetCore')][string]$sku = 'Sdk') {
+    $versionOrChannel = if ($Version) { $Version } else { $Channel }
+    Write-Host "Downloading .NET $sku $versionOrChannel..."
+    $Installer = Get-InstallerExe -Version $versionOrChannel -Architecture $Architecture -sku $sku
+    Write-Host "Installing .NET $sku $versionOrChannel..."
     cmd /c start /wait $Installer /install /passive /norestart
     if ($LASTEXITCODE -eq 3010) {
         Write-Verbose "Restart required"
@@ -198,11 +199,11 @@ if ($InstallLocality -eq 'machine') {
         foreach ($sdk in $sdks) {
             if ($sdk.Version) { $version = $sdk.Version } else { $version = $sdk.Channel }
             if ($PSCmdlet.ShouldProcess(".NET SDK $version ($arch)", "Install")) {
-                Install-DotNet -Version $version -Architecture $arch
+                if ($sdk.Version) { Install-DotNet -Version $sdk.Version -Architecture $arch } else { Install-DotNet -Channel $sdk.Channel -Architecture $arch }
                 $restartRequired = $restartRequired -or ($LASTEXITCODE -eq 3010)
 
                 if ($IncludeX86) {
-                    Install-DotNet -Version $version -Architecture x86
+                    if ($sdk.Version) { Install-DotNet -Version $sdk.Version -Architecture x86 } else { Install-DotNet -Channel $sdk.Channel -Architecture x86 }
                     $restartRequired = $restartRequired -or ($LASTEXITCODE -eq 3010)
                 }
             }

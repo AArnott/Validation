@@ -1,3 +1,11 @@
+<#
+.SYNOPSIS
+    Downloads a file from the web if it is not already present.
+.PARAMETER Uri
+    The URI to download.
+.PARAMETER OutFile
+    The path to write the downloaded file to.
+#>
 Function Get-FileFromWeb([Uri]$Uri, $OutFile) {
     $OutDir = Split-Path $OutFile
     if (!(Test-Path $OutFile)) {
@@ -12,6 +20,14 @@ Function Get-FileFromWeb([Uri]$Uri, $OutFile) {
     }
 }
 
+<#
+.SYNOPSIS
+    Extracts a zip archive into a directory, overwriting existing files.
+.PARAMETER Path
+    The archive to extract.
+.PARAMETER OutDir
+    The directory to extract files into.
+#>
 Function Unzip($Path, $OutDir) {
     $OutDir = (New-Item -ItemType Directory -Path $OutDir -Force).FullName
     Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -28,9 +44,19 @@ Function Unzip($Path, $OutDir) {
         }
         Move-Item -Path $_.FullName -Destination $destinationPath -Force
     }
-    Remove-Item -Path "$OutDir.out" -Recurse -Force
+    Remove-Item -LiteralPath "$OutDir.out" -Recurse -Force
 }
 
+<#
+.SYNOPSIS
+    Downloads a NuGet package and its symbols package, then emits matching binaries and PDBs.
+.PARAMETER id
+    The NuGet package ID.
+.PARAMETER version
+    The NuGet package version.
+.OUTPUTS
+    System.String. Paths to matching binaries and PDB files.
+#>
 Function Get-SymbolsFromPackage($id, $version) {
     $symbolPackagesPath = "$PSScriptRoot/../obj/SymbolsPackages"
     New-Item -ItemType Directory -Path $symbolPackagesPath -Force | Out-Null
@@ -72,6 +98,14 @@ Function Get-SymbolsFromPackage($id, $version) {
 
 $versionProps = [xml](Get-Content -LiteralPath $PSScriptRoot\..\Directory.Packages.props)
 
+<#
+.SYNOPSIS
+    Gets the centrally managed version for a package.
+.PARAMETER id
+    The NuGet package ID.
+.OUTPUTS
+    System.String. The package version.
+#>
 Function Get-PackageVersion($id) {
     $version = $versionProps.Project.ItemGroup.PackageVersion | ? { $_.Include -eq $id } | % { $_.Version }
     if (!$version) {

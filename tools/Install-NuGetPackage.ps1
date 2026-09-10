@@ -17,6 +17,8 @@
     The directory to install the package to. By default, it uses the Packages folder at the root of the repo.
 .PARAMETER ConfigFile
     The nuget.config file to use. By default, it uses :/nuget.config.
+.PARAMETER Verbosity
+    The verbosity level to pass to NuGet.
 .OUTPUTS
     System.String. The path to the installed package.
 #>
@@ -40,7 +42,7 @@ Param(
     [string]$ConfigFile="$PSScriptRoot\..\nuget.config",
     [Parameter()]
     [ValidateSet('Quiet','Normal','Detailed')]
-    [string]$Verbosity='normal'
+    [string]$Verbosity='Normal'
 )
 
 $nugetPath = & "$PSScriptRoot\Get-NuGetTool.ps1"
