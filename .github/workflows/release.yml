@@ -85,5 +85,5 @@ jobs:
         user: ${{ env.NUGET_USER }}
 
     - name: 🚀 Push NuGet packages
-      if: env.NUGET_USER != ''
+      if: steps.nuget-login.outputs.NUGET_API_KEY != ''
       run: dotnet nuget push ${{ runner.temp }}/deployables/*.nupkg --source https://api.nuget.org/v3/index.json -k '${{ steps.nuget-login.outputs.NUGET_API_KEY }}'

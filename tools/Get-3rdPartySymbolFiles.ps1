@@ -17,6 +17,7 @@ Function Unzip($Path, $OutDir) {
     Add-Type -AssemblyName System.IO.Compression.FileSystem
 
     # Start by extracting to a temporary directory so that there are no file conflicts.
+    Remove-Item -LiteralPath "$OutDir.out" -Recurse -Force -ErrorAction Ignore
     [System.IO.Compression.ZipFile]::ExtractToDirectory($Path, "$OutDir.out")
 
     # Now move all files from the temp directory to $OutDir, overwriting any files.
@@ -69,8 +70,9 @@ Function Get-SymbolsFromPackage($id, $version) {
     }
 }
 
+$versionProps = [xml](Get-Content -LiteralPath $PSScriptRoot\..\Directory.Packages.props)
+
 Function Get-PackageVersion($id) {
-    $versionProps = [xml](Get-Content -LiteralPath $PSScriptRoot\..\Directory.Packages.props)
     $version = $versionProps.Project.ItemGroup.PackageVersion | ? { $_.Include -eq $id } | % { $_.Version }
     if (!$version) {
         Write-Error "No package version found in Directory.Packages.props for the package '$id'"
