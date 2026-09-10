@@ -5,12 +5,16 @@
     <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net462</TargetFrameworks>
     <TargetFrameworks Condition="'$(MSBuildRuntimeType)'=='Full'">$(TargetFrameworks);net35</TargetFrameworks>
     <PackageValidationBaselineVersion>2.6.68</PackageValidationBaselineVersion>
-    <EnablePackageValidation>false</EnablePackageValidation>
     <Title>Input and runtime validation</Title>
     <Description>Method input validation and runtime checks that report errors or throw exceptions when failures are detected.</Description>
     <Product>Validation</Product>
     <PackageTags>InputValidation IntegrityCheck</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup Condition="'$(MSBuildRuntimeType)'!='Full'">
+    <PackageValidationBaselineFrameworkToIgnore Include="net35" />
+    <PackageValidationBaselineFrameworkToIgnore Include="net462" />
+  </ItemGroup>
 
   <Target Name="WarnIncompleteBuild" BeforeTargets="Pack" Condition="'$(MSBuildRuntimeType)'!='Full'">
     <Warning Text="This package will contain a subset of the shipping binaries. Use msbuild.exe on Windows for a complete build." Code="IncompleteBuild" />
