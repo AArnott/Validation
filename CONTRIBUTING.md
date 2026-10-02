@@ -50,6 +50,7 @@ Then run `./tools/dotnet-test-cloud.ps1 -Configuration Release -IncludeNativeAOT
 The traversal projects discover projects under `src` and `test`, and publish each eligible test framework targeting .NET 8 or later.
 Keep test projects in the solution as well: managed test runs still use the solution, while NativeAOT runs use the traversal's evaluated executable paths.
 Test projects can opt out of NativeAOT publishing with `<PublishNativeAOTTests>false</PublishNativeAOTTests>`.
+The Validation tests run as both managed and NativeAOT executables; their trace tests use a recording listener instead of a dynamic-proxy mocking framework.
 One restore includes all test target frameworks, runtime identifiers, and NativeAOT compiler dependencies.
 Managed builds are RID-neutral by default; NativeAOT builds use the SDK's runtime-specific output directories.
 For a specified RID, managed execution and native publishing can share the same build outputs.

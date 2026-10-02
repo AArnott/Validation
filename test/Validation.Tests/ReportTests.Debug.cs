@@ -4,9 +4,7 @@
 // Ensure the tests defined in this file always emulate a client compiled for Debug
 #define DEBUG
 
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Moq;
 
 /// <summary>
 /// Verify that the message propagates to the trace listeners if
@@ -28,60 +26,55 @@ public class ReportDebugTests : IDisposable
     [Test]
     public void If()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             Report.If(false, FailureMessage);
-            listener.Value.Setup(l => l.WriteLine(FailureMessage)).Verifiable();
-            SetupFail(listener.Value, FailureMessage);
             Report.If(true, FailureMessage);
+            listener.AssertReported(FailureMessage);
         }
     }
 
     [Test]
     public void IfNot()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             Report.IfNot(true, FailureMessage);
-            listener.Value.Setup(l => l.WriteLine(FailureMessage)).Verifiable();
-            SetupFail(listener.Value, FailureMessage);
             Report.IfNot(false, FailureMessage);
+            listener.AssertReported(FailureMessage);
         }
     }
 
     [Test]
     public void IfNot_Format1Arg()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             Report.IfNot(true, "a{0}c", "b");
-            listener.Value.Setup(l => l.WriteLine("abc")).Verifiable();
-            SetupFail(listener.Value, "abc");
             Report.IfNot(false, "a{0}c", "b");
+            listener.AssertReported("abc");
         }
     }
 
     [Test]
     public void IfNot_Format2Arg()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             Report.IfNot(true, "a{0}{1}d", "b", "c");
-            listener.Value.Setup(l => l.WriteLine("abcd")).Verifiable();
-            SetupFail(listener.Value, "abcd");
             Report.IfNot(false, "a{0}{1}d", "b", "c");
+            listener.AssertReported("abcd");
         }
     }
 
     [Test]
     public void IfNot_FormatNArg()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             Report.IfNot(true, "a{0}{1}{2}e", "b", "c", "d");
-            listener.Value.Setup(l => l.WriteLine("abcde")).Verifiable();
-            SetupFail(listener.Value, "abcde");
             Report.IfNot(false, "a{0}{1}{2}e", "b", "c", "d");
+            listener.AssertReported("abcde");
         }
     }
 
@@ -95,82 +88,47 @@ public class ReportDebugTests : IDisposable
             return "b";
         }
 
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             Report.IfNot(true, $"a{FormattingMethod()}c");
             Assert.Equal(0, formatCount);
-            listener.Value.Setup(l => l.WriteLine("abc")).Verifiable();
-            SetupFail(listener.Value, "abc");
             Report.IfNot(false, $"a{FormattingMethod()}c");
             Assert.Equal(1, formatCount);
+            listener.AssertReported("abc");
         }
     }
 
     [Test]
     public void IfNotPresent()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             string? possiblyPresent = "not missing";
             string missingTypeName = possiblyPresent.GetType().FullName!;
             Report.IfNotPresent(possiblyPresent);
-            listener.Value.Setup(l => l.WriteLine(It.Is<string>(v => v.Contains(missingTypeName)))).Verifiable();
-            SetupFail(listener.Value, v => v.Contains(missingTypeName));
             possiblyPresent = null;
             Report.IfNotPresent(possiblyPresent);
+            listener.AssertReported(message => message?.Contains(missingTypeName) == true);
         }
     }
 
     [Test]
     public void Fail()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
-            listener.Value.Setup(l => l.WriteLine(FailureMessage)).Verifiable();
-            SetupFail(listener.Value, FailureMessage);
             Report.Fail(FailureMessage);
+            listener.AssertReported(FailureMessage);
         }
     }
 
     [Test]
     public void Fail_DefaultMessage()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
-            listener.Value.Setup(l => l.WriteLine(DefaultFailureMessage)).Verifiable();
-            SetupFail(listener.Value, DefaultFailureMessage);
             Report.Fail();
+            listener.AssertReported(DefaultFailureMessage);
         }
-    }
-
-    private static void SetupFail(Mock<TraceListener> listener, string message)
-    {
-#if NET
-        listener.Setup(l => l.Fail(message, string.Empty)).Verifiable();
-#else
-        listener.Setup(l => l.Fail(message)).Verifiable();
-#endif
-    }
-
-    private static void SetupFail(Mock<TraceListener> listener, System.Linq.Expressions.Expression<Func<string, bool>> match)
-    {
-#if NET
-        listener.Setup(l => l.Fail(It.Is(match), string.Empty)).Verifiable();
-#else
-        listener.Setup(l => l.Fail(It.Is(match))).Verifiable();
-#endif
-    }
-
-    private static DisposableValue<Mock<TraceListener>> Listen()
-    {
-        var mockListener = new Mock<TraceListener>(MockBehavior.Strict);
-        Trace.Listeners.Add(mockListener.Object);
-        return new DisposableValue<Mock<TraceListener>>(
-            mockListener,
-            () =>
-            {
-                Trace.Listeners.Remove(mockListener.Object);
-                mockListener.Verify();
-            });
     }
 }

@@ -3,11 +3,9 @@
     <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <TargetFrameworks Condition="'$(OS)' == 'Windows_NT'">$(TargetFrameworks);net472</TargetFrameworks>
     <OutputType>Exe</OutputType>
-    <PublishNativeAOTTests>false</PublishNativeAOTTests>
     <ResxAsConstants>true</ResxAsConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Moq" />
     <PackageReference Include="TUnit.Engine" />
     <PackageReference Include="xunit.v3.assert.aot" Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)','net9.0'))" />
     <PackageReference Include="xunit.v3.assert" Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)','net9.0'))" />
