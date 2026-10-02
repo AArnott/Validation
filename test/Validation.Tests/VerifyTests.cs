@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 public class VerifyTests
 {
-    [Fact]
+    [Test]
     public void Operation()
     {
         Verify.Operation(true, "Should not throw");
@@ -19,7 +19,7 @@ public class VerifyTests
         Assert.Throws<InvalidOperationException>(() => Verify.Operation(false, "throw", "arg1", "arg2", "arg3"));
     }
 
-    [Fact]
+    [Test]
     public void Operation_InterpolatedString()
     {
         int formatCount = 0;
@@ -37,7 +37,7 @@ public class VerifyTests
         Assert.StartsWith("Some generated string method.", ex.Message);
     }
 
-    [Fact]
+    [Test]
     public void Operation_ResourceManager()
     {
         AssertThrows(TestStrings.GetResourceString(TestStrings.SomeError), c => Verify.Operation(c, TestStrings.ResourceManager, TestStrings.SomeError));
@@ -54,7 +54,7 @@ public class VerifyTests
         }
     }
 
-    [Fact]
+    [Test]
     public void OperationWithHelp()
     {
         Verify.OperationWithHelp(true, "message", "helpLink");
@@ -63,7 +63,7 @@ public class VerifyTests
         Assert.Equal("helpLink", ex.HelpLink);
     }
 
-    [Fact]
+    [Test]
     public void NotDisposed()
     {
         Verify.NotDisposed(true, "message");
@@ -83,7 +83,7 @@ public class VerifyTests
         Assert.Equal(typeof(object).FullName, actualException.ObjectName);
     }
 
-    [Fact]
+    [Test]
     public void NotDisposed_Observable()
     {
         var observable = new Disposable();
@@ -93,13 +93,13 @@ public class VerifyTests
         Assert.Throws<ObjectDisposedException>(() => Verify.NotDisposed(observable, "message"));
     }
 
-    [Fact]
+    [Test]
     public void FailOperation()
     {
         Assert.Throws<InvalidOperationException>(() => Verify.FailOperation("message", "arg1"));
     }
 
-    [Fact]
+    [Test]
     public void HResult()
     {
         const int E_INALIDARG = unchecked((int)0x80070057);

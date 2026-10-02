@@ -4,9 +4,7 @@
 // Ensure the tests defined in this file always emulate a client compiled for Release
 #undef DEBUG
 
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Moq;
 
 /// <summary>
 /// Verify that the message does NOT propagate to the trace listeners when
@@ -24,57 +22,62 @@ public class ReportReleaseTests : IDisposable
         this.suppressAssertUi.Dispose();
     }
 
-    [Fact]
+    [Test]
     public void If()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             Report.If(false, FailureMessage);
             Report.If(true, FailureMessage);
+            listener.AssertNoReports();
         }
     }
 
-    [Fact]
+    [Test]
     public void IfNot()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             Report.IfNot(true, FailureMessage);
             Report.IfNot(false, FailureMessage);
+            listener.AssertNoReports();
         }
     }
 
-    [Fact]
+    [Test]
     public void IfNot_Format1Arg()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             Report.IfNot(true, "a{0}c", "b");
             Report.IfNot(false, "a{0}c", "b");
+            listener.AssertNoReports();
         }
     }
 
-    [Fact]
+    [Test]
     public void IfNot_Format2Arg()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             Report.IfNot(true, "a{0}{1}d", "b", "c");
             Report.IfNot(false, "a{0}{1}d", "b", "c");
+            listener.AssertNoReports();
         }
     }
 
-    [Fact]
+    [Test]
     public void IfNot_FormatNArg()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             Report.IfNot(true, "a{0}{1}{2}e", "b", "c", "d");
             Report.IfNot(false, "a{0}{1}{2}e", "b", "c", "d");
+            listener.AssertNoReports();
         }
     }
 
-    [Fact]
+    [Test]
     public void IfNot_InterpolatedString()
     {
         int formatCount = 0;
@@ -84,56 +87,47 @@ public class ReportReleaseTests : IDisposable
             return "b";
         }
 
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             Report.IfNot(true, $"a{FormattingMethod()}c");
             Assert.Equal(0, formatCount);
             Report.IfNot(false, $"a{FormattingMethod()}c");
             Assert.Equal(0, formatCount);
+            listener.AssertNoReports();
         }
     }
 
-    [Fact]
+    [Test]
     public void IfNotPresent()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             string? possiblyPresent = "not missing";
             var missingTypeName = possiblyPresent.GetType().FullName;
             Report.IfNotPresent(possiblyPresent);
             possiblyPresent = null;
             Report.IfNotPresent(possiblyPresent);
+            listener.AssertNoReports();
         }
     }
 
-    [Fact]
+    [Test]
     public void Fail()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             Report.Fail(FailureMessage);
+            listener.AssertNoReports();
         }
     }
 
-    [Fact]
+    [Test]
     public void Fail_DefaultMessage()
     {
-        using (DisposableValue<Mock<TraceListener>> listener = Listen())
+        using (var listener = new RecordingTraceListener())
         {
             Report.Fail();
+            listener.AssertNoReports();
         }
-    }
-
-    private static DisposableValue<Mock<TraceListener>> Listen()
-    {
-        var mockListener = new Mock<TraceListener>(MockBehavior.Strict);
-        Trace.Listeners.Add(mockListener.Object);
-        return new DisposableValue<Mock<TraceListener>>(
-            mockListener,
-            () =>
-            {
-                Trace.Listeners.Remove(mockListener.Object);
-                mockListener.Verify();
-            });
     }
 }

@@ -5,26 +5,19 @@ using System.ComponentModel;
 
 public class RequiresTests
 {
-    private readonly ITestOutputHelper logger;
-
-    public RequiresTests(ITestOutputHelper logger)
-    {
-        this.logger = logger;
-    }
-
     private enum BigEnum : long
     {
         First,
     }
 
-    [Fact]
+    [Test]
     public void NotNull_ThrowsOnNull()
     {
         Assert.Throws<ArgumentNullException>(() => Requires.NotNull((object)null!, "foo"));
         Requires.NotNull(new object(), "foo");
     }
 
-    [Fact]
+    [Test]
     public void NotNull_ThrowsOnNull_CallerArgumentExpression()
     {
         string? foo = null;
@@ -35,28 +28,28 @@ public class RequiresTests
         Assert.Null(ex.ParamName);
     }
 
-    [Fact]
+    [Test]
     public void NotNull_IntPtr_ThrowsOnZero()
     {
         Assert.Throws<ArgumentNullException>(() => Requires.NotNull(IntPtr.Zero, "foo"));
         Requires.NotNull(new IntPtr(5), "foo");
     }
 
-    [Fact]
+    [Test]
     public void NotNull_Task_ThrowsOnNull()
     {
         Assert.Throws<ArgumentNullException>(() => Requires.NotNull((Task)null!, "foo"));
         Requires.NotNull((Task)Task.FromResult(0), "foo");
     }
 
-    [Fact]
+    [Test]
     public void NotNull_TaskOfT_ThrowsOnNull()
     {
         Assert.Throws<ArgumentNullException>(() => Requires.NotNull((Task<int>)null!, "foo"));
         Requires.NotNull(Task.FromResult(0), "foo");
     }
 
-    [Fact]
+    [Test]
     public void Guid_ThrowsOnEmpty()
     {
         // Make sure no exception is thrown when a non empty guid is passed
@@ -66,7 +59,7 @@ public class RequiresTests
         Assert.Throws<ArgumentException>(() => Requires.NotDefault(Guid.Empty, "foo"));
     }
 
-    [Fact]
+    [Test]
     public void NotDefault()
     {
         Requires.NotDefault(-1, "foo");
@@ -77,7 +70,7 @@ public class RequiresTests
         Assert.Throws<ArgumentException>(() => Requires.NotDefault('\0', "foo"));
     }
 
-    [Fact]
+    [Test]
     public void Argument_Bool_String_String()
     {
         Requires.Argument(true, "a", "b");
@@ -85,7 +78,7 @@ public class RequiresTests
         Assert.StartsWith("b", ex.Message);
     }
 
-    [Fact]
+    [Test]
     public void Argument_Bool_String_String_Object()
     {
         Requires.Argument(true, "a", "b");
@@ -93,7 +86,7 @@ public class RequiresTests
         Assert.StartsWith("b: arg1", ex.Message);
     }
 
-    [Fact]
+    [Test]
     public void Argument_Bool_String_String_Object_Object()
     {
         Requires.Argument(true, "a", "b");
@@ -101,7 +94,7 @@ public class RequiresTests
         Assert.StartsWith("b: arg1 arg2", ex.Message);
     }
 
-    [Fact]
+    [Test]
     public void Argument_Bool_String_String_ObjectArray()
     {
         Requires.Argument(true, "a", "b");
@@ -109,7 +102,7 @@ public class RequiresTests
         Assert.StartsWith("b: arg1 arg2 arg3", ex.Message);
     }
 
-    [Fact]
+    [Test]
     public void Argument_Bool_String_ResourceManager_String()
     {
         Requires.Argument(true, "someParameter", TestStrings.ResourceManager, TestStrings.SomeError);
@@ -118,7 +111,7 @@ public class RequiresTests
         Assert.StartsWith(TestStrings.GetResourceString(TestStrings.SomeError), ex.Message);
     }
 
-    [Fact]
+    [Test]
     public void Argument_Bool_String_ResourceManager_String_Object()
     {
         Requires.Argument(true, "someParameter", TestStrings.ResourceManager, TestStrings.SomeError1Arg, "arg1");
@@ -127,7 +120,7 @@ public class RequiresTests
         Assert.StartsWith(TestStrings.FormatSomeError1Arg("arg1"), ex.Message);
     }
 
-    [Fact]
+    [Test]
     public void Argument_Bool_String_ResourceManager_String_Object_Object()
     {
         Requires.Argument(true, "someParameter", TestStrings.ResourceManager, TestStrings.SomeError2Args, "arg1", "arg2");
@@ -136,7 +129,7 @@ public class RequiresTests
         Assert.StartsWith(TestStrings.FormatSomeError2Args("arg1", "arg2"), ex.Message);
     }
 
-    [Fact]
+    [Test]
     public void Argument_Bool_String_ResourceManager_String_ObjectArray()
     {
         Requires.Argument(true, "someParameter", TestStrings.ResourceManager, TestStrings.SomeError3Args, "arg1", "arg2", "arg3");
@@ -145,7 +138,7 @@ public class RequiresTests
         Assert.StartsWith(TestStrings.FormatSomeError3Args("arg1", "arg2", "arg3"), ex.Message);
     }
 
-    [Fact]
+    [Test]
     public void Argument_InterpolatedString()
     {
         int formatCount = 0;
@@ -162,26 +155,26 @@ public class RequiresTests
         Assert.StartsWith("Some generated string method.", ex.Message);
     }
 
-    [Fact]
+    [Test]
     public void Fail()
     {
         Assert.Throws<ArgumentException>(() => Requires.Fail("message"));
     }
 
-    [Fact]
+    [Test]
     public void Fail_ObjectArray()
     {
         Assert.Throws<ArgumentException>(() => Requires.Fail("message", "arg1"));
     }
 
-    [Fact]
+    [Test]
     public void Fail_Exception_ObjectArray()
     {
         ArgumentException ex = Assert.Throws<ArgumentException>(() => Requires.Fail(new InvalidOperationException(), "message", "arg1"));
         Assert.IsType<InvalidOperationException>(ex.InnerException);
     }
 
-    [Fact]
+    [Test]
     public void Range_Bool_String_String()
     {
         Requires.Range(true, "a");
@@ -190,20 +183,20 @@ public class RequiresTests
         Assert.Throws<ArgumentOutOfRangeException>("a", () => Requires.Range(false, "a"));
     }
 
-    [Fact]
+    [Test]
     public void FailRange()
     {
         Assert.Throws<ArgumentOutOfRangeException>("a", () => Requires.FailRange("a"));
     }
 
-    [Fact]
+    [Test]
     public void NotNullAllowStructs()
     {
         Requires.NotNullAllowStructs(0, "paramName");
         Assert.Throws<ArgumentNullException>(() => Requires.NotNullAllowStructs((object?)null, "paramName"));
     }
 
-    [Fact]
+    [Test]
     public void NotNullOrEmpty()
     {
         Requires.NotNullOrEmpty("not empty", "param");
@@ -214,7 +207,7 @@ public class RequiresTests
         Assert.Null(ex.ParamName);
     }
 
-    [Fact]
+    [Test]
     public void NotNullOrWhitespace()
     {
         Requires.NotNullOrEmpty("not empty", "param");
@@ -225,7 +218,7 @@ public class RequiresTests
         Assert.Equal("paramName", ex.ParamName);
     }
 
-    [Fact]
+    [Test]
     public void NotNullOrEmpty_Collection()
     {
         System.Collections.IEnumerable? nullCollection = null;
@@ -236,7 +229,7 @@ public class RequiresTests
         Assert.Throws<ArgumentException>(() => Requires.NotNullOrEmpty(emptyCollection, "param"));
     }
 
-    [Fact]
+    [Test]
     public void NotNullOrEmpty_CollectionOfT()
     {
         IEnumerable<string>? nullCollection = null;
@@ -247,7 +240,7 @@ public class RequiresTests
         Assert.Throws<ArgumentException>(() => Requires.NotNullOrEmpty(emptyCollection, "param"));
     }
 
-    [Fact]
+    [Test]
     public void NotNullOrEmpty_CollectionOfT_Struct()
     {
         IEnumerable<int>? nullCollection = null;
@@ -258,7 +251,7 @@ public class RequiresTests
         Assert.Throws<ArgumentException>(() => Requires.NotNullOrEmpty(emptyCollection, "param"));
     }
 
-    [Fact]
+    [Test]
     public void NotNullEmptyOrNullElements()
     {
         ICollection<string>? nullCollection = null;
@@ -272,7 +265,7 @@ public class RequiresTests
         Assert.Throws<ArgumentException>(() => Requires.NotNullEmptyOrNullElements(collectionWithNullElement, "param"));
     }
 
-    [Fact]
+    [Test]
     public void NullOrNotNullElements()
     {
         IEnumerable<string>? nullCollection = null;
@@ -286,23 +279,23 @@ public class RequiresTests
         Assert.Throws<ArgumentException>(() => Requires.NullOrNotNullElements(collectionWithNullElement, "param"));
     }
 
-    [Fact]
+    [Test]
     public void Defined()
     {
         Requires.Defined(ConsoleColor.Black, "parameterName");
         InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>("parameterName", () => Requires.Defined((ConsoleColor)88, "parameterName"));
-        this.logger.WriteLine(ex.Message);
+        Console.WriteLine(ex.Message);
     }
 
-    [Fact]
+    [Test]
     public void Defined_Int64Enum()
     {
         Requires.Defined(BigEnum.First, "parameterName");
         InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => Requires.Defined((BigEnum)0x100000000, "parameterName"));
-        this.logger.WriteLine(ex.Message);
+        Console.WriteLine(ex.Message);
     }
 
-    [Fact]
+    [Test]
     public void ValidElements()
     {
         Assert.Throws<ArgumentNullException>("values", () => Requires.ValidElements((IEnumerable<string>)null!, x => !string.IsNullOrWhiteSpace(x), "param", "test"));
@@ -323,7 +316,7 @@ public class RequiresTests
     }
 
 #pragma warning disable 0618 //Requires.That(bool, string?, string, params object?[])' is obsolete
-    [Fact]
+    [Test]
     public void That()
     {
         Requires.That(true, "param", "{0} must be true.", "param");
@@ -333,7 +326,7 @@ public class RequiresTests
 #pragma warning restore 0618
 
 #pragma warning disable 0618 //Requires.ValidState(bool, string)' is obsolete
-    [Fact]
+    [Test]
     public void ValidState()
     {
         Requires.ValidState(true, "Condition must be true.");
