@@ -3,13 +3,22 @@ parameters:
 
 steps:
 
-- ${{ if parameters.RunTests }}:
-  - script: dotnet build tools/dirs.proj -t:build,pack,publish --no-restore -c $(BuildConfiguration) -warnAsError -warnNotAsError:NU1901,NU1902,NU1903,NU1904 /bl:"$(Build.ArtifactStagingDirectory)/build_logs/build.binlog"
-    displayName: 🛠 dotnet build
+- task: MSBuild@1
+  displayName: 🛠 Build and pack with full MSBuild
+  inputs:
+    solution: tools/dirs.proj
+    platform: AnyCPU
+    msbuildArgs: /r /t:build,pack -warnAsError -warnNotAsError:NU1901,NU1902,NU1903,NU1904 /bl:"$(Build.ArtifactStagingDirectory)/build_logs/build.binlog"
+    configuration: $(BuildConfiguration)
+  condition: and(succeeded(), eq(variables['Agent.OS'], 'Windows_NT'))
 
-- ${{ if not(parameters.RunTests) }}:
-  - script: dotnet build tools/dirs.proj -t:build,pack --no-restore -c $(BuildConfiguration) -warnAsError -warnNotAsError:NU1901,NU1902,NU1903,NU1904 /bl:"$(Build.ArtifactStagingDirectory)/build_logs/build.binlog"
-    displayName: 🛠 dotnet build
+- script: dotnet build tools/dirs.proj -t:build,pack --no-restore -c $(BuildConfiguration) -warnAsError -warnNotAsError:NU1901,NU1902,NU1903,NU1904,IncompleteBuild /bl:"$(Build.ArtifactStagingDirectory)/build_logs/build.binlog"
+  displayName: 🛠 Build and pack
+  condition: and(succeeded(), ne(variables['Agent.OS'], 'Windows_NT'))
+
+- script: dotnet publish tools/dirs.proj --no-restore -c $(BuildConfiguration)
+  displayName: 🛠 publish NativeAOT tests
+  condition: and(succeeded(), ${{ parameters.RunTests }})
 
 - powershell: tools/dotnet-test-cloud.ps1 -Configuration $(BuildConfiguration) -Agent $(Agent.JobName) -PublishResults -IncludeNativeAOT
   displayName: 🧪 dotnet test
