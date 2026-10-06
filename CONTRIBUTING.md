@@ -83,11 +83,6 @@ After publishing the release, the `.github/workflows/release.yml` workflow will 
 1. Upload the `deployables` artifact from that workflow run to your GitHub Release.
 1. If you have `NUGET_USER` defined as a secret variable for your repo or org, any nuget packages in the `deployables` artifact will be pushed to nuget.org.
 
-### Azure Pipelines
-
-When your repo builds with Azure Pipelines, use the `azure-pipelines/release.yml` pipeline.
-Trigger the pipeline by adding the `auto-release` tag on a run of your main `azure-pipelines.yml` pipeline.
-
 ## Tutorial and API documentation
 
 API and hand-written docs are found under the `docfx/` directory and are built by [docfx](https://dotnet.github.io/docfx/).

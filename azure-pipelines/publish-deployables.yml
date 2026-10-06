@@ -1,4 +1,0 @@
-steps:
-- powershell: dotnet nuget push "$(Resolve-Path '$(Build.ArtifactStagingDirectory)\deployables-Windows\')*.nupkg" -s $(ci_feed) -k azdo --skip-duplicate
-  displayName: 📦 Push packages to CI feed
-  condition: and(succeeded(), ne(variables['ci_feed'], ''), ne(variables['Build.Reason'], 'PullRequest'))

@@ -7,7 +7,6 @@
         "terminal.integrated.shell.linux": "/usr/bin/pwsh"
       },
       "extensions": [
-        "ms-azure-devops.azure-pipelines",
         "ms-dotnettools.csharp",
         "k--kato.docomment",
         "editorconfig.editorconfig",
