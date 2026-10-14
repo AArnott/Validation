@@ -57,8 +57,6 @@ For a specified RID, managed execution and native publishing can share the same 
 Test builds keep dynamic code, startup hooks, and event tracing enabled for managed code coverage.
 The `ConfigureNativeAOTTestFeatures` target disables those features only in the native compiler's publish-time inputs, without rewriting the managed runtime configuration.
 It preserves all other runtime feature options, including invariant globalization, so native compilation and linking use consistent settings.
-For an existing RID-specific build, `dotnet publish test/Validation.Tests/Validation.Tests.csproj -f net8.0 -r <RID> -p:NativeAOT=true --no-build` publishes native tests from the managed build.
-Use the same configuration, framework, and RID for the preceding build and the publish.
 Test builds use invariant globalization and retain only English satellite resources; RID-specific builds are self-contained.
 Shipping libraries targeting .NET 8 or later opt into NativeAOT compatibility analysis with `IsAotCompatible`.
 The `test/AotCompatibilityTest` project complements those analyzers by rooting the shipping assembly and passing it through the NativeAOT compiler during every traversal publish.
@@ -84,6 +82,9 @@ After publishing the release, the `.github/workflows/release.yml` workflow will 
 1. If you have `NUGET_USER` defined as a secret variable for your repo or org, any nuget packages in the `deployables` artifact will be pushed to nuget.org.
 
 ## Tutorial and API documentation
+
+Markup links are checked in CI with [mlc](https://github.com/becheran/mlc).
+Run `mlc` from the repository root to use the same settings, configured in `.mlc.toml`.
 
 API and hand-written docs are found under the `docfx/` directory and are built by [docfx](https://dotnet.github.io/docfx/).
 

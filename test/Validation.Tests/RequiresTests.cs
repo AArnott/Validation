@@ -31,8 +31,10 @@ public class RequiresTests
     [Test]
     public void NotNull_IntPtr_ThrowsOnZero()
     {
-        Assert.Throws<ArgumentNullException>(() => Requires.NotNull(IntPtr.Zero, "foo"));
-        Requires.NotNull(new IntPtr(5), "foo");
+#pragma warning disable SA1121 // StyleCop 1.3.1-beta misreports nint casts as needing the built-in alias.
+        Assert.Throws<ArgumentNullException>(() => Requires.NotNull((nint)0, "foo"));
+        Assert.Equal((nint)5, Requires.NotNull((nint)5, "foo"));
+#pragma warning restore SA1121
     }
 
     [Test]
